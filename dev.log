@@ -1,0 +1,84 @@
+
+> new_note@0.1.0 dev
+> next dev
+
+▲ Next.js 16.3.3 (Turbopack)
+- Local:         http://localhost:3000
+- Network:       http://172.27.16.1:3000
+- Environments: .env
+✓ Ready in 1025ms
+✓ Running next.config.ts took 93ms
+⚠ The "middleware" file convention is deprecated. Please use "proxy" instead.
+
+  To migrate automatically, run:
+  npx @next/codemod@canary middleware-to-proxy .
+
+  Learn more: https://nextjs.org/docs/messages/middleware-to-proxy
+
+ GET /login 200 in 3.6s (next.js: 3.2s, proxy.ts: 92ms, application-code: 317ms)
+ POST /api/auth/sign-up/email 200 in 3.2s (next.js: 2.6s, application-code: 576ms)
+ POST /api/notes 201 in 1033ms (next.js: 938ms, application-code: 95ms)
+ POST /api/notes/cmtbba6r40000h4usresdiqr4/attachments 201 in 6.1s (next.js: 4.0s, application-code: 2.1s)
+ POST /api/notes/cmtbba6r40000h4usresdiqr4/attachments 201 in 2.9s (next.js: 30ms, application-code: 2.8s)
+ POST /api/notes/cmtbba6r40000h4usresdiqr4/attachments 201 in 1398ms (next.js: 8ms, application-code: 1390ms)
+ POST /api/notes/cmtbba6r40000h4usresdiqr4/attachments 201 in 97ms (next.js: 9ms, application-code: 87ms)
+ POST /api/notes/cmtbba6r40000h4usresdiqr4/attachments 201 in 109ms (next.js: 9ms, application-code: 100ms)
+ POST /api/notes/cmtbba6r40000h4usresdiqr4/attachments 201 in 125ms (next.js: 10ms, application-code: 115ms)
+ GET /api/notes?q=B%C3%AAn%20B 200 in 111ms (next.js: 12ms, application-code: 99ms)
+ GET /api/notes?q=ben%20b 200 in 61ms (next.js: 8ms, application-code: 53ms)
+ GET /api/notes?q=Monthly%20rent 200 in 44ms (next.js: 7ms, application-code: 37ms)
+ GET /api/notes?q=tinhTong 200 in 44ms (next.js: 9ms, application-code: 36ms)
+ GET /api/notes?q=ghi%20chu%20tu%20viet 200 in 48ms (next.js: 9ms, application-code: 39ms)
+ GET /api/notes?q=xyzkhongcogi 200 in 48ms (next.js: 7ms, application-code: 40ms)
+ GET /api/attachments/b4e89ef2-896b-41a8-93b2-897bab26386e/content 200 in 3.9s (next.js: 3.9s, application-code: 32ms)
+ GET /api/attachments/1db226b0-5eb0-4ed5-8b7f-4f9032abd696/content 200 in 46ms (next.js: 18ms, application-code: 28ms)
+ GET /api/attachments/56c680c7-3fb3-4e0f-8e7b-ddca4927de0c/raw 200 in 4.4s (next.js: 4.3s, application-code: 49ms)
+ GET /api/attachments/1db226b0-5eb0-4ed5-8b7f-4f9032abd696/raw 200 in 65ms (next.js: 37ms, application-code: 28ms)
+ GET /api/attachments/b4e89ef2-896b-41a8-93b2-897bab26386e/download 200 in 4.5s (next.js: 4.4s, application-code: 49ms)
+ GET /api/attachments/b4e89ef2-896b-41a8-93b2-897bab26386e/asset/img-0.png 200 in 3.7s (next.js: 3.7s, application-code: 26ms)
+ GET /api/attachments/b4e89ef2-896b-41a8-93b2-897bab26386e/asset/original 404 in 47ms (next.js: 29ms, application-code: 19ms)
+ POST /api/auth/sign-up/email 200 in 173ms (next.js: 23ms, application-code: 151ms)
+ GET /api/attachments/b4e89ef2-896b-41a8-93b2-897bab26386e/content 404 in 55ms (next.js: 24ms, application-code: 31ms)
+ GET /api/attachments/b4e89ef2-896b-41a8-93b2-897bab26386e/download 404 in 41ms (next.js: 20ms, application-code: 21ms)
+ DELETE /api/attachments/56c680c7-3fb3-4e0f-8e7b-ddca4927de0c 404 in 4.7s (next.js: 4.6s, application-code: 36ms)
+ DELETE /api/attachments/56c680c7-3fb3-4e0f-8e7b-ddca4927de0c 200 in 68ms (next.js: 21ms, application-code: 48ms)
+ GET /api/notes?q=Monthly%20rent 200 in 30ms (next.js: 5ms, application-code: 25ms)
+ POST /api/auth/sign-up/email 200 in 110ms (next.js: 11ms, application-code: 99ms)
+ POST /api/notes 201 in 34ms (next.js: 3ms, application-code: 30ms)
+ POST /api/notes/cmtbbb19h0001h4us9jzdw5vb/attachments 201 in 98ms (next.js: 14ms, application-code: 84ms)
+ POST /api/notes/cmtbbb19h0001h4us9jzdw5vb/attachments 201 in 66ms (next.js: 4ms, application-code: 61ms)
+ POST /api/notes/cmtbbb19h0001h4us9jzdw5vb/attachments 201 in 77ms (next.js: 4ms, application-code: 73ms)
+ POST /api/notes/cmtbbb19h0001h4us9jzdw5vb/attachments 201 in 49ms (next.js: 3ms, application-code: 46ms)
+ POST /api/notes/cmtbbb19h0001h4us9jzdw5vb/attachments 201 in 46ms (next.js: 4ms, application-code: 42ms)
+ POST /api/notes/cmtbbb19h0001h4us9jzdw5vb/attachments 201 in 37ms (next.js: 3ms, application-code: 33ms)
+ GET /api/notes?q=B%C3%AAn%20B 200 in 46ms (next.js: 4ms, application-code: 42ms)
+ GET /api/notes?q=ben%20b 200 in 37ms (next.js: 4ms, application-code: 34ms)
+ GET /api/notes?q=Monthly%20rent 200 in 11ms (next.js: 4ms, application-code: 7ms)
+ POST /api/auth/sign-up/email 200 in 163ms (next.js: 15ms, application-code: 148ms)
+ POST /api/notes 201 in 50ms (next.js: 4ms, application-code: 46ms)
+ POST /api/notes/cmtbbcb850002h4usbqxigr6f/attachments 201 in 105ms (next.js: 25ms, application-code: 80ms)
+ POST /api/notes/cmtbbcb850002h4usbqxigr6f/attachments 201 in 66ms (next.js: 5ms, application-code: 62ms)
+ POST /api/notes/cmtbbcb850002h4usbqxigr6f/attachments 201 in 77ms (next.js: 4ms, application-code: 72ms)
+ POST /api/notes/cmtbbcb850002h4usbqxigr6f/attachments 201 in 76ms (next.js: 6ms, application-code: 70ms)
+ POST /api/notes/cmtbbcb850002h4usbqxigr6f/attachments 201 in 67ms (next.js: 6ms, application-code: 61ms)
+ POST /api/notes/cmtbbcb850002h4usbqxigr6f/attachments 201 in 54ms (next.js: 5ms, application-code: 49ms)
+ GET /api/notes?q=B%C3%AAn%20B 200 in 71ms (next.js: 6ms, application-code: 64ms)
+ GET /api/notes?q=ben%20b 200 in 45ms (next.js: 6ms, application-code: 39ms)
+ GET /api/notes?q=Monthly%20rent 200 in 36ms (next.js: 5ms, application-code: 32ms)
+ GET /api/notes?q=tinhTong 200 in 42ms (next.js: 5ms, application-code: 37ms)
+ GET /api/notes?q=ghi%20chu%20tu%20viet 200 in 43ms (next.js: 5ms, application-code: 38ms)
+ GET /api/notes?q=xyzkhongcogi 200 in 39ms (next.js: 4ms, application-code: 35ms)
+ GET /api/attachments/43423cc6-3360-4a88-8ae6-6709543e6956/content 200 in 51ms (next.js: 26ms, application-code: 25ms)
+ GET /api/attachments/b63a2f4d-0652-43fe-9ec5-10e7674a89db/content 200 in 24ms (next.js: 5ms, application-code: 19ms)
+ GET /api/attachments/cb96a951-b375-4618-8377-bc2195f79c41/raw 200 in 70ms (next.js: 27ms, application-code: 43ms)
+ GET /api/attachments/b63a2f4d-0652-43fe-9ec5-10e7674a89db/raw 200 in 50ms (next.js: 7ms, application-code: 43ms)
+ GET /api/attachments/43423cc6-3360-4a88-8ae6-6709543e6956/download 200 in 73ms (next.js: 31ms, application-code: 42ms)
+ GET /api/attachments/43423cc6-3360-4a88-8ae6-6709543e6956/asset/img-0.png 200 in 97ms (next.js: 53ms, application-code: 43ms)
+ GET /api/attachments/43423cc6-3360-4a88-8ae6-6709543e6956/asset/original 404 in 37ms (next.js: 6ms, application-code: 31ms)
+ POST /api/auth/sign-up/email 200 in 201ms (next.js: 8ms, application-code: 193ms)
+ GET /api/attachments/43423cc6-3360-4a88-8ae6-6709543e6956/content 404 in 34ms (next.js: 7ms, application-code: 27ms)
+ GET /api/attachments/43423cc6-3360-4a88-8ae6-6709543e6956/download 404 in 35ms (next.js: 6ms, application-code: 30ms)
+ DELETE /api/attachments/cb96a951-b375-4618-8377-bc2195f79c41 404 in 73ms (next.js: 36ms, application-code: 37ms)
+ DELETE /api/attachments/cb96a951-b375-4618-8377-bc2195f79c41 200 in 64ms (next.js: 6ms, application-code: 58ms)
+ GET /api/notes?q=Monthly%20rent 200 in 43ms (next.js: 6ms, application-code: 36ms)
+[?25h

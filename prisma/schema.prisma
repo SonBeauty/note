@@ -1,0 +1,157 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+// ============================================================
+// Auth — cấu trúc lấy từ getAuthTables() của better-auth 1.7.2
+// KHÔNG sửa tay các model này khi nâng cấp better-auth;
+// chạy lại probe getAuthTables() để đối chiếu trước.
+// ============================================================
+
+model User {
+  id            String    @id @default(cuid())
+  name          String
+  email         String    @unique
+  emailVerified Boolean   @default(false)
+  image         String?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  sessions      Session[]
+  accounts      Account[]
+  notes         Note[]
+  labels        Label[]
+  attachments   Attachment[]
+}
+
+model Session {
+  id        String   @id @default(cuid())
+  expiresAt DateTime
+  token     String   @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  ipAddress String?
+  userAgent String?
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+}
+
+model Account {
+  id                    String    @id @default(cuid())
+  issuer                String
+  accountId             String
+  providerId            String
+  userId                String
+  user                  User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  accessToken           String?
+  refreshToken          String?
+  idToken               String?
+  accessTokenExpiresAt  DateTime?
+  refreshTokenExpiresAt DateTime?
+  scope                 String?
+  password              String?
+  createdAt             DateTime  @default(now())
+  updatedAt             DateTime  @updatedAt
+
+  @@index([userId])
+}
+
+model Verification {
+  id         String   @id @default(cuid())
+  identifier String
+  value      String
+  expiresAt  DateTime
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@index([identifier])
+}
+
+// ============================================================
+// Note domain
+// ============================================================
+
+model Note {
+  id     String @id @default(cuid())
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  title     String  @default("")
+  body      String  @default("") @db.Text // markdown
+  checklist Json? // [{ id, text, checked, order }]
+  color     String  @default("default")
+
+  isPinned   Boolean   @default(false)
+  isArchived Boolean   @default(false)
+  deletedAt  DateTime? // soft delete -> thùng rác
+
+  /// body + extractedText của mọi attachment.
+  /// Cột dẫn xuất — CHỈ được ghi bởi rebuildSearchableText().
+  searchableText String @default("") @db.Text
+
+  attachments Attachment[]
+  labels      Label[]      @relation("NoteLabels")
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([userId, isArchived, deletedAt, isPinned, updatedAt])
+  @@index([userId, deletedAt])
+}
+
+model Attachment {
+  id     String @id @default(cuid())
+  noteId String
+  note   Note   @relation(fields: [noteId], references: [id], onDelete: Cascade)
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  fileName   String
+  mimeType   String
+  sizeBytes  Int
+  storageKey String @unique // cuid, KHÔNG dùng tên file gốc
+
+  /// markdown | docx | pdf | image | code | data | html | unknown
+  kind String
+
+  renderedHtml  String? @db.Text // HTML đã sanitize, cache để mở là đọc ngay
+  extractedText String? @db.Text // text thô cho search + RAG giai đoạn 2
+
+  /// pending | ready | failed | unsupported
+  status       String  @default("pending")
+  errorMessage String?
+
+  createdAt DateTime @default(now())
+
+  @@index([noteId])
+  @@index([userId])
+}
+
+model Label {
+  id     String @id @default(cuid())
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  name   String
+  notes  Note[] @relation("NoteLabels")
+
+  createdAt DateTime @default(now())
+
+  @@unique([userId, name])
+}
+
+/// Giai đoạn 2 — RAG. Tạo trước để khỏi migrate dữ liệu sau.
+model NoteChunk {
+  id      String @id @default(cuid())
+  noteId  String
+  content String @db.Text
+  ordinal Int
+
+  @@index([noteId])
+}
