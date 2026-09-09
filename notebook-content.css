@@ -1,0 +1,62 @@
+/* Khoi noi dung cua mon Lap trinh: code, bang du lieu, canh bao, vi du JOIN. */
+:root {
+  --code-bg: #2f2519; --code-ink: #f2e7d5;
+  --hint-bg: #fdf3dc; --hint-edge: #c9a44c;
+}
+@media (prefers-color-scheme: dark) {
+  :root { --code-bg: #14110d; --code-ink: #e8dcc6; --hint-bg: #2c2618; --hint-edge: #8a7433; }
+}
+
+code {
+  font-family: Consolas, "Cascadia Mono", monospace; font-size: .92em;
+  background: var(--accent-soft); color: var(--accent);
+  padding: 1px 5px; border-radius: 4px;
+}
+pre.code {
+  background: var(--code-bg); color: var(--code-ink); border-radius: 10px;
+  padding: 14px 16px; overflow-x: auto; margin: 12px 0;
+  font-family: Consolas, "Cascadia Mono", monospace; font-size: 13.5px; line-height: 1.65;
+}
+pre.code code { background: none; color: inherit; padding: 0; font-size: inherit; }
+
+aside.hint {
+  background: var(--hint-bg); border-left: 4px solid var(--hint-edge);
+  padding: 12px 15px; border-radius: 0 8px 8px 0; margin: 14px 0; font-size: 15px;
+}
+aside.hint code { background: rgba(0, 0, 0, .07); color: inherit; }
+
+.big-example {
+  font-size: 25px; font-weight: bold; color: var(--accent);
+  text-align: center; margin: 16px 0; letter-spacing: .5px;
+}
+
+table.data { width: 100%; border-collapse: collapse; font-size: 14.5px; }
+table.data th {
+  text-align: left; font-size: 12.5px; color: var(--ink-soft);
+  background: var(--paper); padding: 8px 11px; border-bottom: 2px solid var(--border);
+}
+table.data td { padding: 8px 11px; border-bottom: 1px dashed var(--border); }
+table.data tr:last-child td { border-bottom: 0; }
+.null { color: var(--bad); font-style: italic; }
+
+/* Vi du JOIN bam duoc */
+.demo { background: var(--paper); border: 1px solid var(--border); border-radius: 10px;
+  padding: 15px; margin-bottom: 14px; }
+.demo-tables { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.demo-cap { margin: 0 0 6px; font-size: 14px; }
+.demo-tables table.data th { background: var(--sheet); }
+.demo-tabs { display: flex; gap: 7px; flex-wrap: wrap; margin: 15px 0 4px; }
+.demo-tabs button.on { background: var(--accent); border-color: var(--accent); color: #fff; }
+.demo-note { font-size: 14.5px; color: var(--ink-soft); margin: 8px 0 0; }
+#demo-result table.data { margin-top: 10px; background: var(--sheet); border-radius: 8px; }
+
+@media (max-width: 560px) {
+  .demo-tables { grid-template-columns: 1fr; }
+  .demo-tabs button { flex: 1; min-height: 38px; }
+  pre.code { font-size: 12.5px; padding: 12px; }
+  .big-example { font-size: 21px; }
+}
+@media print {
+  pre.code { background: #f2efe6; color: #241d13; border: 1px solid #ccc; }
+  .demo-tabs { display: none; }
+}

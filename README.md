@@ -1,15 +1,28 @@
-# Sổ tay tiếng Anh
+# Sổ tay học tập
 
-Sổ tay học tiếng Anh cá nhân, chạy offline bằng trình duyệt. Không cần server, không cần cài gì.
+Sổ tay học cá nhân gồm hai phần: **Tiếng Anh** và **Lập trình**. Chạy offline bằng trình duyệt,
+không cần server, không cần cài gì.
 
 ## Mở sổ
 
 Nháy đúp vào `index.html`, hoặc kéo file đó thả vào cửa sổ Chrome/Edge.
 
+## Hai mục chính
+
+Hai tab trên đầu sổ, mỗi tab giữ tiến độ và trang đang đọc riêng:
+
+| Mục | Nội dung | Số bài tập |
+|---|---|---|
+| Tiếng Anh | 5 chương: giới thiệu bản thân, kinh nghiệm, dự án, công việc hằng ngày, du lịch | 25 |
+| Lập trình | 3 chương SQL: ghép bảng JOIN, tổng hợp dữ liệu, áp dụng vào dự án | 14 |
+
+Phần SQL có ví dụ JOIN bấm được để so sánh INNER, LEFT và RIGHT, kèm các ô cảnh báo chỗ dễ nhầm.
+
 ## Lật sổ
 
 - Trang 1 là **Mục lục**, bấm vào chương để mở
 - Cột **bookmark** bên phải: nhảy thẳng tới chương bất kỳ, có hiện điểm từng chương
+- Màn hình nhỏ thì cột bookmark ẩn đi, thay bằng nút **☰ Mục lục** bên phải mở ngăn kéo chọn chương
 - Trong mỗi chương có hai tab: **Bài học** và **Bài tập**
 - Nút **Trang trước / Trang sau** ở dưới, hoặc dùng phím mũi tên ← →
 - Sổ nhớ trang bạn đang đọc, mở lại là vào đúng chỗ cũ
@@ -18,7 +31,7 @@ Nháy đúp vào `index.html`, hoặc kéo file đó thả vào cửa sổ Chrom
 
 - **5 chương theo chủ đề**: giới thiệu bản thân, kinh nghiệm & kỹ năng, nói về dự án, công việc hằng ngày, du lịch & sở thích
 - Mỗi chương gồm: câu mẫu (sai → đúng → cách nói tự nhiên), bảng quy tắc, từ vựng, bài tập, ô ghi chú
-- **25 bài tập** ba dạng: dịch sang tiếng Anh, sửa câu sai, điền vào chỗ trống
+- **39 bài tập** năm dạng: dịch sang tiếng Anh, sửa câu sai, điền vào chỗ trống, đoán kết quả, viết mệnh đề SQL
 - **Chấm điểm tự động**: gõ đáp án rồi bấm Kiểm tra (hoặc nhấn Enter)
   - ✓ Chính xác
   - ⚠ Gần đúng — đúng từ nhưng sai viết hoa hoặc dấu câu
@@ -125,14 +138,21 @@ Không dùng Georgia vì Georgia thiếu bộ glyph Latin Extended Additional, k
 
 ```
 english-notebook/
-├── index.html            khung sổ, thanh công cụ, vùng lật trang
-├── notebook-styles.css   giao diện tờ giấy + tab bookmark, tự đổi màu sáng/tối
-├── notebook-state.js     lưu trữ localStorage, chấm điểm, đếm điểm theo chương
+├── index.html            khung sổ, hai tab chính, ngăn kéo mục lục
+├── notebook-styles.css   giao diện tờ giấy, tab, bookmark, ngăn kéo
+├── notebook-content.css  khối code, bảng dữ liệu, ô cảnh báo cho phần SQL
+├── notebook-state.js     lưu trữ localStorage, chấm điểm, đếm điểm theo chương và theo mục
+├── notebook-speech.js    đọc mẫu tiếng Anh bằng Web Speech API
+├── notebook-blocks.js    dựng khối nội dung SQL và ví dụ JOIN bấm được
 ├── notebook-render.js    dựng HTML cho mục lục, trang bài học, trang bài tập
-├── notebook-app.js       lật trang, bắt sự kiện, nút công cụ
-├── data-chapters.js      nội dung bài học
-├── data-vocabulary.js    từ vựng
-├── data-exercises.js     bài tập
+├── notebook-app.js       đổi mục, lật trang, bắt sự kiện
+├── notebook-toolbar.js   các nút trên thanh công cụ
+├── data-chapters.js      nội dung tiếng Anh
+├── data-vocabulary.js    từ vựng tiếng Anh
+├── data-exercises.js     bài tập tiếng Anh
+├── data-sql-chapters.js  nội dung SQL
+├── data-sql-exercises.js bài tập SQL
+├── data-subjects.js      khai báo hai mục chính
 ├── build-single-file.js  gộp tất cả thành 1 file cho điện thoại
 ├── serve-lan.js          mở sổ từ điện thoại qua WiFi
 └── deploy.sh             đẩy bản mới lên GitHub Pages

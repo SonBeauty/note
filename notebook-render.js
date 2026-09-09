@@ -1,39 +1,53 @@
-// Dung HTML cho tung trang cua cuon so.
+// Dung HTML cho tung trang cua cuon so, dung chung cho ca hai mon.
 window.NBRender = (function () {
   var esc = window.NB.esc;
   var say = function (t) { return window.NBSpeech.btn(t); };
-  var KIND = { translate: "Dịch sang tiếng Anh", fix: "Sửa câu sai", fill: "Điền vào chỗ trống" };
+  var KIND = {
+    translate: "Dịch sang tiếng Anh", fix: "Sửa câu sai", fill: "Điền vào chỗ trống",
+    guess: "Đoán kết quả", sql: "Viết mệnh đề SQL"
+  };
 
-  // Trang 0 la muc luc, moi chuong chiem 2 trang: bai hoc va bai tap.
-  function buildPages() {
-    var pages = [{ kind: "toc", title: "Mục lục", label: "Mục lục" }];
-    window.CHAPTERS.forEach(function (ch, i) {
-      pages.push({ kind: "learn", chapter: ch.id, title: ch.title, label: "Bài học", no: i + 1 });
-      pages.push({ kind: "practice", chapter: ch.id, title: ch.title, label: "Bài tập", no: i + 1 });
-    });
-    return pages;
+  function subjectById(id) {
+    return window.SUBJECTS.filter(function (s) { return s.id === id; })[0] || window.SUBJECTS[0];
   }
 
-  function tocHtml() {
-    var h = '<div class="page-head"><h2>Mục lục</h2>' +
-      '<span class="kicker">Bấm vào chương để mở</span></div>' +
-      '<p class="intro">Sổ tay này ghi lại đúng những gì bạn đã học và những lỗi bạn đã mắc. ' +
-      'Mỗi chương gồm một trang bài học và một trang bài tập.</p><ol class="contents">';
-    window.CHAPTERS.forEach(function (ch, i) {
-      var done = window.NB.correctCount(ch.id), all = window.NB.totalCount(ch.id);
-      h += '<li data-goto="' + (i * 2 + 1) + '"><span class="c-score">' + done + "/" + all + '</span>' +
-        esc(ch.title) + '<span class="c-sub"> — ' + esc(ch.subtitle) + '</span></li>';
+  // Trang 0 la muc luc, moi chuong chiem 2 trang: bai hoc va bai tap.
+  function buildPages(subjectId) {
+    var subject = subjectById(subjectId);
+    var pages = [{ kind: "toc", subject: subject.id, title: "Mục lục", label: "Mục lục" }];
+    subject.chapters.forEach(function (ch, i) {
+      pages.push({ kind: "learn", subject: subject.id, chapter: ch.id, title: ch.title, no: i + 1 });
+      pages.push({ kind: "practice", subject: subject.id, chapter: ch.id, title: ch.title, no: i + 1 });
     });
-    h += "</ol>";
-    return h;
+    return pages;
   }
 
   function chapterScore(chId) {
     return window.NB.correctCount(chId) + "/" + window.NB.totalCount(chId);
   }
 
+  function subjectTabsHtml(currentId) {
+    return window.SUBJECTS.map(function (s) {
+      return '<button class="subject-tab' + (s.id === currentId ? " on" : "") +
+        '" data-subject="' + s.id + '">' + esc(s.title) +
+        '<small>' + window.NB.correctCount(s.id) + "/" + window.NB.totalCount(s.id) + "</small></button>";
+    }).join("");
+  }
+
+  function tocHtml(subjectId) {
+    var subject = subjectById(subjectId);
+    var h = '<div class="page-head"><h2>Mục lục</h2>' +
+      '<span class="kicker">' + esc(subject.title) + " · bấm vào chương để mở</span></div>" +
+      '<p class="intro">' + esc(subject.tocIntro) + "</p><ol class=\"contents\">";
+    subject.chapters.forEach(function (ch, i) {
+      h += '<li data-goto="' + (i * 2 + 1) + '"><span class="c-score">' + chapterScore(ch.id) + "</span>" +
+        esc(ch.title) + '<span class="c-sub"> — ' + esc(ch.subtitle) + "</span></li>";
+    });
+    return h + "</ol>";
+  }
+
   function headHtml(ch, label) {
-    return '<div class="page-head"><h2>' + esc(ch.title) + '</h2>' +
+    return '<div class="page-head"><h2>' + esc(ch.title) + "</h2>" +
       '<span class="kicker">' + esc(ch.subtitle) + " · " + label + "</span></div>";
   }
 
@@ -45,10 +59,10 @@ window.NBRender = (function () {
       "</div>";
   }
 
-  function learnHtml(ch, pageIndex) {
+  // Trang bai hoc mon tieng Anh: cau mau, quy tac, tu vung.
+  function learnEnHtml(ch) {
     var st = window.NB.get();
-    var h = headHtml(ch, "Bài học") + tabsHtml(pageIndex, "learn") +
-      '<p class="intro">' + esc(ch.intro) + "</p>";
+    var h = '<p class="intro">' + esc(ch.intro) + "</p>";
 
     h += '<h3 class="sub">Câu mẫu</h3>';
     ch.samples.forEach(function (s) {
@@ -72,8 +86,12 @@ window.NBRender = (function () {
         '<td class="vi' + (st.hideVocab ? " hidden" : "") + '" data-vocab="1">' +
         esc(v.vi) + "</td></tr>";
     });
-    h += "</table></div>";
-    return h;
+    return h + "</table></div>";
+  }
+
+  // Trang bai hoc mon Lap trinh: cac khoi noi dung tu do.
+  function learnBlocksHtml(ch) {
+    return '<p class="intro">' + esc(ch.intro) + "</p>" + window.NBBlocks.render(ch.blocks);
   }
 
   function exerciseHtml(ex, n) {
@@ -92,40 +110,42 @@ window.NBRender = (function () {
       '</div><div class="feedback" id="fb-' + ex.id + '"></div></div>';
   }
 
-  function practiceHtml(ch, pageIndex) {
+  function practiceHtml(ch) {
     var st = window.NB.get();
-    var h = headHtml(ch, "Bài tập") + tabsHtml(pageIndex, "practice") +
-      '<p class="intro">Gõ đáp án rồi bấm Kiểm tra, hoặc nhấn Enter. Chương này bạn đang đúng ' +
+    var h = '<p class="intro">Gõ đáp án rồi bấm Kiểm tra, hoặc nhấn Enter. Chương này bạn đang đúng ' +
       '<span id="ch-progress" data-ch="' + ch.id + '">' + chapterScore(ch.id) + "</span> câu.</p>";
-    (window.EXERCISES[ch.id] || []).forEach(function (ex, i) { h += exerciseHtml(ex, i + 1); });
-    h += '<h3 class="sub">Ghi chú của bạn</h3><textarea class="notes" data-notes="' + ch.id +
-      '" placeholder="Viết thêm câu bạn tự đặt, từ mới, hoặc lỗi bạn hay quên...">' +
+    (window.ALL_EXERCISES[ch.id] || []).forEach(function (ex, i) { h += exerciseHtml(ex, i + 1); });
+    return h + '<h3 class="sub">Ghi chú của bạn</h3><textarea class="notes" data-notes="' + ch.id +
+      '" placeholder="Viết thêm ví dụ, từ mới, hoặc chỗ bạn hay quên...">' +
       esc(st.notes[ch.id] || "") + "</textarea>" +
       '<div class="saved-hint">Tự lưu khi bạn gõ.</div>';
-    return h;
   }
 
   function pageHtml(pages, i) {
     var p = pages[i];
-    if (p.kind === "toc") return tocHtml();
-    var ch = window.CHAPTERS.filter(function (c) { return c.id === p.chapter; })[0];
-    return p.kind === "learn" ? learnHtml(ch, i) : practiceHtml(ch, i);
+    if (p.kind === "toc") return tocHtml(p.subject);
+    var subject = subjectById(p.subject);
+    var ch = subject.chapters.filter(function (c) { return c.id === p.chapter; })[0];
+    var head = headHtml(ch, p.kind === "learn" ? "Bài học" : "Bài tập") + tabsHtml(i, p.kind);
+    if (p.kind === "practice") return head + practiceHtml(ch);
+    return head + (subject.kind === "en" ? learnEnHtml(ch) : learnBlocksHtml(ch));
   }
 
   function bookmarksHtml(pages, cur) {
+    var subject = subjectById(pages[cur].subject);
     var curCh = pages[cur].chapter;
     var h = '<button data-goto="0" class="' + (pages[cur].kind === "toc" ? "on" : "") + '">' +
       '<span class="bm-title">Mục lục</span></button>';
-    window.CHAPTERS.forEach(function (ch, i) {
+    subject.chapters.forEach(function (ch, i) {
       h += '<button data-goto="' + (i * 2 + 1) + '" class="' + (curCh === ch.id ? "on" : "") + '">' +
         '<span class="bm-title">' + (i + 1) + ". " + esc(ch.title) + "</span>" +
-        '<span class="bm-sub">' + window.NB.correctCount(ch.id) + "/" + window.NB.totalCount(ch.id) + " câu đúng</span></button>";
+        '<span class="bm-sub">' + chapterScore(ch.id) + " câu đúng</span></button>";
     });
     return h;
   }
 
   return {
-    buildPages: buildPages, pageHtml: pageHtml,
-    bookmarksHtml: bookmarksHtml, chapterScore: chapterScore
+    buildPages: buildPages, pageHtml: pageHtml, bookmarksHtml: bookmarksHtml,
+    chapterScore: chapterScore, subjectTabsHtml: subjectTabsHtml, subjectById: subjectById
   };
 })();

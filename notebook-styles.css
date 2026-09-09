@@ -31,6 +31,28 @@ button.primary:hover { opacity: .87; color: #fff; }
 button:disabled { opacity: .35; cursor: default; }
 button:disabled:hover { border-color: var(--border); color: var(--ink); }
 
+/* ---- Hai tab chinh: Tieng Anh / Lap trinh ---- */
+.subject-tabs { display: flex; gap: 8px; justify-content: center; margin: 6px 0 4px; }
+.subject-tabs button { font-size: 16px; padding: 10px 26px; border-radius: 10px 10px 0 0;
+  border-bottom-width: 3px; line-height: 1.2; }
+.subject-tabs button small { display: block; font-size: 12px; color: var(--ink-soft); margin-top: 2px; }
+.subject-tabs button.on { background: var(--accent); border-color: var(--accent); color: #fff; font-weight: bold; }
+.subject-tabs button.on small { color: #fff; opacity: .8; }
+
+/* ---- Nut mo muc luc, chi hien tren man hinh nho ---- */
+.toc-fab { display: none; margin: 0 0 10px auto; }
+.drawer { display: none; position: fixed; inset: 0; background: rgba(30, 22, 12, .45); z-index: 40; }
+.drawer.open { display: block; }
+.drawer-panel { position: absolute; top: 0; right: 0; bottom: 0; width: min(300px, 84vw);
+  background: var(--sheet); border-left: 1px solid var(--border); padding: 14px;
+  overflow-y: auto; box-shadow: -6px 0 24px var(--shadow); animation: slide-in .2s ease; }
+@keyframes slide-in { from { transform: translateX(100%); } to { transform: none; } }
+.drawer-head { display: flex; justify-content: space-between; align-items: center;
+  border-bottom: 1px solid var(--border); padding-bottom: 10px; margin-bottom: 10px; }
+.drawer-head b { font-size: 17px; color: var(--accent); }
+.drawer-head button { border: 0; background: none; font-size: 19px; padding: 2px 8px; }
+.drawer .bookmarks { position: static; width: 100%; flex-direction: column; }
+
 .score-bar { background: var(--sheet); border: 1px solid var(--border); border-radius: 8px;
   padding: 12px 16px; margin-bottom: 18px; }
 .score-bar .label { display: flex; justify-content: space-between; font-size: 14px; margin-bottom: 7px; }
@@ -127,15 +149,13 @@ ol.contents li:hover { color: var(--accent); }
 ol.contents li .c-sub { font-size: 14px; color: var(--ink-soft); }
 ol.contents li .c-score { float: right; font-size: 14px; color: var(--ink-soft); }
 
+/* Man hinh nho: bo cot bookmark ben canh, thay bang nut Muc luc mo ngan keo */
 @media (max-width: 800px) {
-  .book-shell { flex-direction: column-reverse; }
-  .bookmarks { position: sticky; top: 0; z-index: 5; flex-direction: row; width: 100%;
-    overflow-x: auto; background: var(--paper); padding: 6px 0; -webkit-overflow-scrolling: touch; }
-  .bookmarks button { border-left: 0; border-bottom: 4px solid var(--border); border-radius: 8px 8px 0 0;
-    white-space: nowrap; }
-  .bookmarks button.on { border-left: 0; border-bottom-color: var(--accent); }
+  .book-shell > .bookmarks { display: none; }
+  .toc-fab { display: block; }
   .sheet { padding: 20px 16px 24px 22px; }
   .rule { grid-template-columns: 1fr; }
+  .subject-tabs button { flex: 1; padding: 10px 8px; }
 }
 
 /* ---- Dien thoai: chu to hon, nut de bam, thanh lat trang luon trong tam tay ---- */
@@ -161,6 +181,7 @@ ol.contents li .c-score { float: right; font-size: 14px; color: var(--ink-soft);
   ol.contents li { padding: 12px 0; }
 }
 @media print {
-  body { background: #fff; } .toolbar, .bookmarks, .pager, .tabs, .ex .actions, button.say { display: none; }
+  body { background: #fff; } .toolbar, .bookmarks, .pager, .tabs, .ex .actions, button.say,
+  .toc-fab, .drawer, .subject-tabs { display: none; }
   .sheet { box-shadow: none; min-height: 0; } .ex .feedback { display: block; }
 }

@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Sổ tay tiếng Anh của Sơn</title>
+<title>Sổ tay học tập của Sơn</title>
 <style>
 :root {
   /* Cambria/Constantia co bo glyph tieng Viet day du. Georgia thi khong, gay loi tach dau. */
@@ -37,6 +37,28 @@ button.primary { background: var(--accent); border-color: var(--accent); color: 
 button.primary:hover { opacity: .87; color: #fff; }
 button:disabled { opacity: .35; cursor: default; }
 button:disabled:hover { border-color: var(--border); color: var(--ink); }
+
+/* ---- Hai tab chinh: Tieng Anh / Lap trinh ---- */
+.subject-tabs { display: flex; gap: 8px; justify-content: center; margin: 6px 0 4px; }
+.subject-tabs button { font-size: 16px; padding: 10px 26px; border-radius: 10px 10px 0 0;
+  border-bottom-width: 3px; line-height: 1.2; }
+.subject-tabs button small { display: block; font-size: 12px; color: var(--ink-soft); margin-top: 2px; }
+.subject-tabs button.on { background: var(--accent); border-color: var(--accent); color: #fff; font-weight: bold; }
+.subject-tabs button.on small { color: #fff; opacity: .8; }
+
+/* ---- Nut mo muc luc, chi hien tren man hinh nho ---- */
+.toc-fab { display: none; margin: 0 0 10px auto; }
+.drawer { display: none; position: fixed; inset: 0; background: rgba(30, 22, 12, .45); z-index: 40; }
+.drawer.open { display: block; }
+.drawer-panel { position: absolute; top: 0; right: 0; bottom: 0; width: min(300px, 84vw);
+  background: var(--sheet); border-left: 1px solid var(--border); padding: 14px;
+  overflow-y: auto; box-shadow: -6px 0 24px var(--shadow); animation: slide-in .2s ease; }
+@keyframes slide-in { from { transform: translateX(100%); } to { transform: none; } }
+.drawer-head { display: flex; justify-content: space-between; align-items: center;
+  border-bottom: 1px solid var(--border); padding-bottom: 10px; margin-bottom: 10px; }
+.drawer-head b { font-size: 17px; color: var(--accent); }
+.drawer-head button { border: 0; background: none; font-size: 19px; padding: 2px 8px; }
+.drawer .bookmarks { position: static; width: 100%; flex-direction: column; }
 
 .score-bar { background: var(--sheet); border: 1px solid var(--border); border-radius: 8px;
   padding: 12px 16px; margin-bottom: 18px; }
@@ -134,15 +156,13 @@ ol.contents li:hover { color: var(--accent); }
 ol.contents li .c-sub { font-size: 14px; color: var(--ink-soft); }
 ol.contents li .c-score { float: right; font-size: 14px; color: var(--ink-soft); }
 
+/* Man hinh nho: bo cot bookmark ben canh, thay bang nut Muc luc mo ngan keo */
 @media (max-width: 800px) {
-  .book-shell { flex-direction: column-reverse; }
-  .bookmarks { position: sticky; top: 0; z-index: 5; flex-direction: row; width: 100%;
-    overflow-x: auto; background: var(--paper); padding: 6px 0; -webkit-overflow-scrolling: touch; }
-  .bookmarks button { border-left: 0; border-bottom: 4px solid var(--border); border-radius: 8px 8px 0 0;
-    white-space: nowrap; }
-  .bookmarks button.on { border-left: 0; border-bottom-color: var(--accent); }
+  .book-shell > .bookmarks { display: none; }
+  .toc-fab { display: block; }
   .sheet { padding: 20px 16px 24px 22px; }
   .rule { grid-template-columns: 1fr; }
+  .subject-tabs button { flex: 1; padding: 10px 8px; }
 }
 
 /* ---- Dien thoai: chu to hon, nut de bam, thanh lat trang luon trong tam tay ---- */
@@ -168,8 +188,74 @@ ol.contents li .c-score { float: right; font-size: 14px; color: var(--ink-soft);
   ol.contents li { padding: 12px 0; }
 }
 @media print {
-  body { background: #fff; } .toolbar, .bookmarks, .pager, .tabs, .ex .actions, button.say { display: none; }
+  body { background: #fff; } .toolbar, .bookmarks, .pager, .tabs, .ex .actions, button.say,
+  .toc-fab, .drawer, .subject-tabs { display: none; }
   .sheet { box-shadow: none; min-height: 0; } .ex .feedback { display: block; }
+}
+
+</style>
+<style>
+/* Khoi noi dung cua mon Lap trinh: code, bang du lieu, canh bao, vi du JOIN. */
+:root {
+  --code-bg: #2f2519; --code-ink: #f2e7d5;
+  --hint-bg: #fdf3dc; --hint-edge: #c9a44c;
+}
+@media (prefers-color-scheme: dark) {
+  :root { --code-bg: #14110d; --code-ink: #e8dcc6; --hint-bg: #2c2618; --hint-edge: #8a7433; }
+}
+
+code {
+  font-family: Consolas, "Cascadia Mono", monospace; font-size: .92em;
+  background: var(--accent-soft); color: var(--accent);
+  padding: 1px 5px; border-radius: 4px;
+}
+pre.code {
+  background: var(--code-bg); color: var(--code-ink); border-radius: 10px;
+  padding: 14px 16px; overflow-x: auto; margin: 12px 0;
+  font-family: Consolas, "Cascadia Mono", monospace; font-size: 13.5px; line-height: 1.65;
+}
+pre.code code { background: none; color: inherit; padding: 0; font-size: inherit; }
+
+aside.hint {
+  background: var(--hint-bg); border-left: 4px solid var(--hint-edge);
+  padding: 12px 15px; border-radius: 0 8px 8px 0; margin: 14px 0; font-size: 15px;
+}
+aside.hint code { background: rgba(0, 0, 0, .07); color: inherit; }
+
+.big-example {
+  font-size: 25px; font-weight: bold; color: var(--accent);
+  text-align: center; margin: 16px 0; letter-spacing: .5px;
+}
+
+table.data { width: 100%; border-collapse: collapse; font-size: 14.5px; }
+table.data th {
+  text-align: left; font-size: 12.5px; color: var(--ink-soft);
+  background: var(--paper); padding: 8px 11px; border-bottom: 2px solid var(--border);
+}
+table.data td { padding: 8px 11px; border-bottom: 1px dashed var(--border); }
+table.data tr:last-child td { border-bottom: 0; }
+.null { color: var(--bad); font-style: italic; }
+
+/* Vi du JOIN bam duoc */
+.demo { background: var(--paper); border: 1px solid var(--border); border-radius: 10px;
+  padding: 15px; margin-bottom: 14px; }
+.demo-tables { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.demo-cap { margin: 0 0 6px; font-size: 14px; }
+.demo-tables table.data th { background: var(--sheet); }
+.demo-tabs { display: flex; gap: 7px; flex-wrap: wrap; margin: 15px 0 4px; }
+.demo-tabs button.on { background: var(--accent); border-color: var(--accent); color: #fff; }
+.demo-note { font-size: 14.5px; color: var(--ink-soft); margin: 8px 0 0; }
+#demo-result table.data { margin-top: 10px; background: var(--sheet); border-radius: 8px; }
+
+@media (max-width: 560px) {
+  .demo-tables { grid-template-columns: 1fr; }
+  .demo-tabs button { flex: 1; min-height: 38px; }
+  pre.code { font-size: 12.5px; padding: 12px; }
+  .big-example { font-size: 21px; }
+}
+@media print {
+  pre.code { background: #f2efe6; color: #241d13; border: 1px solid #ccc; }
+  .demo-tabs { display: none; }
 }
 
 </style>
@@ -178,9 +264,11 @@ ol.contents li .c-score { float: right; font-size: 14px; color: var(--ink-soft);
 <div class="wrap">
 
   <header class="book">
-    <h1>Sổ tay tiếng Anh</h1>
-    <p>Học theo chủ đề, làm bài và chấm điểm ngay trong sổ</p>
+    <h1>Sổ tay học tập</h1>
+    <p>Tiếng Anh và lập trình, làm bài rồi chấm điểm ngay trong sổ</p>
   </header>
+
+  <nav class="subject-tabs" id="subject-tabs"></nav>
 
   <div class="toolbar">
     <button id="btn-hide-vocab">Ẩn nghĩa (học thẻ)</button>
@@ -200,6 +288,8 @@ ol.contents li .c-score { float: right; font-size: 14px; color: var(--ink-soft);
     <div class="track"><div class="fill" id="score-fill"></div></div>
   </div>
 
+  <button class="toc-fab" id="btn-toc" aria-label="Mở mục lục">☰ Mục lục</button>
+
   <div class="book-shell">
     <div class="sheet" id="sheet"></div>
     <nav class="bookmarks" id="bookmarks"></nav>
@@ -211,6 +301,16 @@ ol.contents li .c-score { float: right; font-size: 14px; color: var(--ink-soft);
     <button id="btn-next">Trang sau ›</button>
   </div>
 
+</div>
+
+<div class="drawer" id="drawer">
+  <div class="drawer-panel">
+    <div class="drawer-head">
+      <b id="drawer-title">Mục lục</b>
+      <button id="drawer-close" aria-label="Đóng mục lục">✕</button>
+    </div>
+    <nav class="bookmarks" id="drawer-list"></nav>
+  </div>
 </div>
 
 <script>
@@ -473,39 +573,242 @@ window.EXERCISES = {
 
 </script>
 <script>
+// Noi dung SQL, giu nguyen y tu ghi chu goc.
+// Khoi noi dung: p (doan van), h (tieu de), table, code, hint, big, demo (vi du bam duoc).
+window.SQL_CHAPTERS = [
+  {
+    id: "sql1",
+    title: "Ghép bảng bằng JOIN",
+    subtitle: "JOIN, ON và WHERE",
+    intro: "Ghép dữ liệu giữa hai bảng bằng điều kiện ON. Ba loại JOIN khác nhau ở cách xử lý các dòng không khớp.",
+    blocks: [
+      { t: "h", text: "Nhớ nhanh" },
+      { t: "table", head: ["Loại", "Giữ dòng nào?"],
+        rows: [
+          ["<b>INNER JOIN</b>", "Chỉ các cặp khớp ở cả hai bảng."],
+          ["<b>LEFT JOIN</b>", "Mọi dòng bên trái. Không khớp thì phía phải là NULL."],
+          ["<b>RIGHT JOIN</b>", "Mọi dòng bên phải. Không khớp thì phía trái là NULL."]
+        ] },
+      { t: "p", html: "Viết <code>JOIN</code> không thôi thì đó chính là <code>INNER JOIN</code>. Trái và phải là vị trí của bảng trong câu SQL, không phải vị trí trên màn hình." },
+
+      { t: "h", text: "Thử từng loại JOIN" },
+      { t: "demo" },
+      { t: "p", html: "Dữ liệu giả định: <code>S9</code> không tồn tại trong bảng skus để minh họa dòng không khớp. Khóa ngoại trong thực tế thường ngăn trường hợp này xảy ra." },
+
+      { t: "h", text: "ON khác WHERE thế nào" },
+      { t: "p", html: "<code>ON</code> quyết định dòng nào được coi là khớp. <code>WHERE</code> lọc kết quả sau khi đã ghép." },
+      { t: "code", text: "FROM skus s\nLEFT JOIN order_items oi\n  ON oi.\"skuId\" = s.id\n AND oi.qty >= 5" },
+      { t: "p", html: "Giữ mọi SKU, chỉ ghép những dòng hàng có số lượng từ 5 trở lên." },
+      { t: "code", text: "FROM skus s\nLEFT JOIN order_items oi ON oi.\"skuId\" = s.id\nWHERE oi.qty >= 5" },
+      { t: "p", html: "Loại luôn cả SKU không có dòng hàng phù hợp, vì NULL không thỏa điều kiện WHERE." },
+      { t: "hint", html: "<b>Dễ nhầm:</b> <code>LEFT JOIN ... WHERE b.id IS NOT NULL</code> loại hết dòng không khớp, làm mất tác dụng giữ dòng của LEFT JOIN. Ngoài ra một dòng bên trái có thể khớp nhiều dòng bên phải, nên chú ý bị cộng lặp khi dùng SUM." }
+    ]
+  },
+  {
+    id: "sql2",
+    title: "Tổng hợp dữ liệu",
+    subtitle: "SUM, COUNT, ép kiểu, GROUP BY",
+    intro: "Bốn thứ hay đi cùng nhau khi tính toán số liệu. Cùng một bộ dữ liệu qty = 3, 5, 2 xuyên suốt để dễ so sánh.",
+    blocks: [
+      { t: "h", text: "SUM cộng số lượng" },
+      { t: "table", head: ["Dòng", "qty"], rows: [["OI1", "3"], ["OI2", "5"], ["OI3", "2"]] },
+      { t: "big", text: "3 + 5 + 2 = 10" },
+      { t: "code", text: "SELECT SUM(oi.qty) AS sold\nFROM order_items oi;\n-- sold = 10" },
+      { t: "hint", html: "<b>Nhớ:</b> SUM cộng giá trị chứ không đếm số dòng. SUM bỏ qua NULL, và nếu không có giá trị nào để cộng thì trả về NULL chứ không phải 0." },
+
+      { t: "h", text: "COUNT đếm số dòng" },
+      { t: "p", html: "Vẫn bộ dữ liệu qty = 3, 5, 2: tổng là 10 nhưng số dòng chỉ là 3." },
+      { t: "table", head: ["Biểu thức", "Kết quả", "Ý nghĩa"],
+        rows: [
+          ["<code>SUM(oi.qty)</code>", "10", "Cộng số lượng"],
+          ["<code>COUNT(*)</code>", "3", "Đếm mọi dòng"],
+          ["<code>COUNT(oi.qty)</code>", "3", "Đếm các qty khác NULL"]
+        ] },
+      { t: "code", text: "SELECT SUM(oi.qty) AS total_qty,\n       COUNT(*) AS item_rows\nFROM order_items oi;" },
+      { t: "hint", html: "Số dòng hàng không phải số đơn. Muốn đếm số đơn khác nhau thì dùng <code>COUNT(DISTINCT oi.\"orderId\")</code>." },
+
+      { t: "h", text: "Dấu :: để ép kiểu" },
+      { t: "code", text: "SUM(oi.qty)::int AS sold\n└─ cộng qty   └─ đổi sang integer" },
+      { t: "p", html: "<code>::int</code> không phải phép đếm, nó chỉ đổi kiểu dữ liệu của kết quả. Đây là cú pháp riêng của PostgreSQL, dạng <code>biểu_thức::kiểu</code>." },
+      { t: "code", text: "SUM(oi.qty)::int\nCAST(SUM(oi.qty) AS integer)" },
+      { t: "p", html: "Hai cách viết trên tương đương. Trong schema thì qty là Int, nhưng PostgreSQL trả <code>SUM(integer)</code> dưới dạng bigint, nên <code>::int</code> đưa tổng về lại integer." },
+      { t: "hint", html: "Nếu tổng vượt phạm vi integer (−2.147.483.648 đến 2.147.483.647) thì phép ép kiểu sẽ báo lỗi." },
+
+      { t: "h", text: "GROUP BY gom nhóm" },
+      { t: "p", html: "Chia dữ liệu thành từng nhóm rồi tính SUM hoặc COUNT cho mỗi nhóm." },
+      { t: "table", head: ["Size", "Các qty", "SUM", "COUNT(*)"],
+        rows: [["M", "3, 5", "8", "2"], ["L", "2", "2", "1"]] },
+      { t: "code", text: "SELECT s.option2 AS size,\n       SUM(oi.qty)::int AS sold\nFROM order_items oi\nJOIN skus s ON s.id = oi.\"skuId\"\nGROUP BY s.option2;" },
+      { t: "hint", html: "Cùng size sẽ được cộng chung kể cả khác màu. Không có <code>ORDER BY</code> thì thứ tự kết quả trả về không được bảo đảm." }
+    ]
+  },
+  {
+    id: "sql3",
+    title: "Áp dụng vào dự án",
+    subtitle: "Schema và truy vấn thống kê size",
+    intro: "Đọc lại truy vấn thật của bạn theo quan hệ giữa các bảng, kèm những chỗ dễ hiểu sai.",
+    blocks: [
+      { t: "h", text: "Quan hệ giữa các bảng" },
+      { t: "code", text: "products  1 → N  skus  1 → N  order_items  N ← 1  orders" },
+      { t: "p", html: "<code>oi.\"skuId\" → s.id</code> để lấy size từ SKU.<br><code>oi.\"orderId\" → o.id</code> để lấy trạng thái và ngày tạo đơn." },
+      { t: "p", html: "Truy vấn của bạn dùng hai <b>INNER JOIN</b>, lọc đơn CONFIRMED hoặc EXPORTED tạo trong 12 tháng gần đây, rồi <code>SUM(oi.qty)</code> theo <code>s.option2</code>. Size nào không có dòng hàng phù hợp sẽ không xuất hiện trong kết quả." },
+
+      { t: "h", text: "Điều kiện cần nhớ" },
+      { t: "p", html: "<code>option2 ~ '^[A-Za-z]+$'</code> nhận M, XL, XXL nhưng loại 2XL, loại 38 và loại cả chuỗi có khoảng trắng." },
+      { t: "p", html: "<code>createdAt</code> là ngày tạo đơn, không phải ngày xuất hàng." },
+      { t: "p", html: "Schema có cả <code>option2</code> lẫn <code>Size</code>, truy vấn hiện tại đang dùng <code>option2</code>." },
+      { t: "p", html: "<code>sold</code> chỉ là tên cột kết quả, bản thân nó không chứng minh đơn đã giao hay đã thanh toán." },
+      { t: "hint", html: "Vì dùng INNER JOIN nên size chưa bán được cái nào sẽ biến mất khỏi báo cáo. Muốn hiện đủ mọi size kể cả bằng 0 thì phải đổi sang LEFT JOIN từ bảng skus." }
+    ]
+  }
+];
+
+</script>
+<script>
+// Bai tap SQL. type: fill (dien tu khoa), guess (doan ket qua), sql (viet menh de).
+// Ca ba deu cham khong phan biet hoa thuong vi tu khoa SQL viet kieu nao cung dung.
+window.SQL_EXERCISES = {
+  sql1: [
+    { id: "q1e1", type: "fill", prompt: "Muốn giữ mọi dòng của bảng bên trái thì dùng ___ JOIN.",
+      hint: "Bảng bên trái là bảng viết sau FROM.",
+      answers: ["LEFT"] },
+    { id: "q1e2", type: "fill", prompt: "Viết JOIN không thôi thì thực chất là ___ JOIN.",
+      hint: "Loại chỉ giữ các cặp khớp ở cả hai bảng.",
+      answers: ["INNER"] },
+    { id: "q1e3", type: "fill", prompt: "Điều kiện ghép hai bảng được viết sau từ khóa ___.",
+      hint: "Không phải WHERE.",
+      answers: ["ON"] },
+    { id: "q1e4", type: "guess", prompt: "order_items có OI1→S1 và OI2→S9, bảng skus chỉ có S1 và S2. INNER JOIN trả về mấy dòng?",
+      hint: "Chỉ đếm cặp khớp được ở cả hai bên. S9 không tồn tại.",
+      answers: ["1", "1 dòng", "một"] },
+    { id: "q1e5", type: "guess", prompt: "Vẫn dữ liệu đó, LEFT JOIN từ order_items sang skus trả về mấy dòng?",
+      hint: "Giữ hết dòng bên trái, dòng không khớp thì phía phải là NULL.",
+      answers: ["2", "2 dòng", "hai"] }
+  ],
+  sql2: [
+    { id: "q2e1", type: "guess", prompt: "Ba dòng hàng có qty là 3, 5 và 2. SUM(oi.qty) bằng bao nhiêu?",
+      hint: "Cộng lại, đừng đếm số dòng.",
+      answers: ["10"] },
+    { id: "q2e2", type: "guess", prompt: "Vẫn ba dòng đó, COUNT(*) bằng bao nhiêu?",
+      hint: "COUNT đếm số dòng chứ không cộng giá trị.",
+      answers: ["3"] },
+    { id: "q2e3", type: "fill", prompt: "Ép tổng về kiểu integer trong PostgreSQL: SUM(oi.qty)___",
+      hint: "Hai dấu hai chấm rồi tới tên kiểu.",
+      answers: ["::int", "::integer"] },
+    { id: "q2e4", type: "guess", prompt: "Gom nhóm theo size: M có qty 3 và 5, L có qty 2. SUM của nhóm M bằng bao nhiêu?",
+      hint: "Chỉ cộng các qty thuộc nhóm M.",
+      answers: ["8"] },
+    { id: "q2e5", type: "sql", prompt: "Viết mệnh đề gom nhóm kết quả theo cột s.option2.",
+      hint: "Hai từ khóa rồi tới tên cột.",
+      answers: ["GROUP BY s.option2"] }
+  ],
+  sql3: [
+    { id: "q3e1", type: "fill", prompt: "Cột dùng để nối order_items sang bảng skus là oi.___",
+      hint: "Trong schema nó được viết có dấu nháy kép vì chữ hoa chữ thường.",
+      answers: ["skuId", "\"skuId\""] },
+    { id: "q3e2", type: "guess", prompt: "Điều kiện option2 ~ '^[A-Za-z]+$' có nhận giá trị 2XL không?",
+      hint: "Mẫu này chỉ cho phép chữ cái, mà 2XL bắt đầu bằng chữ số.",
+      answers: ["không", "khong", "no", "không nhận"] },
+    { id: "q3e3", type: "fill", prompt: "createdAt là ngày ___ đơn, không phải ngày xuất hàng.",
+      hint: "Một từ tiếng Việt.",
+      answers: ["tạo", "tao"] },
+    { id: "q3e4", type: "sql", prompt: "Viết mệnh đề ghép bảng skus vào order_items, đặt bí danh là s.",
+      hint: "Dạng JOIN <bảng> <bí danh> ON <điều kiện>. Cột skuId cần dấu nháy kép.",
+      answers: ["JOIN skus s ON s.id = oi.\"skuId\"", "INNER JOIN skus s ON s.id = oi.\"skuId\""] }
+  ]
+};
+
+</script>
+<script>
+// Hai muc chinh cua so tay. Phai nap sau cac file du lieu kia.
+window.SUBJECTS = [
+  {
+    id: "en",
+    title: "Tiếng Anh",
+    tagline: "Học theo chủ đề, làm bài và chấm điểm ngay trong sổ",
+    tocIntro: "Sổ tay này ghi lại đúng những gì bạn đã học và những lỗi bạn đã mắc. " +
+      "Mỗi chương gồm một trang bài học và một trang bài tập.",
+    kind: "en",
+    chapters: window.CHAPTERS
+  },
+  {
+    id: "sql",
+    title: "Lập trình",
+    tagline: "Ghi chú SQL rút từ chính truy vấn trong dự án của bạn",
+    tocIntro: "Phần này đi từ cách ghép bảng tới cách tổng hợp số liệu, rồi soi lại " +
+      "truy vấn thống kê size trong dự án. Mỗi chương cũng có một trang bài tập.",
+    kind: "blocks",
+    chapters: window.SQL_CHAPTERS
+  }
+];
+
+// Gop bai tap cua moi mon vao mot bang tra cuu chung theo id chuong.
+window.ALL_EXERCISES = Object.assign({}, window.EXERCISES, window.SQL_EXERCISES);
+
+// Tra ve mon chua chuong nay.
+window.subjectOfChapter = function (chapterId) {
+  for (var i = 0; i < window.SUBJECTS.length; i++) {
+    var s = window.SUBJECTS[i];
+    for (var j = 0; j < s.chapters.length; j++) {
+      if (s.chapters[j].id === chapterId) return s;
+    }
+  }
+  return window.SUBJECTS[0];
+};
+
+</script>
+<script>
 // Luu tru, cham diem va cac ham tien ich dung chung.
 window.NB = (function () {
   var KEY = "english-notebook-v1";
   var state = load();
 
   function blank() {
-    return { answers: {}, status: {}, notes: {}, hideVocab: false, slowSpeech: false, page: 0 };
+    return {
+      answers: {}, status: {}, notes: {},
+      hideVocab: false, slowSpeech: false,
+      subject: "en", pages: { en: 0, sql: 0 }
+    };
   }
+
+  // Ban backup cu chi co mot so trang duy nhat, chuyen sang dang tach theo mon.
+  function normalize(s) {
+    if (!s || typeof s !== "object" || !s.answers) return blank();
+    if (typeof s.pages !== "object" || !s.pages) {
+      s.pages = { en: typeof s.page === "number" ? s.page : 0, sql: 0 };
+    }
+    if (typeof s.pages.en !== "number") s.pages.en = 0;
+    if (typeof s.pages.sql !== "number") s.pages.sql = 0;
+    if (s.subject !== "en" && s.subject !== "sql") s.subject = "en";
+    delete s.page;
+    return s;
+  }
+
   function load() {
-    try {
-      var s = JSON.parse(localStorage.getItem(KEY));
-      if (!s || typeof s !== "object" || !s.answers) return blank();
-      if (typeof s.page !== "number") s.page = 0;
-      return s;
-    } catch (e) { return blank(); }
+    try { return normalize(JSON.parse(localStorage.getItem(KEY))); }
+    catch (e) { return blank(); }
   }
+
   function save() {
     try { localStorage.setItem(KEY, JSON.stringify(state)); }
     catch (e) { console.warn("Không lưu được:", e); }
   }
 
-  // Cham mem: bo khoang trang thua, dau cham cuoi cau, chuan hoa dau nhay cong.
+  // Cham mem: bo khoang trang thua, dau cau o cuoi, chuan hoa dau nhay cong.
   function norm(s) {
-    return String(s).replace(/[‘’]/g, "'").replace(/\s+/g, " ").trim().replace(/[.!?]+$/, "");
+    return String(s).replace(/[‘’]/g, "'").replace(/\s+/g, " ").trim().replace(/[.!?;]+$/, "");
   }
   // Bo het dau cau va viet hoa, dung de phat hien "gan dung".
   function loose(s) {
     return norm(s).toLowerCase().replace(/[.,;:'"?!-]/g, "").replace(/\s+/g, " ").trim();
   }
 
+  // Tu khoa SQL va cac dang dien tu khong phan biet hoa thuong.
+  var CASE_FREE = { fill: 1, guess: 1, sql: 1 };
+
   function grade(ex, input) {
     if (!norm(input)) return "empty";
-    var caseFree = ex.type === "fill";
+    var caseFree = CASE_FREE[ex.type] === 1;
     var u = norm(input);
     for (var i = 0; i < ex.answers.length; i++) {
       var a = norm(ex.answers[i]);
@@ -518,28 +821,40 @@ window.NB = (function () {
   }
 
   function findEx(id) {
-    var keys = Object.keys(window.EXERCISES);
+    var keys = Object.keys(window.ALL_EXERCISES);
     for (var i = 0; i < keys.length; i++) {
-      var list = window.EXERCISES[keys[i]];
+      var list = window.ALL_EXERCISES[keys[i]];
       for (var j = 0; j < list.length; j++) { if (list[j].id === id) return list[j]; }
     }
     return null;
   }
 
-  // So cau dung cua mot chuong, hoac cua ca so neu khong truyen chapterId.
-  function correctCount(chapterId) {
-    var ids = chapterId
-      ? (window.EXERCISES[chapterId] || []).map(function (e) { return e.id; })
-      : Object.keys(state.status);
-    return ids.filter(function (id) { return state.status[id] === "correct"; }).length;
+  function chapterIds(subjectId) {
+    var ids = [];
+    window.SUBJECTS.forEach(function (s) {
+      if (subjectId && s.id !== subjectId) return;
+      s.chapters.forEach(function (c) { ids.push(c.id); });
+    });
+    return ids;
   }
 
-  function totalCount(chapterId) {
-    if (chapterId) return (window.EXERCISES[chapterId] || []).length;
-    return Object.keys(window.EXERCISES).reduce(function (n, k) {
-      return n + window.EXERCISES[k].length;
-    }, 0);
+  // Dem theo chuong, theo mon, hoac ca so neu khong truyen gi.
+  function exercisesOf(scope) {
+    if (scope && window.ALL_EXERCISES[scope]) return window.ALL_EXERCISES[scope];
+    var out = [];
+    chapterIds(scope).forEach(function (id) {
+      out = out.concat(window.ALL_EXERCISES[id] || []);
+    });
+    return out;
   }
+
+  function correctCount(scope) {
+    return exercisesOf(scope).filter(function (e) {
+      return state.status[e.id] === "correct";
+    }).length;
+  }
+
+  function totalCount(scope) { return exercisesOf(scope).length; }
 
   function esc(s) {
     return String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;")
@@ -548,8 +863,10 @@ window.NB = (function () {
 
   return {
     get: function () { return state; },
-    replace: function (s) { state = s; if (typeof state.page !== "number") state.page = 0; save(); },
+    replace: function (s) { state = normalize(s); save(); },
     reset: function () { state = blank(); save(); },
+    page: function () { return state.pages[state.subject] || 0; },
+    setPage: function (i) { state.pages[state.subject] = i; },
     save: save,
     grade: grade,
     findEx: findEx,
@@ -605,42 +922,146 @@ window.NBSpeech = (function () {
 
 </script>
 <script>
-// Dung HTML cho tung trang cua cuon so.
+// Dung HTML cho cac khoi noi dung cua mon Lap trinh, va vi du JOIN bam duoc.
+window.NBBlocks = (function () {
+  var esc = window.NB.esc;
+
+  // Du lieu vi du: S9 khong ton tai trong bang skus de minh hoa dong khong khop.
+  var DEMO = {
+    INNER: { rows: [["OI1", "S1", "M"]],
+      text: "Chỉ OI1 khớp S1 nên giữ đúng 1 dòng." },
+    LEFT: { rows: [["OI1", "S1", "M"], ["OI2", null, null]],
+      text: "Giữ cả hai dòng hàng. OI2 không khớp SKU nào nên phía SKU là NULL." },
+    RIGHT: { rows: [["OI1", "S1", "M"], [null, "S2", "L"]],
+      text: "Giữ cả hai SKU. S2 chưa có dòng hàng nào nên item_id là NULL." }
+  };
+
+  function tableHtml(head, rows) {
+    var h = '<table class="data"><thead><tr>';
+    head.forEach(function (c) { h += "<th>" + c + "</th>"; });
+    h += "</tr></thead><tbody>";
+    rows.forEach(function (r) {
+      h += "<tr>";
+      r.forEach(function (c) { h += "<td>" + c + "</td>"; });
+      h += "</tr>";
+    });
+    return h + "</tbody></table>";
+  }
+
+  function demoHtml() {
+    return '<div class="demo">' +
+      '<div class="demo-tables">' +
+      '<div><p class="demo-cap"><b>A · order_items</b></p>' +
+      tableHtml(["id", "skuId"], [["OI1", "S1"], ["OI2", "S9"]]) + "</div>" +
+      '<div><p class="demo-cap"><b>B · skus</b></p>' +
+      tableHtml(["id", "size"], [["S1", "M"], ["S2", "L"]]) + "</div></div>" +
+      '<div class="demo-tabs">' +
+      '<button data-join="INNER">INNER JOIN</button>' +
+      '<button data-join="LEFT">LEFT JOIN</button>' +
+      '<button data-join="RIGHT">RIGHT JOIN</button></div>' +
+      '<pre class="code"><code id="demo-query"></code></pre>' +
+      '<div id="demo-result"></div>' +
+      '<p class="demo-note" id="demo-explain"></p></div>';
+  }
+
+  function blockHtml(b) {
+    if (b.t === "h") return '<h3 class="sub">' + esc(b.text) + "</h3>";
+    if (b.t === "p") return "<p>" + b.html + "</p>";
+    if (b.t === "code") return '<pre class="code"><code>' + esc(b.text) + "</code></pre>";
+    if (b.t === "hint") return '<aside class="hint">' + b.html + "</aside>";
+    if (b.t === "big") return '<div class="big-example">' + esc(b.text) + "</div>";
+    if (b.t === "table") return '<div class="card">' + tableHtml(b.head, b.rows) + "</div>";
+    if (b.t === "demo") return demoHtml();
+    return "";
+  }
+
+  function render(blocks) {
+    return (blocks || []).map(blockHtml).join("");
+  }
+
+  // Goi lai sau moi lan ve trang, chi lam gi khi trang do co vi du JOIN.
+  function wireDemo(root) {
+    var q = root.querySelector("#demo-query");
+    if (!q) return;
+    var buttons = root.querySelectorAll("[data-join]");
+
+    function show(kind) {
+      q.textContent = "SELECT oi.id AS item_id, s.id AS sku_id, s.option2 AS size\n" +
+        "FROM order_items oi\n" + kind + ' JOIN skus s ON s.id = oi."skuId";';
+      var rows = DEMO[kind].rows.map(function (r) {
+        return r.map(function (v) {
+          return v === null ? '<span class="null">NULL</span>' : esc(v);
+        });
+      });
+      root.querySelector("#demo-result").innerHTML =
+        tableHtml(["item_id", "sku_id", "size"], rows);
+      root.querySelector("#demo-explain").textContent = DEMO[kind].text;
+      for (var i = 0; i < buttons.length; i++) {
+        buttons[i].classList.toggle("on", buttons[i].dataset.join === kind);
+      }
+    }
+
+    for (var i = 0; i < buttons.length; i++) {
+      buttons[i].addEventListener("click", function () { show(this.dataset.join); });
+    }
+    show("INNER");
+  }
+
+  return { render: render, wireDemo: wireDemo };
+})();
+
+</script>
+<script>
+// Dung HTML cho tung trang cua cuon so, dung chung cho ca hai mon.
 window.NBRender = (function () {
   var esc = window.NB.esc;
   var say = function (t) { return window.NBSpeech.btn(t); };
-  var KIND = { translate: "Dịch sang tiếng Anh", fix: "Sửa câu sai", fill: "Điền vào chỗ trống" };
+  var KIND = {
+    translate: "Dịch sang tiếng Anh", fix: "Sửa câu sai", fill: "Điền vào chỗ trống",
+    guess: "Đoán kết quả", sql: "Viết mệnh đề SQL"
+  };
 
-  // Trang 0 la muc luc, moi chuong chiem 2 trang: bai hoc va bai tap.
-  function buildPages() {
-    var pages = [{ kind: "toc", title: "Mục lục", label: "Mục lục" }];
-    window.CHAPTERS.forEach(function (ch, i) {
-      pages.push({ kind: "learn", chapter: ch.id, title: ch.title, label: "Bài học", no: i + 1 });
-      pages.push({ kind: "practice", chapter: ch.id, title: ch.title, label: "Bài tập", no: i + 1 });
-    });
-    return pages;
+  function subjectById(id) {
+    return window.SUBJECTS.filter(function (s) { return s.id === id; })[0] || window.SUBJECTS[0];
   }
 
-  function tocHtml() {
-    var h = '<div class="page-head"><h2>Mục lục</h2>' +
-      '<span class="kicker">Bấm vào chương để mở</span></div>' +
-      '<p class="intro">Sổ tay này ghi lại đúng những gì bạn đã học và những lỗi bạn đã mắc. ' +
-      'Mỗi chương gồm một trang bài học và một trang bài tập.</p><ol class="contents">';
-    window.CHAPTERS.forEach(function (ch, i) {
-      var done = window.NB.correctCount(ch.id), all = window.NB.totalCount(ch.id);
-      h += '<li data-goto="' + (i * 2 + 1) + '"><span class="c-score">' + done + "/" + all + '</span>' +
-        esc(ch.title) + '<span class="c-sub"> — ' + esc(ch.subtitle) + '</span></li>';
+  // Trang 0 la muc luc, moi chuong chiem 2 trang: bai hoc va bai tap.
+  function buildPages(subjectId) {
+    var subject = subjectById(subjectId);
+    var pages = [{ kind: "toc", subject: subject.id, title: "Mục lục", label: "Mục lục" }];
+    subject.chapters.forEach(function (ch, i) {
+      pages.push({ kind: "learn", subject: subject.id, chapter: ch.id, title: ch.title, no: i + 1 });
+      pages.push({ kind: "practice", subject: subject.id, chapter: ch.id, title: ch.title, no: i + 1 });
     });
-    h += "</ol>";
-    return h;
+    return pages;
   }
 
   function chapterScore(chId) {
     return window.NB.correctCount(chId) + "/" + window.NB.totalCount(chId);
   }
 
+  function subjectTabsHtml(currentId) {
+    return window.SUBJECTS.map(function (s) {
+      return '<button class="subject-tab' + (s.id === currentId ? " on" : "") +
+        '" data-subject="' + s.id + '">' + esc(s.title) +
+        '<small>' + window.NB.correctCount(s.id) + "/" + window.NB.totalCount(s.id) + "</small></button>";
+    }).join("");
+  }
+
+  function tocHtml(subjectId) {
+    var subject = subjectById(subjectId);
+    var h = '<div class="page-head"><h2>Mục lục</h2>' +
+      '<span class="kicker">' + esc(subject.title) + " · bấm vào chương để mở</span></div>" +
+      '<p class="intro">' + esc(subject.tocIntro) + "</p><ol class=\"contents\">";
+    subject.chapters.forEach(function (ch, i) {
+      h += '<li data-goto="' + (i * 2 + 1) + '"><span class="c-score">' + chapterScore(ch.id) + "</span>" +
+        esc(ch.title) + '<span class="c-sub"> — ' + esc(ch.subtitle) + "</span></li>";
+    });
+    return h + "</ol>";
+  }
+
   function headHtml(ch, label) {
-    return '<div class="page-head"><h2>' + esc(ch.title) + '</h2>' +
+    return '<div class="page-head"><h2>' + esc(ch.title) + "</h2>" +
       '<span class="kicker">' + esc(ch.subtitle) + " · " + label + "</span></div>";
   }
 
@@ -652,10 +1073,10 @@ window.NBRender = (function () {
       "</div>";
   }
 
-  function learnHtml(ch, pageIndex) {
+  // Trang bai hoc mon tieng Anh: cau mau, quy tac, tu vung.
+  function learnEnHtml(ch) {
     var st = window.NB.get();
-    var h = headHtml(ch, "Bài học") + tabsHtml(pageIndex, "learn") +
-      '<p class="intro">' + esc(ch.intro) + "</p>";
+    var h = '<p class="intro">' + esc(ch.intro) + "</p>";
 
     h += '<h3 class="sub">Câu mẫu</h3>';
     ch.samples.forEach(function (s) {
@@ -679,8 +1100,12 @@ window.NBRender = (function () {
         '<td class="vi' + (st.hideVocab ? " hidden" : "") + '" data-vocab="1">' +
         esc(v.vi) + "</td></tr>";
     });
-    h += "</table></div>";
-    return h;
+    return h + "</table></div>";
+  }
+
+  // Trang bai hoc mon Lap trinh: cac khoi noi dung tu do.
+  function learnBlocksHtml(ch) {
+    return '<p class="intro">' + esc(ch.intro) + "</p>" + window.NBBlocks.render(ch.blocks);
   }
 
   function exerciseHtml(ex, n) {
@@ -699,54 +1124,60 @@ window.NBRender = (function () {
       '</div><div class="feedback" id="fb-' + ex.id + '"></div></div>';
   }
 
-  function practiceHtml(ch, pageIndex) {
+  function practiceHtml(ch) {
     var st = window.NB.get();
-    var h = headHtml(ch, "Bài tập") + tabsHtml(pageIndex, "practice") +
-      '<p class="intro">Gõ đáp án rồi bấm Kiểm tra, hoặc nhấn Enter. Chương này bạn đang đúng ' +
+    var h = '<p class="intro">Gõ đáp án rồi bấm Kiểm tra, hoặc nhấn Enter. Chương này bạn đang đúng ' +
       '<span id="ch-progress" data-ch="' + ch.id + '">' + chapterScore(ch.id) + "</span> câu.</p>";
-    (window.EXERCISES[ch.id] || []).forEach(function (ex, i) { h += exerciseHtml(ex, i + 1); });
-    h += '<h3 class="sub">Ghi chú của bạn</h3><textarea class="notes" data-notes="' + ch.id +
-      '" placeholder="Viết thêm câu bạn tự đặt, từ mới, hoặc lỗi bạn hay quên...">' +
+    (window.ALL_EXERCISES[ch.id] || []).forEach(function (ex, i) { h += exerciseHtml(ex, i + 1); });
+    return h + '<h3 class="sub">Ghi chú của bạn</h3><textarea class="notes" data-notes="' + ch.id +
+      '" placeholder="Viết thêm ví dụ, từ mới, hoặc chỗ bạn hay quên...">' +
       esc(st.notes[ch.id] || "") + "</textarea>" +
       '<div class="saved-hint">Tự lưu khi bạn gõ.</div>';
-    return h;
   }
 
   function pageHtml(pages, i) {
     var p = pages[i];
-    if (p.kind === "toc") return tocHtml();
-    var ch = window.CHAPTERS.filter(function (c) { return c.id === p.chapter; })[0];
-    return p.kind === "learn" ? learnHtml(ch, i) : practiceHtml(ch, i);
+    if (p.kind === "toc") return tocHtml(p.subject);
+    var subject = subjectById(p.subject);
+    var ch = subject.chapters.filter(function (c) { return c.id === p.chapter; })[0];
+    var head = headHtml(ch, p.kind === "learn" ? "Bài học" : "Bài tập") + tabsHtml(i, p.kind);
+    if (p.kind === "practice") return head + practiceHtml(ch);
+    return head + (subject.kind === "en" ? learnEnHtml(ch) : learnBlocksHtml(ch));
   }
 
   function bookmarksHtml(pages, cur) {
+    var subject = subjectById(pages[cur].subject);
     var curCh = pages[cur].chapter;
     var h = '<button data-goto="0" class="' + (pages[cur].kind === "toc" ? "on" : "") + '">' +
       '<span class="bm-title">Mục lục</span></button>';
-    window.CHAPTERS.forEach(function (ch, i) {
+    subject.chapters.forEach(function (ch, i) {
       h += '<button data-goto="' + (i * 2 + 1) + '" class="' + (curCh === ch.id ? "on" : "") + '">' +
         '<span class="bm-title">' + (i + 1) + ". " + esc(ch.title) + "</span>" +
-        '<span class="bm-sub">' + window.NB.correctCount(ch.id) + "/" + window.NB.totalCount(ch.id) + " câu đúng</span></button>";
+        '<span class="bm-sub">' + chapterScore(ch.id) + " câu đúng</span></button>";
     });
     return h;
   }
 
   return {
-    buildPages: buildPages, pageHtml: pageHtml,
-    bookmarksHtml: bookmarksHtml, chapterScore: chapterScore
+    buildPages: buildPages, pageHtml: pageHtml, bookmarksHtml: bookmarksHtml,
+    chapterScore: chapterScore, subjectTabsHtml: subjectTabsHtml, subjectById: subjectById
   };
 })();
 
 </script>
 <script>
-// Dieu khien cuon so: lat trang, cham diem, luu tru.
+// Dieu khien cuon so: doi mon, lat trang, cham diem, luu tru.
 (function () {
   var NB = window.NB, R = window.NBRender;
-  var PAGES = R.buildPages();
+  var PAGES = R.buildPages(NB.get().subject);
   var say = function (t) { return window.NBSpeech.btn(t); };
   var el = {
     sheet: document.getElementById("sheet"),
     marks: document.getElementById("bookmarks"),
+    subjectTabs: document.getElementById("subject-tabs"),
+    drawer: document.getElementById("drawer"),
+    drawerList: document.getElementById("drawer-list"),
+    drawerTitle: document.getElementById("drawer-title"),
     num: document.getElementById("page-num"),
     prev: document.getElementById("btn-prev"),
     next: document.getElementById("btn-next"),
@@ -758,16 +1189,23 @@ window.NBRender = (function () {
   function clampPage(i) { return Math.max(0, Math.min(PAGES.length - 1, i)); }
 
   function refreshScore() {
-    var done = NB.correctCount(), all = NB.totalCount();
-    el.scoreText.textContent = done + " / " + all + " câu đúng";
+    var subject = R.subjectById(NB.get().subject);
+    var done = NB.correctCount(subject.id), all = NB.totalCount(subject.id);
+    el.scoreText.textContent = subject.title + ": " + done + " / " + all + " câu đúng";
     el.scorePct.textContent = Math.round((done / all) * 100) + "%";
     el.scoreFill.style.width = (done / all) * 100 + "%";
   }
 
-  // Cap nhat diem tong, tab bookmark va dong diem cua chuong dang mo.
+  function refreshNav() {
+    el.marks.innerHTML = R.bookmarksHtml(PAGES, NB.page());
+    el.drawerList.innerHTML = el.marks.innerHTML;
+    el.subjectTabs.innerHTML = R.subjectTabsHtml(NB.get().subject);
+  }
+
+  // Cap nhat diem tong, danh sach chuong va dong diem cua chuong dang mo.
   function refreshCounters() {
     refreshScore();
-    el.marks.innerHTML = R.bookmarksHtml(PAGES, NB.get().page);
+    refreshNav();
     var chp = document.getElementById("ch-progress");
     if (chp) chp.textContent = R.chapterScore(chp.dataset.ch);
   }
@@ -776,19 +1214,22 @@ window.NBRender = (function () {
     var ex = NB.findEx(id);
     var fb = document.getElementById("fb-" + id);
     var box = document.getElementById("ex-" + id);
-    if (!fb || !box) return;
+    if (!fb || !box || !ex) return;
+    var readable = ex.type === "translate" || ex.type === "fix";
     box.classList.remove("correct", "close", "wrong");
     fb.classList.add("show");
     if (kind === "correct") {
       box.classList.add("correct");
-      fb.innerHTML = '<span class="fb-ok">✓ Chính xác!</span> ' + say(ex.answers[0]);
+      fb.innerHTML = '<span class="fb-ok">✓ Chính xác!</span> ' + (readable ? say(ex.answers[0]) : "");
     } else if (kind === "close") {
       box.classList.add("close");
       fb.innerHTML = '<span class="fb-warn">⚠ Gần đúng.</span> Từ ngữ đúng rồi, nhưng sai viết hoa hoặc dấu câu.' +
-        '<div class="solution">Đáp án: ' + NB.esc(ex.answers[0]) + ". " + say(ex.answers[0]) + "</div>";
+        '<div class="solution">Đáp án: ' + NB.esc(ex.answers[0]) + ". " +
+        (readable ? say(ex.answers[0]) : "") + "</div>";
     } else if (kind === "reveal") {
       box.classList.add("close");
-      fb.innerHTML = '<span class="fb-warn">Đáp án:</span> ' + NB.esc(ex.answers[0]) + ". " + say(ex.answers[0]) +
+      fb.innerHTML = '<span class="fb-warn">Đáp án:</span> ' + NB.esc(ex.answers[0]) + ". " +
+        (readable ? say(ex.answers[0]) : "") +
         (ex.answers.length > 1 ? '<div class="solution">Cách khác: ' + NB.esc(ex.answers[1]) + ".</div>" : "");
     } else if (kind === "hint") {
       fb.innerHTML = '<span class="fb-warn">Gợi ý:</span> ' + NB.esc(ex.hint);
@@ -802,12 +1243,13 @@ window.NBRender = (function () {
 
   function render(animate) {
     var st = NB.get();
-    st.page = clampPage(st.page);
-    el.sheet.innerHTML = R.pageHtml(PAGES, st.page);
-    el.marks.innerHTML = R.bookmarksHtml(PAGES, st.page);
-    el.num.textContent = "Trang " + (st.page + 1) + " / " + PAGES.length;
-    el.prev.disabled = st.page === 0;
-    el.next.disabled = st.page === PAGES.length - 1;
+    NB.setPage(clampPage(NB.page()));
+    el.sheet.innerHTML = R.pageHtml(PAGES, NB.page());
+    window.NBBlocks.wireDemo(el.sheet);
+    refreshNav();
+    el.num.textContent = "Trang " + (NB.page() + 1) + " / " + PAGES.length;
+    el.prev.disabled = NB.page() === 0;
+    el.next.disabled = NB.page() === PAGES.length - 1;
     Object.keys(st.status).forEach(function (id) { showFeedback(id, st.status[id]); });
     refreshScore();
     if (animate) {
@@ -817,18 +1259,32 @@ window.NBRender = (function () {
     }
   }
 
+  function closeDrawer() { el.drawer.classList.remove("open"); }
+
   function goTo(i) {
-    var st = NB.get();
     i = clampPage(i);
-    if (i === st.page) return;
-    st.page = i; NB.save(); render(true);
+    closeDrawer();
+    if (i === NB.page()) return;
+    NB.setPage(i); NB.save(); render(true);
+    document.getElementById("book-top").scrollIntoView({ behavior: "smooth", block: "start" });
+  }
+
+  function switchSubject(id) {
+    var st = NB.get();
+    closeDrawer();
+    if (st.subject === id) return;
+    st.subject = id; NB.save();
+    PAGES = R.buildPages(id);
+    render(true);
     document.getElementById("book-top").scrollIntoView({ behavior: "smooth", block: "start" });
   }
 
   document.addEventListener("click", function (e) {
-    var t = e.target.closest ? e.target.closest("[data-say],[data-goto],[data-act],[data-vocab]") : null;
+    var t = e.target.closest
+      ? e.target.closest("[data-say],[data-subject],[data-goto],[data-act],[data-vocab]") : null;
     if (!t) return;
     if (t.dataset.say !== undefined) { window.NBSpeech.say(t.dataset.say, NB.get().slowSpeech); return; }
+    if (t.dataset.subject !== undefined) { switchSubject(t.dataset.subject); return; }
     if (t.dataset.goto !== undefined) { goTo(parseInt(t.dataset.goto, 10)); return; }
     if (t.dataset.vocab) { t.classList.toggle("hidden"); return; }
 
@@ -858,13 +1314,41 @@ window.NBRender = (function () {
       document.querySelector('button[data-act="check"][data-id="' + e.target.dataset.id + '"]').click();
       return;
     }
+    if (e.key === "Escape") closeDrawer();
     if (typing) return;
-    if (e.key === "ArrowRight") goTo(NB.get().page + 1);
-    if (e.key === "ArrowLeft") goTo(NB.get().page - 1);
+    if (e.key === "ArrowRight") goTo(NB.page() + 1);
+    if (e.key === "ArrowLeft") goTo(NB.page() - 1);
   });
 
-  el.prev.addEventListener("click", function () { goTo(NB.get().page - 1); });
-  el.next.addEventListener("click", function () { goTo(NB.get().page + 1); });
+  el.prev.addEventListener("click", function () { goTo(NB.page() - 1); });
+  el.next.addEventListener("click", function () { goTo(NB.page() + 1); });
+
+  document.getElementById("btn-toc").addEventListener("click", function () {
+    el.drawerTitle.textContent = R.subjectById(NB.get().subject).title;
+    el.drawer.classList.add("open");
+  });
+  document.getElementById("drawer-close").addEventListener("click", closeDrawer);
+  el.drawer.addEventListener("click", function (e) {
+    if (e.target === el.drawer) closeDrawer();
+  });
+
+  // Thanh cong cu nam o notebook-toolbar.js, nap sau file nay.
+  window.NBApp = {
+    render: render,
+    rebuild: function () { PAGES = R.buildPages(NB.get().subject); render(true); }
+  };
+
+  if (NB.get().hideVocab) {
+    document.getElementById("btn-hide-vocab").textContent = "Hiện nghĩa từ vựng";
+  }
+  render(false);
+})();
+
+</script>
+<script>
+// Thanh cong cu: an nghia, toc doc, xoa het, xuat va nap backup.
+(function () {
+  var NB = window.NB, App = window.NBApp;
 
   document.getElementById("btn-hide-vocab").addEventListener("click", function () {
     var st = NB.get();
@@ -889,7 +1373,9 @@ window.NBRender = (function () {
   }
 
   document.getElementById("btn-reset").addEventListener("click", function () {
-    if (confirm("Xóa toàn bộ bài làm và ghi chú? Không khôi phục được.")) { NB.reset(); render(true); }
+    if (confirm("Xóa toàn bộ bài làm và ghi chú? Không khôi phục được.")) {
+      NB.reset(); App.rebuild();
+    }
   });
 
   document.getElementById("btn-export").addEventListener("click", function () {
@@ -906,16 +1392,15 @@ window.NBRender = (function () {
     if (!f) return;
     var r = new FileReader();
     r.onload = function () {
-      try { NB.replace(JSON.parse(r.result)); render(true); alert("Đã nạp lại bài làm."); }
-      catch (err) { alert("File không hợp lệ."); }
+      try {
+        NB.replace(JSON.parse(r.result));
+        App.rebuild();
+        alert("Đã nạp lại bài làm.");
+      } catch (err) { alert("File không hợp lệ."); }
     };
     r.readAsText(f);
   });
 
-  if (NB.get().hideVocab) {
-    document.getElementById("btn-hide-vocab").textContent = "Hiện nghĩa từ vựng";
-  }
-  render(false);
 })();
 
 </script>

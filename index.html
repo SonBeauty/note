@@ -3,16 +3,19 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Sổ tay tiếng Anh của Sơn</title>
+<title>Sổ tay học tập của Sơn</title>
 <link rel="stylesheet" href="notebook-styles.css">
+<link rel="stylesheet" href="notebook-content.css">
 </head>
 <body>
 <div class="wrap">
 
   <header class="book">
-    <h1>Sổ tay tiếng Anh</h1>
-    <p>Học theo chủ đề, làm bài và chấm điểm ngay trong sổ</p>
+    <h1>Sổ tay học tập</h1>
+    <p>Tiếng Anh và lập trình, làm bài rồi chấm điểm ngay trong sổ</p>
   </header>
+
+  <nav class="subject-tabs" id="subject-tabs"></nav>
 
   <div class="toolbar">
     <button id="btn-hide-vocab">Ẩn nghĩa (học thẻ)</button>
@@ -32,6 +35,8 @@
     <div class="track"><div class="fill" id="score-fill"></div></div>
   </div>
 
+  <button class="toc-fab" id="btn-toc" aria-label="Mở mục lục">☰ Mục lục</button>
+
   <div class="book-shell">
     <div class="sheet" id="sheet"></div>
     <nav class="bookmarks" id="bookmarks"></nav>
@@ -45,12 +50,27 @@
 
 </div>
 
+<div class="drawer" id="drawer">
+  <div class="drawer-panel">
+    <div class="drawer-head">
+      <b id="drawer-title">Mục lục</b>
+      <button id="drawer-close" aria-label="Đóng mục lục">✕</button>
+    </div>
+    <nav class="bookmarks" id="drawer-list"></nav>
+  </div>
+</div>
+
 <script src="data-chapters.js"></script>
 <script src="data-vocabulary.js"></script>
 <script src="data-exercises.js"></script>
+<script src="data-sql-chapters.js"></script>
+<script src="data-sql-exercises.js"></script>
+<script src="data-subjects.js"></script>
 <script src="notebook-state.js"></script>
 <script src="notebook-speech.js"></script>
+<script src="notebook-blocks.js"></script>
 <script src="notebook-render.js"></script>
 <script src="notebook-app.js"></script>
+<script src="notebook-toolbar.js"></script>
 </body>
 </html>

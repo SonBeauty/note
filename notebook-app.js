@@ -1,11 +1,15 @@
-// Dieu khien cuon so: lat trang, cham diem, luu tru.
+// Dieu khien cuon so: doi mon, lat trang, cham diem, luu tru.
 (function () {
   var NB = window.NB, R = window.NBRender;
-  var PAGES = R.buildPages();
+  var PAGES = R.buildPages(NB.get().subject);
   var say = function (t) { return window.NBSpeech.btn(t); };
   var el = {
     sheet: document.getElementById("sheet"),
     marks: document.getElementById("bookmarks"),
+    subjectTabs: document.getElementById("subject-tabs"),
+    drawer: document.getElementById("drawer"),
+    drawerList: document.getElementById("drawer-list"),
+    drawerTitle: document.getElementById("drawer-title"),
     num: document.getElementById("page-num"),
     prev: document.getElementById("btn-prev"),
     next: document.getElementById("btn-next"),
@@ -17,16 +21,23 @@
   function clampPage(i) { return Math.max(0, Math.min(PAGES.length - 1, i)); }
 
   function refreshScore() {
-    var done = NB.correctCount(), all = NB.totalCount();
-    el.scoreText.textContent = done + " / " + all + " câu đúng";
+    var subject = R.subjectById(NB.get().subject);
+    var done = NB.correctCount(subject.id), all = NB.totalCount(subject.id);
+    el.scoreText.textContent = subject.title + ": " + done + " / " + all + " câu đúng";
     el.scorePct.textContent = Math.round((done / all) * 100) + "%";
     el.scoreFill.style.width = (done / all) * 100 + "%";
   }
 
-  // Cap nhat diem tong, tab bookmark va dong diem cua chuong dang mo.
+  function refreshNav() {
+    el.marks.innerHTML = R.bookmarksHtml(PAGES, NB.page());
+    el.drawerList.innerHTML = el.marks.innerHTML;
+    el.subjectTabs.innerHTML = R.subjectTabsHtml(NB.get().subject);
+  }
+
+  // Cap nhat diem tong, danh sach chuong va dong diem cua chuong dang mo.
   function refreshCounters() {
     refreshScore();
-    el.marks.innerHTML = R.bookmarksHtml(PAGES, NB.get().page);
+    refreshNav();
     var chp = document.getElementById("ch-progress");
     if (chp) chp.textContent = R.chapterScore(chp.dataset.ch);
   }
@@ -35,19 +46,22 @@
     var ex = NB.findEx(id);
     var fb = document.getElementById("fb-" + id);
     var box = document.getElementById("ex-" + id);
-    if (!fb || !box) return;
+    if (!fb || !box || !ex) return;
+    var readable = ex.type === "translate" || ex.type === "fix";
     box.classList.remove("correct", "close", "wrong");
     fb.classList.add("show");
     if (kind === "correct") {
       box.classList.add("correct");
-      fb.innerHTML = '<span class="fb-ok">✓ Chính xác!</span> ' + say(ex.answers[0]);
+      fb.innerHTML = '<span class="fb-ok">✓ Chính xác!</span> ' + (readable ? say(ex.answers[0]) : "");
     } else if (kind === "close") {
       box.classList.add("close");
       fb.innerHTML = '<span class="fb-warn">⚠ Gần đúng.</span> Từ ngữ đúng rồi, nhưng sai viết hoa hoặc dấu câu.' +
-        '<div class="solution">Đáp án: ' + NB.esc(ex.answers[0]) + ". " + say(ex.answers[0]) + "</div>";
+        '<div class="solution">Đáp án: ' + NB.esc(ex.answers[0]) + ". " +
+        (readable ? say(ex.answers[0]) : "") + "</div>";
     } else if (kind === "reveal") {
       box.classList.add("close");
-      fb.innerHTML = '<span class="fb-warn">Đáp án:</span> ' + NB.esc(ex.answers[0]) + ". " + say(ex.answers[0]) +
+      fb.innerHTML = '<span class="fb-warn">Đáp án:</span> ' + NB.esc(ex.answers[0]) + ". " +
+        (readable ? say(ex.answers[0]) : "") +
         (ex.answers.length > 1 ? '<div class="solution">Cách khác: ' + NB.esc(ex.answers[1]) + ".</div>" : "");
     } else if (kind === "hint") {
       fb.innerHTML = '<span class="fb-warn">Gợi ý:</span> ' + NB.esc(ex.hint);
@@ -61,12 +75,13 @@
 
   function render(animate) {
     var st = NB.get();
-    st.page = clampPage(st.page);
-    el.sheet.innerHTML = R.pageHtml(PAGES, st.page);
-    el.marks.innerHTML = R.bookmarksHtml(PAGES, st.page);
-    el.num.textContent = "Trang " + (st.page + 1) + " / " + PAGES.length;
-    el.prev.disabled = st.page === 0;
-    el.next.disabled = st.page === PAGES.length - 1;
+    NB.setPage(clampPage(NB.page()));
+    el.sheet.innerHTML = R.pageHtml(PAGES, NB.page());
+    window.NBBlocks.wireDemo(el.sheet);
+    refreshNav();
+    el.num.textContent = "Trang " + (NB.page() + 1) + " / " + PAGES.length;
+    el.prev.disabled = NB.page() === 0;
+    el.next.disabled = NB.page() === PAGES.length - 1;
     Object.keys(st.status).forEach(function (id) { showFeedback(id, st.status[id]); });
     refreshScore();
     if (animate) {
@@ -76,18 +91,32 @@
     }
   }
 
+  function closeDrawer() { el.drawer.classList.remove("open"); }
+
   function goTo(i) {
-    var st = NB.get();
     i = clampPage(i);
-    if (i === st.page) return;
-    st.page = i; NB.save(); render(true);
+    closeDrawer();
+    if (i === NB.page()) return;
+    NB.setPage(i); NB.save(); render(true);
+    document.getElementById("book-top").scrollIntoView({ behavior: "smooth", block: "start" });
+  }
+
+  function switchSubject(id) {
+    var st = NB.get();
+    closeDrawer();
+    if (st.subject === id) return;
+    st.subject = id; NB.save();
+    PAGES = R.buildPages(id);
+    render(true);
     document.getElementById("book-top").scrollIntoView({ behavior: "smooth", block: "start" });
   }
 
   document.addEventListener("click", function (e) {
-    var t = e.target.closest ? e.target.closest("[data-say],[data-goto],[data-act],[data-vocab]") : null;
+    var t = e.target.closest
+      ? e.target.closest("[data-say],[data-subject],[data-goto],[data-act],[data-vocab]") : null;
     if (!t) return;
     if (t.dataset.say !== undefined) { window.NBSpeech.say(t.dataset.say, NB.get().slowSpeech); return; }
+    if (t.dataset.subject !== undefined) { switchSubject(t.dataset.subject); return; }
     if (t.dataset.goto !== undefined) { goTo(parseInt(t.dataset.goto, 10)); return; }
     if (t.dataset.vocab) { t.classList.toggle("hidden"); return; }
 
@@ -117,59 +146,29 @@
       document.querySelector('button[data-act="check"][data-id="' + e.target.dataset.id + '"]').click();
       return;
     }
+    if (e.key === "Escape") closeDrawer();
     if (typing) return;
-    if (e.key === "ArrowRight") goTo(NB.get().page + 1);
-    if (e.key === "ArrowLeft") goTo(NB.get().page - 1);
+    if (e.key === "ArrowRight") goTo(NB.page() + 1);
+    if (e.key === "ArrowLeft") goTo(NB.page() - 1);
   });
 
-  el.prev.addEventListener("click", function () { goTo(NB.get().page - 1); });
-  el.next.addEventListener("click", function () { goTo(NB.get().page + 1); });
+  el.prev.addEventListener("click", function () { goTo(NB.page() - 1); });
+  el.next.addEventListener("click", function () { goTo(NB.page() + 1); });
 
-  document.getElementById("btn-hide-vocab").addEventListener("click", function () {
-    var st = NB.get();
-    st.hideVocab = !st.hideVocab; NB.save();
-    var cells = document.querySelectorAll("td.vi");
-    for (var i = 0; i < cells.length; i++) cells[i].classList.toggle("hidden", st.hideVocab);
-    this.textContent = st.hideVocab ? "Hiện nghĩa từ vựng" : "Ẩn nghĩa (học thẻ)";
+  document.getElementById("btn-toc").addEventListener("click", function () {
+    el.drawerTitle.textContent = R.subjectById(NB.get().subject).title;
+    el.drawer.classList.add("open");
+  });
+  document.getElementById("drawer-close").addEventListener("click", closeDrawer);
+  el.drawer.addEventListener("click", function (e) {
+    if (e.target === el.drawer) closeDrawer();
   });
 
-  var btnSpeed = document.getElementById("btn-speed");
-  if (!window.NBSpeech.supported) {
-    btnSpeed.textContent = "Trình duyệt không đọc được";
-    btnSpeed.disabled = true;
-  } else {
-    btnSpeed.addEventListener("click", function () {
-      var st = NB.get();
-      st.slowSpeech = !st.slowSpeech; NB.save();
-      this.textContent = st.slowSpeech ? "Đang đọc chậm ✓" : "Đọc chậm lại";
-      window.NBSpeech.say("This is the reading speed.", st.slowSpeech);
-    });
-    if (NB.get().slowSpeech) btnSpeed.textContent = "Đang đọc chậm ✓";
-  }
-
-  document.getElementById("btn-reset").addEventListener("click", function () {
-    if (confirm("Xóa toàn bộ bài làm và ghi chú? Không khôi phục được.")) { NB.reset(); render(true); }
-  });
-
-  document.getElementById("btn-export").addEventListener("click", function () {
-    var blob = new Blob([JSON.stringify(NB.get(), null, 2)], { type: "application/json" });
-    var a = document.createElement("a");
-    a.href = URL.createObjectURL(blob);
-    a.download = "english-notebook-backup.json";
-    a.click();
-    URL.revokeObjectURL(a.href);
-  });
-
-  document.getElementById("file-import").addEventListener("change", function (e) {
-    var f = e.target.files[0];
-    if (!f) return;
-    var r = new FileReader();
-    r.onload = function () {
-      try { NB.replace(JSON.parse(r.result)); render(true); alert("Đã nạp lại bài làm."); }
-      catch (err) { alert("File không hợp lệ."); }
-    };
-    r.readAsText(f);
-  });
+  // Thanh cong cu nam o notebook-toolbar.js, nap sau file nay.
+  window.NBApp = {
+    render: render,
+    rebuild: function () { PAGES = R.buildPages(NB.get().subject); render(true); }
+  };
 
   if (NB.get().hideVocab) {
     document.getElementById("btn-hide-vocab").textContent = "Hiện nghĩa từ vựng";
