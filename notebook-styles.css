@@ -1,0 +1,159 @@
+:root {
+  /* Cambria/Constantia co bo glyph tieng Viet day du. Georgia thi khong, gay loi tach dau. */
+  --serif: Cambria, Constantia, "Palatino Linotype", "Times New Roman", serif;
+  --paper: #efe7d6; --sheet: #fffdf7; --paper-line: #e6ddc8; --margin-line: #d98d8d;
+  --ink: #2c2a26; --ink-soft: #6b665c; --accent: #b4531f; --accent-soft: #f6e7da;
+  --ok: #2f7a3f; --ok-bg: #e8f5ea; --warn: #a8730b; --warn-bg: #fbf1dc;
+  --bad: #b03030; --bad-bg: #fbe8e8; --border: #d9d0bc; --shadow: rgba(90, 70, 40, .16);
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --paper: #171613; --sheet: #23201c; --paper-line: #2e2a25; --margin-line: #6b3a3a;
+    --ink: #ece6d9; --ink-soft: #a49b8c; --accent: #e08a4a; --accent-soft: #35291f;
+    --ok: #7ecb8f; --ok-bg: #1d2c20; --warn: #e0b45a; --warn-bg: #2d2718;
+    --bad: #e88b8b; --bad-bg: #2e1d1d; --border: #3b352d; --shadow: rgba(0, 0, 0, .45);
+  }
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--paper); color: var(--ink); font: 16px/1.7 var(--serif); }
+.wrap { max-width: 1080px; margin: 0 auto; padding: 0 18px 60px; }
+
+header.book { text-align: center; padding: 30px 0 14px; }
+header.book h1 { font-size: 30px; margin: 0 0 4px; }
+header.book p { margin: 0; color: var(--ink-soft); font-style: italic; font-size: 15px; }
+
+.toolbar { display: flex; flex-wrap: wrap; gap: 7px; justify-content: center; margin: 14px 0 16px; }
+button { font: inherit; font-size: 14px; cursor: pointer; padding: 6px 13px; border-radius: 6px;
+  border: 1px solid var(--border); background: var(--sheet); color: var(--ink); }
+button:hover { border-color: var(--accent); color: var(--accent); }
+button.primary { background: var(--accent); border-color: var(--accent); color: #fff; }
+button.primary:hover { opacity: .87; color: #fff; }
+button:disabled { opacity: .35; cursor: default; }
+button:disabled:hover { border-color: var(--border); color: var(--ink); }
+
+.score-bar { background: var(--sheet); border: 1px solid var(--border); border-radius: 8px;
+  padding: 12px 16px; margin-bottom: 18px; }
+.score-bar .label { display: flex; justify-content: space-between; font-size: 14px; margin-bottom: 7px; }
+.track { height: 9px; background: var(--paper-line); border-radius: 999px; overflow: hidden; }
+.fill { height: 100%; width: 0; background: var(--accent); transition: width .4s ease; }
+
+/* ---- Cuon so: to giay + tab bookmark ben canh ---- */
+.book-shell { display: flex; gap: 14px; align-items: flex-start; }
+.sheet { flex: 1; min-width: 0; background: var(--sheet); border: 1px solid var(--border);
+  border-radius: 4px 12px 12px 4px; box-shadow: 0 3px 14px var(--shadow); min-height: 62vh;
+  padding: 26px 30px 30px 34px; position: relative; }
+.sheet::before { content: ""; position: absolute; left: 16px; top: 0; bottom: 0;
+  width: 1px; background: var(--margin-line); opacity: .55; }
+.sheet.flip { animation: flip-in .28s ease; }
+@keyframes flip-in { from { opacity: 0; transform: translateX(14px); } to { opacity: 1; transform: none; } }
+
+.bookmarks { display: flex; flex-direction: column; gap: 6px; width: 148px; flex: none;
+  position: sticky; top: 14px; }
+.bookmarks button { text-align: left; border-radius: 0 8px 8px 0; border-left: 5px solid var(--border);
+  padding: 9px 11px; line-height: 1.35; }
+.bookmarks button .bm-title { display: block; }
+.bookmarks button .bm-sub { display: block; font-size: 12px; color: var(--ink-soft); }
+.bookmarks button.on { border-left-color: var(--accent); background: var(--accent-soft);
+  color: var(--accent); font-weight: bold; }
+.bookmarks button.on .bm-sub { color: var(--accent); }
+
+.page-head { display: flex; justify-content: space-between; align-items: baseline;
+  gap: 12px; flex-wrap: wrap; border-bottom: 2px solid var(--border); padding-bottom: 10px; margin-bottom: 16px; }
+.page-head h2 { font-size: 23px; margin: 0; }
+.page-head .kicker { font-size: 13px; color: var(--ink-soft); font-style: italic; }
+.tabs { display: flex; gap: 6px; margin-bottom: 18px; }
+.tabs button.on { background: var(--accent); border-color: var(--accent); color: #fff; }
+
+.pager { display: flex; justify-content: space-between; align-items: center; gap: 10px;
+  margin-top: 26px; padding-top: 14px; border-top: 1px dashed var(--border); }
+.pager .num { font-size: 14px; color: var(--ink-soft); }
+
+h3.sub { font-size: 16px; color: var(--accent); border-bottom: 1px solid var(--border);
+  padding-bottom: 5px; margin: 24px 0 12px; }
+.intro { color: var(--ink-soft); margin: 0 0 18px; }
+.card { background: var(--paper); border: 1px solid var(--border); border-radius: 8px;
+  padding: 13px 15px; margin-bottom: 12px; }
+.line-wrong, .line-right, .line-native { margin: 5px 0; }
+.line-wrong { color: var(--bad); }
+.line-right { color: var(--ok); font-weight: bold; }
+.line-native { color: var(--accent); }
+.tag { font-size: 12px; font-weight: bold; margin-right: 7px; opacity: .75; }
+
+.rule { display: grid; grid-template-columns: 1fr 1fr; gap: 5px 14px;
+  border-bottom: 1px dashed var(--border); padding: 9px 0; }
+.rule:last-child { border-bottom: 0; }
+.rule .r-wrong { color: var(--bad); }
+.rule .r-right { color: var(--ok); font-weight: bold; }
+.rule .r-note { grid-column: 1 / -1; font-size: 14px; color: var(--ink-soft); }
+
+table.vocab { width: 100%; border-collapse: collapse; }
+table.vocab td { padding: 7px 9px; border-bottom: 1px dashed var(--border); }
+table.vocab td.en { font-weight: bold; width: 45%; }
+table.vocab td.vi { color: var(--ink-soft); cursor: pointer; }
+table.vocab td.vi.hidden { color: transparent; background: var(--paper-line); border-radius: 4px; }
+
+.ex { background: var(--paper); border: 1px solid var(--border); border-left: 4px solid var(--border);
+  border-radius: 8px; padding: 13px 15px; margin-bottom: 13px; }
+.ex.correct { border-left-color: var(--ok); background: var(--ok-bg); }
+.ex.close { border-left-color: var(--warn); background: var(--warn-bg); }
+.ex.wrong { border-left-color: var(--bad); background: var(--bad-bg); }
+.ex .kind { font-size: 13px; color: var(--ink-soft); font-style: italic; }
+.ex .prompt-vi { font-size: 17px; margin-top: 2px; }
+.ex .prompt-vi b { color: var(--accent); margin-right: 5px; }
+.ex input.answer { width: 100%; font: inherit; font-size: 15px; padding: 9px 11px; margin: 9px 0;
+  border: 1px solid var(--border); border-radius: 6px; background: var(--sheet); color: var(--ink); }
+.ex input.answer:focus { outline: 2px solid var(--accent); outline-offset: -1px; }
+.ex .actions { display: flex; gap: 7px; flex-wrap: wrap; }
+.ex .feedback { margin-top: 9px; font-size: 15px; display: none; }
+.ex .feedback.show { display: block; }
+.fb-ok { color: var(--ok); font-weight: bold; }
+.fb-warn { color: var(--warn); font-weight: bold; }
+.fb-bad { color: var(--bad); font-weight: bold; }
+.solution { margin-top: 5px; color: var(--ok); }
+
+textarea.notes { width: 100%; min-height: 120px; font: inherit; font-size: 15px; padding: 11px;
+  border: 1px solid var(--border); border-radius: 8px; background: var(--paper); color: var(--ink); resize: vertical; }
+.saved-hint { font-size: 13px; color: var(--ink-soft); margin-top: 5px; }
+
+ol.contents { padding-left: 20px; margin: 0; }
+ol.contents li { padding: 9px 0; border-bottom: 1px dashed var(--border); cursor: pointer; }
+ol.contents li:hover { color: var(--accent); }
+ol.contents li .c-sub { font-size: 14px; color: var(--ink-soft); }
+ol.contents li .c-score { float: right; font-size: 14px; color: var(--ink-soft); }
+
+@media (max-width: 800px) {
+  .book-shell { flex-direction: column-reverse; }
+  .bookmarks { position: sticky; top: 0; z-index: 5; flex-direction: row; width: 100%;
+    overflow-x: auto; background: var(--paper); padding: 6px 0; -webkit-overflow-scrolling: touch; }
+  .bookmarks button { border-left: 0; border-bottom: 4px solid var(--border); border-radius: 8px 8px 0 0;
+    white-space: nowrap; }
+  .bookmarks button.on { border-left: 0; border-bottom-color: var(--accent); }
+  .sheet { padding: 20px 16px 24px 22px; }
+  .rule { grid-template-columns: 1fr; }
+}
+
+/* ---- Dien thoai: chu to hon, nut de bam, thanh lat trang luon trong tam tay ---- */
+@media (max-width: 560px) {
+  .wrap { padding: 0 10px 20px; }
+  header.book { padding: 18px 0 8px; }
+  header.book h1 { font-size: 25px; }
+  .toolbar { gap: 6px; }
+  .toolbar button { flex: 1 1 auto; min-height: 40px; }
+  .sheet { padding: 16px 13px 20px 18px; border-radius: 10px; min-height: 0; }
+  .sheet::before { left: 9px; }
+  .page-head h2 { font-size: 20px; }
+  .ex { padding: 12px; }
+  /* 16px de iOS khong tu phong to khi go chu */
+  .ex input.answer, textarea.notes { font-size: 16px; }
+  .ex .actions button { flex: 1 1 auto; min-height: 40px; }
+  .tabs button { flex: 1; min-height: 38px; }
+  .pager { position: sticky; bottom: 0; background: var(--paper); margin-top: 18px;
+    padding: 10px 0; gap: 8px; }
+  .pager button { min-height: 42px; flex: 1; }
+  .pager .num { flex: none; font-size: 13px; }
+  ol.contents li { padding: 12px 0; }
+}
+@media print {
+  body { background: #fff; } .toolbar, .bookmarks, .pager, .tabs, .ex .actions { display: none; }
+  .sheet { box-shadow: none; min-height: 0; } .ex .feedback { display: block; }
+}

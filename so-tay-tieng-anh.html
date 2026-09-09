@@ -1,0 +1,854 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sổ tay tiếng Anh của Sơn</title>
+<style>
+:root {
+  /* Cambria/Constantia co bo glyph tieng Viet day du. Georgia thi khong, gay loi tach dau. */
+  --serif: Cambria, Constantia, "Palatino Linotype", "Times New Roman", serif;
+  --paper: #efe7d6; --sheet: #fffdf7; --paper-line: #e6ddc8; --margin-line: #d98d8d;
+  --ink: #2c2a26; --ink-soft: #6b665c; --accent: #b4531f; --accent-soft: #f6e7da;
+  --ok: #2f7a3f; --ok-bg: #e8f5ea; --warn: #a8730b; --warn-bg: #fbf1dc;
+  --bad: #b03030; --bad-bg: #fbe8e8; --border: #d9d0bc; --shadow: rgba(90, 70, 40, .16);
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --paper: #171613; --sheet: #23201c; --paper-line: #2e2a25; --margin-line: #6b3a3a;
+    --ink: #ece6d9; --ink-soft: #a49b8c; --accent: #e08a4a; --accent-soft: #35291f;
+    --ok: #7ecb8f; --ok-bg: #1d2c20; --warn: #e0b45a; --warn-bg: #2d2718;
+    --bad: #e88b8b; --bad-bg: #2e1d1d; --border: #3b352d; --shadow: rgba(0, 0, 0, .45);
+  }
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--paper); color: var(--ink); font: 16px/1.7 var(--serif); }
+.wrap { max-width: 1080px; margin: 0 auto; padding: 0 18px 60px; }
+
+header.book { text-align: center; padding: 30px 0 14px; }
+header.book h1 { font-size: 30px; margin: 0 0 4px; }
+header.book p { margin: 0; color: var(--ink-soft); font-style: italic; font-size: 15px; }
+
+.toolbar { display: flex; flex-wrap: wrap; gap: 7px; justify-content: center; margin: 14px 0 16px; }
+button { font: inherit; font-size: 14px; cursor: pointer; padding: 6px 13px; border-radius: 6px;
+  border: 1px solid var(--border); background: var(--sheet); color: var(--ink); }
+button:hover { border-color: var(--accent); color: var(--accent); }
+button.primary { background: var(--accent); border-color: var(--accent); color: #fff; }
+button.primary:hover { opacity: .87; color: #fff; }
+button:disabled { opacity: .35; cursor: default; }
+button:disabled:hover { border-color: var(--border); color: var(--ink); }
+
+.score-bar { background: var(--sheet); border: 1px solid var(--border); border-radius: 8px;
+  padding: 12px 16px; margin-bottom: 18px; }
+.score-bar .label { display: flex; justify-content: space-between; font-size: 14px; margin-bottom: 7px; }
+.track { height: 9px; background: var(--paper-line); border-radius: 999px; overflow: hidden; }
+.fill { height: 100%; width: 0; background: var(--accent); transition: width .4s ease; }
+
+/* ---- Cuon so: to giay + tab bookmark ben canh ---- */
+.book-shell { display: flex; gap: 14px; align-items: flex-start; }
+.sheet { flex: 1; min-width: 0; background: var(--sheet); border: 1px solid var(--border);
+  border-radius: 4px 12px 12px 4px; box-shadow: 0 3px 14px var(--shadow); min-height: 62vh;
+  padding: 26px 30px 30px 34px; position: relative; }
+.sheet::before { content: ""; position: absolute; left: 16px; top: 0; bottom: 0;
+  width: 1px; background: var(--margin-line); opacity: .55; }
+.sheet.flip { animation: flip-in .28s ease; }
+@keyframes flip-in { from { opacity: 0; transform: translateX(14px); } to { opacity: 1; transform: none; } }
+
+.bookmarks { display: flex; flex-direction: column; gap: 6px; width: 148px; flex: none;
+  position: sticky; top: 14px; }
+.bookmarks button { text-align: left; border-radius: 0 8px 8px 0; border-left: 5px solid var(--border);
+  padding: 9px 11px; line-height: 1.35; }
+.bookmarks button .bm-title { display: block; }
+.bookmarks button .bm-sub { display: block; font-size: 12px; color: var(--ink-soft); }
+.bookmarks button.on { border-left-color: var(--accent); background: var(--accent-soft);
+  color: var(--accent); font-weight: bold; }
+.bookmarks button.on .bm-sub { color: var(--accent); }
+
+.page-head { display: flex; justify-content: space-between; align-items: baseline;
+  gap: 12px; flex-wrap: wrap; border-bottom: 2px solid var(--border); padding-bottom: 10px; margin-bottom: 16px; }
+.page-head h2 { font-size: 23px; margin: 0; }
+.page-head .kicker { font-size: 13px; color: var(--ink-soft); font-style: italic; }
+.tabs { display: flex; gap: 6px; margin-bottom: 18px; }
+.tabs button.on { background: var(--accent); border-color: var(--accent); color: #fff; }
+
+.pager { display: flex; justify-content: space-between; align-items: center; gap: 10px;
+  margin-top: 26px; padding-top: 14px; border-top: 1px dashed var(--border); }
+.pager .num { font-size: 14px; color: var(--ink-soft); }
+
+h3.sub { font-size: 16px; color: var(--accent); border-bottom: 1px solid var(--border);
+  padding-bottom: 5px; margin: 24px 0 12px; }
+.intro { color: var(--ink-soft); margin: 0 0 18px; }
+.card { background: var(--paper); border: 1px solid var(--border); border-radius: 8px;
+  padding: 13px 15px; margin-bottom: 12px; }
+.line-wrong, .line-right, .line-native { margin: 5px 0; }
+.line-wrong { color: var(--bad); }
+.line-right { color: var(--ok); font-weight: bold; }
+.line-native { color: var(--accent); }
+.tag { font-size: 12px; font-weight: bold; margin-right: 7px; opacity: .75; }
+
+.rule { display: grid; grid-template-columns: 1fr 1fr; gap: 5px 14px;
+  border-bottom: 1px dashed var(--border); padding: 9px 0; }
+.rule:last-child { border-bottom: 0; }
+.rule .r-wrong { color: var(--bad); }
+.rule .r-right { color: var(--ok); font-weight: bold; }
+.rule .r-note { grid-column: 1 / -1; font-size: 14px; color: var(--ink-soft); }
+
+table.vocab { width: 100%; border-collapse: collapse; }
+table.vocab td { padding: 7px 9px; border-bottom: 1px dashed var(--border); }
+table.vocab td.en { font-weight: bold; width: 45%; }
+table.vocab td.vi { color: var(--ink-soft); cursor: pointer; }
+table.vocab td.vi.hidden { color: transparent; background: var(--paper-line); border-radius: 4px; }
+
+.ex { background: var(--paper); border: 1px solid var(--border); border-left: 4px solid var(--border);
+  border-radius: 8px; padding: 13px 15px; margin-bottom: 13px; }
+.ex.correct { border-left-color: var(--ok); background: var(--ok-bg); }
+.ex.close { border-left-color: var(--warn); background: var(--warn-bg); }
+.ex.wrong { border-left-color: var(--bad); background: var(--bad-bg); }
+.ex .kind { font-size: 13px; color: var(--ink-soft); font-style: italic; }
+.ex .prompt-vi { font-size: 17px; margin-top: 2px; }
+.ex .prompt-vi b { color: var(--accent); margin-right: 5px; }
+.ex input.answer { width: 100%; font: inherit; font-size: 15px; padding: 9px 11px; margin: 9px 0;
+  border: 1px solid var(--border); border-radius: 6px; background: var(--sheet); color: var(--ink); }
+.ex input.answer:focus { outline: 2px solid var(--accent); outline-offset: -1px; }
+.ex .actions { display: flex; gap: 7px; flex-wrap: wrap; }
+.ex .feedback { margin-top: 9px; font-size: 15px; display: none; }
+.ex .feedback.show { display: block; }
+.fb-ok { color: var(--ok); font-weight: bold; }
+.fb-warn { color: var(--warn); font-weight: bold; }
+.fb-bad { color: var(--bad); font-weight: bold; }
+.solution { margin-top: 5px; color: var(--ok); }
+
+textarea.notes { width: 100%; min-height: 120px; font: inherit; font-size: 15px; padding: 11px;
+  border: 1px solid var(--border); border-radius: 8px; background: var(--paper); color: var(--ink); resize: vertical; }
+.saved-hint { font-size: 13px; color: var(--ink-soft); margin-top: 5px; }
+
+ol.contents { padding-left: 20px; margin: 0; }
+ol.contents li { padding: 9px 0; border-bottom: 1px dashed var(--border); cursor: pointer; }
+ol.contents li:hover { color: var(--accent); }
+ol.contents li .c-sub { font-size: 14px; color: var(--ink-soft); }
+ol.contents li .c-score { float: right; font-size: 14px; color: var(--ink-soft); }
+
+@media (max-width: 800px) {
+  .book-shell { flex-direction: column-reverse; }
+  .bookmarks { position: sticky; top: 0; z-index: 5; flex-direction: row; width: 100%;
+    overflow-x: auto; background: var(--paper); padding: 6px 0; -webkit-overflow-scrolling: touch; }
+  .bookmarks button { border-left: 0; border-bottom: 4px solid var(--border); border-radius: 8px 8px 0 0;
+    white-space: nowrap; }
+  .bookmarks button.on { border-left: 0; border-bottom-color: var(--accent); }
+  .sheet { padding: 20px 16px 24px 22px; }
+  .rule { grid-template-columns: 1fr; }
+}
+
+/* ---- Dien thoai: chu to hon, nut de bam, thanh lat trang luon trong tam tay ---- */
+@media (max-width: 560px) {
+  .wrap { padding: 0 10px 20px; }
+  header.book { padding: 18px 0 8px; }
+  header.book h1 { font-size: 25px; }
+  .toolbar { gap: 6px; }
+  .toolbar button { flex: 1 1 auto; min-height: 40px; }
+  .sheet { padding: 16px 13px 20px 18px; border-radius: 10px; min-height: 0; }
+  .sheet::before { left: 9px; }
+  .page-head h2 { font-size: 20px; }
+  .ex { padding: 12px; }
+  /* 16px de iOS khong tu phong to khi go chu */
+  .ex input.answer, textarea.notes { font-size: 16px; }
+  .ex .actions button { flex: 1 1 auto; min-height: 40px; }
+  .tabs button { flex: 1; min-height: 38px; }
+  .pager { position: sticky; bottom: 0; background: var(--paper); margin-top: 18px;
+    padding: 10px 0; gap: 8px; }
+  .pager button { min-height: 42px; flex: 1; }
+  .pager .num { flex: none; font-size: 13px; }
+  ol.contents li { padding: 12px 0; }
+}
+@media print {
+  body { background: #fff; } .toolbar, .bookmarks, .pager, .tabs, .ex .actions { display: none; }
+  .sheet { box-shadow: none; min-height: 0; } .ex .feedback { display: block; }
+}
+
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="book">
+    <h1>Sổ tay tiếng Anh</h1>
+    <p>Học theo chủ đề, làm bài và chấm điểm ngay trong sổ</p>
+  </header>
+
+  <div class="toolbar">
+    <button id="btn-hide-vocab">Ẩn nghĩa (học thẻ)</button>
+    <button id="btn-export">Xuất file backup</button>
+    <button onclick="document.getElementById('file-import').click()">Nạp lại backup</button>
+    <button onclick="window.print()">In ra giấy</button>
+    <button id="btn-reset">Xóa hết làm lại</button>
+    <input type="file" id="file-import" accept="application/json" hidden>
+  </div>
+
+  <div class="score-bar" id="book-top">
+    <div class="label">
+      <span id="score-text">0 / 0 câu đúng</span>
+      <span id="score-pct">0%</span>
+    </div>
+    <div class="track"><div class="fill" id="score-fill"></div></div>
+  </div>
+
+  <div class="book-shell">
+    <div class="sheet" id="sheet"></div>
+    <nav class="bookmarks" id="bookmarks"></nav>
+  </div>
+
+  <div class="pager">
+    <button id="btn-prev">‹ Trang trước</button>
+    <span class="num" id="page-num">Trang 1 / 1</span>
+    <button id="btn-next">Trang sau ›</button>
+  </div>
+
+</div>
+
+<script>
+// Nội dung 5 chương, rút ra từ các buổi học thực tế trong chat.
+window.CHAPTERS = [
+  {
+    id: "ch1",
+    title: "Giới thiệu bản thân",
+    subtitle: "Self-introduction",
+    intro: "Câu đầu tiên bạn nói với người nước ngoài, với nhà tuyển dụng, với khách hàng. Học thuộc mẫu này.",
+    samples: [
+      {
+        wrong: "Hi my name is Son. I am a Software developer. I want to learn English because i want to earn money, discovery many country in the world.",
+        right: "Hi, my name is Son. I'm a software developer. I want to learn English because I want to earn more money and discover many countries in the world.",
+        native: "Hi, I'm Son. I work as a software developer. I'm learning English to boost my income and travel the world."
+      }
+    ],
+    rules: [
+      { wrong: "Hi my name", right: "Hi, my name", note: "Sau lời chào luôn có dấu phẩy." },
+      { wrong: "a Software developer", right: "a software developer", note: "Nghề nghiệp KHÔNG viết hoa trong tiếng Anh, khác tiếng Việt." },
+      { wrong: "i want", right: "I want", note: "Chữ I luôn viết hoa ở mọi vị trí, kể cả I'm, I've, I'll." },
+      { wrong: "discovery many country", right: "discover many countries", note: "discovery là danh từ, discover mới là động từ. Sau many phải dùng danh từ số nhiều." },
+      { wrong: "money, discover", right: "money and discover", note: "Nối 2 hành động bằng and, không dùng dấu phẩy." }
+    ]
+  },
+  {
+    id: "ch2",
+    title: "Kinh nghiệm & kỹ năng",
+    subtitle: "Experience & skills",
+    intro: "Phần bạn sẽ dùng nhiều nhất khi phỏng vấn hoặc viết CV. Hai giới từ of và as là chìa khóa.",
+    samples: [
+      {
+        wrong: "I have nearly 4 years experience for software developer. My mainly is ReactJS, NodeJS.",
+        right: "I have nearly four years of experience as a software developer. I mainly work with React and Node.js.",
+        native: "I've been working as a software developer for almost four years. My main tech stack is React and Node.js."
+      }
+    ],
+    rules: [
+      { wrong: "4 years experience", right: "four years of experience", note: "Bắt buộc có of. Số từ 1 đến 10 nên viết bằng chữ trong văn viết." },
+      { wrong: "experience for a developer", right: "experience as a developer", note: "as dùng cho vai trò, nghề nghiệp. for nghĩa là cho ai đó." },
+      { wrong: "My mainly is React", right: "I mainly work with React", note: "mainly là trạng từ, không thể làm chủ ngữ. Hoặc dùng My main tech stack is React." }
+    ]
+  },
+  {
+    id: "ch3",
+    title: "Nói về dự án đang làm",
+    subtitle: "Talking about your project",
+    intro: "Khi ai đó hỏi What are you working on, bạn cần trả lời gọn trong 2 câu. Chú ý trật tự danh từ ghép.",
+    samples: [
+      {
+        wrong: "i'm working on b2b project to give the sale data product, sale can online, check order from customer.",
+        right: "I'm working on a B2B project that provides product data to the sales team. Salespeople can sell online and check orders from customers.",
+        native: "I'm currently building a B2B platform that gives our sales team access to product data. It lets sales reps sell online and track customer orders in real time."
+      }
+    ],
+    rules: [
+      { wrong: "on b2b project", right: "on a B2B project", note: "Danh từ đếm được số ít bắt buộc có a/an/the đứng trước. Viết tắt phải viết hoa: B2B, API, SQL." },
+      { wrong: "sale data product", right: "product data", note: "Tiếng Anh ngược tiếng Việt: cái phụ đứng TRƯỚC, cái chính đứng SAU. customer order, login page, sales report." },
+      { wrong: "the sale (chỉ người)", right: "the sales team / a salesperson", note: "sale số ít nghĩa là một lần bán hoặc đợt giảm giá, không phải người." },
+      { wrong: "sale can online", right: "salespeople can sell online", note: "Sau can BẮT BUỘC có động từ nguyên mẫu. online chỉ là trạng từ." },
+      { wrong: "I working on", right: "I'm working on", note: "Hiện tại tiếp diễn = be + V-ing. Thiếu am/is/are là sai ngữ pháp." },
+      { wrong: "My team have", right: "My team has", note: "team, company, group là danh từ tập hợp, chia như số ít." }
+    ]
+  },
+  {
+    id: "ch4",
+    title: "Công việc hằng ngày",
+    subtitle: "Daily work",
+    intro: "Từ vựng để kể một ngày làm việc của dev: review code, fix bug, họp, deploy.",
+    samples: [
+      {
+        wrong: "I work remote everyday and I join meeting at 9 am.",
+        right: "I work remotely every day, and I join a meeting at 9 a.m.",
+        native: "I work remotely every day and usually jump on a standup at 9 a.m."
+      }
+    ],
+    rules: [
+      { wrong: "everyday (mỗi ngày)", right: "every day", note: "every day 2 từ = mỗi ngày (trạng từ). everyday 1 từ = thường ngày (tính từ): everyday tasks." },
+      { wrong: "I work remote", right: "I work remotely", note: "Bổ nghĩa cho động từ phải dùng trạng từ, thêm -ly." },
+      { wrong: "join meeting", right: "join a meeting", note: "meeting là danh từ đếm được, cần mạo từ." },
+      { wrong: "I'm working and fix bugs", right: "I'm working and I fix bugs", note: "Hai vế khác thì thì phải lặp lại chủ ngữ." }
+    ]
+  },
+  {
+    id: "ch5",
+    title: "Du lịch & sở thích",
+    subtitle: "Travel & hobbies",
+    intro: "Chủ đề small talk số một. Nhớ kỹ: visit không có to, nhưng travel và go thì có.",
+    samples: [
+      {
+        wrong: "i want visit to Japan because i really like anime and the food in Japan is delecious like ramen.",
+        right: "I want to visit Japan because I really like anime, and the food there is delicious, especially ramen.",
+        native: "I'd love to visit Japan. I'm really into anime, and the food there is amazing, especially ramen."
+      }
+    ],
+    rules: [
+      { wrong: "want visit", right: "want to visit", note: "Sau want LUÔN có to + động từ, không ngoại lệ." },
+      { wrong: "visit to Japan", right: "visit Japan", note: "visit là ngoại động từ, không cần to. Nhưng travel to Japan và go to Japan thì CẦN to." },
+      { wrong: "delecious", right: "delicious", note: "Nhớ chữ i ở giữa. Phát âm: đi-LI-shợs." },
+      { wrong: "is delicious like ramen", right: "is delicious, especially ramen", note: "Dùng especially để nêu ví dụ nổi bật, không dùng like." }
+    ]
+  }
+];
+
+</script>
+<script>
+// Từ vựng theo chương. Bấm vào dòng để lật thẻ và tự kiểm tra.
+window.VOCABULARY = {
+  ch1: [
+    { en: "to introduce yourself", vi: "tự giới thiệu" },
+    { en: "a software developer", vi: "lập trình viên" },
+    { en: "to earn money", vi: "kiếm tiền" },
+    { en: "to boost my income", vi: "tăng thu nhập (nghe chuyên nghiệp)" },
+    { en: "to travel the world", vi: "đi khắp thế giới" },
+    { en: "to discover", vi: "khám phá (động từ)" },
+    { en: "a discovery", vi: "sự khám phá (danh từ)" }
+  ],
+  ch2: [
+    { en: "years of experience", vi: "năm kinh nghiệm" },
+    { en: "my tech stack", vi: "bộ công nghệ tôi dùng" },
+    { en: "to specialize in", vi: "chuyên về" },
+    { en: "a colleague", vi: "đồng nghiệp" },
+    { en: "a junior / senior developer", vi: "dev mới vào nghề / lâu năm" },
+    { en: "to be responsible for", vi: "chịu trách nhiệm về" },
+    { en: "a job interview", vi: "buổi phỏng vấn" }
+  ],
+  ch3: [
+    { en: "the sales team", vi: "đội sale" },
+    { en: "a sales rep", vi: "nhân viên kinh doanh" },
+    { en: "product data", vi: "dữ liệu sản phẩm" },
+    { en: "customer orders", vi: "đơn hàng của khách" },
+    { en: "a platform", vi: "nền tảng" },
+    { en: "to track orders", vi: "theo dõi đơn hàng" },
+    { en: "in real time", vi: "thời gian thực" },
+    { en: "a feature", vi: "tính năng" },
+    { en: "to deploy", vi: "triển khai lên production" }
+  ],
+  ch4: [
+    { en: "to review code", vi: "review code" },
+    { en: "a pull request", vi: "pull request" },
+    { en: "to fix bugs", vi: "sửa lỗi" },
+    { en: "a deadline", vi: "hạn chót" },
+    { en: "to release", vi: "phát hành" },
+    { en: "a database", vi: "cơ sở dữ liệu" },
+    { en: "to work remotely", vi: "làm việc từ xa" },
+    { en: "a meeting", vi: "cuộc họp" },
+    { en: "a client", vi: "khách hàng doanh nghiệp" },
+    { en: "to join", vi: "tham gia" }
+  ],
+  ch5: [
+    { en: "to visit", vi: "thăm (không có to phía sau)" },
+    { en: "to travel to", vi: "du lịch đến (có to)" },
+    { en: "delicious", vi: "ngon" },
+    { en: "especially", vi: "đặc biệt là" },
+    { en: "a trip", vi: "chuyến đi" },
+    { en: "abroad", vi: "ở nước ngoài" },
+    { en: "to explore", vi: "khám phá, đi lang thang tìm hiểu" }
+  ]
+};
+
+</script>
+<script>
+// 25 bài tập. type: translate (dịch), fix (sửa câu sai), fill (điền từ).
+// answers: mảng các đáp án được chấp nhận. fill chấm không phân biệt hoa thường.
+window.EXERCISES = {
+  ch1: [
+    { id: "c1e1", type: "translate", prompt: "Xin chào, tôi là Mai. Tôi là một tester.",
+      hint: "Sau Hi có dấu phẩy. Nghề nghiệp không viết hoa và cần mạo từ a.",
+      answers: ["Hi, I'm Mai. I'm a tester", "Hi, I am Mai. I am a tester", "Hi, my name is Mai. I'm a tester"] },
+    { id: "c1e2", type: "fix", prompt: "i want to learn many language",
+      hint: "Hai lỗi: chữ I và danh từ sau many.",
+      answers: ["I want to learn many languages"] },
+    { id: "c1e3", type: "translate", prompt: "Tôi muốn học tiếng Anh vì tôi muốn kiếm nhiều tiền hơn.",
+      hint: "vì = because. kiếm nhiều tiền hơn = earn more money.",
+      answers: ["I want to learn English because I want to earn more money"] },
+    { id: "c1e4", type: "fill", prompt: "I work ___ a software developer.",
+      hint: "Giới từ chỉ vai trò, nghề nghiệp.",
+      answers: ["as"] },
+    { id: "c1e5", type: "fix", prompt: "She is a Teacher and i am a Developer",
+      hint: "Ba lỗi viết hoa.",
+      answers: ["She is a teacher and I am a developer"] }
+  ],
+  ch2: [
+    { id: "c2e1", type: "fill", prompt: "I have three years ___ experience.",
+      hint: "Một giới từ ngắn, bắt buộc phải có.",
+      answers: ["of"] },
+    { id: "c2e2", type: "translate", prompt: "Cô ấy có năm năm kinh nghiệm làm tester.",
+      hint: "years OF experience AS a tester. Số 5 viết bằng chữ.",
+      answers: ["She has five years of experience as a tester"] },
+    { id: "c2e3", type: "fix", prompt: "My mainly is Java",
+      hint: "mainly là trạng từ, không làm chủ ngữ được.",
+      answers: ["I mainly work with Java", "My main tech stack is Java"] },
+    { id: "c2e4", type: "translate", prompt: "Tôi chủ yếu làm việc với React và Node.js.",
+      hint: "chủ yếu = mainly, đứng trước động từ.",
+      answers: ["I mainly work with React and Node.js"] },
+    { id: "c2e5", type: "translate", prompt: "Anh ấy đã làm lập trình viên được gần bốn năm.",
+      hint: "Dùng hiện tại hoàn thành tiếp diễn: He has been working ... for ...",
+      answers: ["He has been working as a developer for almost four years",
+                "He has been working as a software developer for almost four years",
+                "He has been working as a developer for nearly four years"] }
+  ],
+  ch3: [
+    { id: "c3e1", type: "fix", prompt: "I working on a new feature",
+      hint: "Thiếu động từ be.",
+      answers: ["I'm working on a new feature", "I am working on a new feature"] },
+    { id: "c3e2", type: "translate", prompt: "Nhóm tôi có thể triển khai dự án vào thứ Sáu.",
+      hint: "can + động từ nguyên mẫu. Thứ trong tuần viết hoa. Giới từ on.",
+      answers: ["My team can deploy the project on Friday"] },
+    { id: "c3e3", type: "fill", prompt: "My team ___ five developers. (has / have)",
+      hint: "team là danh từ tập hợp, chia như số ít.",
+      answers: ["has"] },
+    { id: "c3e4", type: "translate", prompt: "Tôi đang review code và đồng nghiệp của tôi đang kiểm thử tính năng mới.",
+      hint: "Cả hai vế đều be + V-ing. đồng nghiệp = my colleague.",
+      answers: ["I'm reviewing code and my colleague is testing the new feature",
+                "I am reviewing code and my colleague is testing the new feature"] },
+    { id: "c3e5", type: "translate", prompt: "Nhân viên sale có thể bán hàng online và kiểm tra đơn của khách.",
+      hint: "Salespeople can + V. Nhớ thêm -s cho orders và customers.",
+      answers: ["Salespeople can sell online and check orders from customers",
+                "Salespeople can sell online and check customer orders",
+                "Sales reps can sell online and check customer orders"] }
+  ],
+  ch4: [
+    { id: "c4e1", type: "fill", prompt: "I code ___ ___ . (mỗi ngày)",
+      hint: "Hai từ riêng biệt, không viết dính.",
+      answers: ["every day"] },
+    { id: "c4e2", type: "translate", prompt: "Tôi làm việc từ xa mỗi ngày và tôi tham gia họp lúc 9 giờ sáng.",
+      hint: "remotely, every day (2 từ), a meeting, at 9 a.m.",
+      answers: ["I work remotely every day and I join a meeting at 9 a.m",
+                "I work remotely every day, and I join a meeting at 9 a.m"] },
+    { id: "c4e3", type: "fix", prompt: "These are everyday task",
+      hint: "Ở đây everyday viết dính là ĐÚNG vì nó là tính từ. Lỗi nằm ở chỗ khác.",
+      answers: ["These are everyday tasks"] },
+    { id: "c4e4", type: "translate", prompt: "Tôi chịu trách nhiệm về nhiều dự án cho khách hàng của chúng tôi.",
+      hint: "be responsible for + danh từ. many + số nhiều. our clients.",
+      answers: ["I am responsible for many projects for our clients",
+                "I'm responsible for many projects for our clients"] },
+    { id: "c4e5", type: "translate", prompt: "Nhóm tôi có thể phát hành ứng dụng vào thứ Hai.",
+      hint: "phát hành = release. Thứ Hai viết hoa.",
+      answers: ["My team can release the app on Monday",
+                "My team can release the application on Monday"] }
+  ],
+  ch5: [
+    { id: "c5e1", type: "fill", prompt: "I want ___ visit Japan next year.",
+      hint: "Sau want luôn có từ này.",
+      answers: ["to"] },
+    { id: "c5e2", type: "fix", prompt: "I want to visit to Korea",
+      hint: "Một từ thừa.",
+      answers: ["I want to visit Korea"] },
+    { id: "c5e3", type: "fill", prompt: "Last year I traveled ___ Da Nang.",
+      hint: "travel khác visit ở chỗ này.",
+      answers: ["to"] },
+    { id: "c5e4", type: "translate", prompt: "Tôi muốn thăm Singapore vì tôi muốn tham gia nhiều cuộc họp công nghệ ở đó.",
+      hint: "Hai chữ muốn, cả hai đều cần to. Nhớ many + s và there ở cuối.",
+      answers: ["I want to visit Singapore because I want to join many tech meetings there"] },
+    { id: "c5e5", type: "translate", prompt: "Đồ ăn ở đó rất ngon, đặc biệt là ramen.",
+      hint: "đồ ăn ở đó = the food there. đặc biệt là = especially.",
+      answers: ["The food there is delicious, especially ramen"] }
+  ]
+};
+
+</script>
+<script>
+// Luu tru, cham diem va cac ham tien ich dung chung.
+window.NB = (function () {
+  var KEY = "english-notebook-v1";
+  var state = load();
+
+  function blank() {
+    return { answers: {}, status: {}, notes: {}, hideVocab: false, page: 0 };
+  }
+  function load() {
+    try {
+      var s = JSON.parse(localStorage.getItem(KEY));
+      if (!s || typeof s !== "object" || !s.answers) return blank();
+      if (typeof s.page !== "number") s.page = 0;
+      return s;
+    } catch (e) { return blank(); }
+  }
+  function save() {
+    try { localStorage.setItem(KEY, JSON.stringify(state)); }
+    catch (e) { console.warn("Không lưu được:", e); }
+  }
+
+  // Cham mem: bo khoang trang thua, dau cham cuoi cau, chuan hoa dau nhay cong.
+  function norm(s) {
+    return String(s).replace(/[‘’]/g, "'").replace(/\s+/g, " ").trim().replace(/[.!?]+$/, "");
+  }
+  // Bo het dau cau va viet hoa, dung de phat hien "gan dung".
+  function loose(s) {
+    return norm(s).toLowerCase().replace(/[.,;:'"?!-]/g, "").replace(/\s+/g, " ").trim();
+  }
+
+  function grade(ex, input) {
+    if (!norm(input)) return "empty";
+    var caseFree = ex.type === "fill";
+    var u = norm(input);
+    for (var i = 0; i < ex.answers.length; i++) {
+      var a = norm(ex.answers[i]);
+      if (caseFree ? a.toLowerCase() === u.toLowerCase() : a === u) return "correct";
+    }
+    for (var j = 0; j < ex.answers.length; j++) {
+      if (loose(ex.answers[j]) === loose(input)) return "close";
+    }
+    return "wrong";
+  }
+
+  function findEx(id) {
+    var keys = Object.keys(window.EXERCISES);
+    for (var i = 0; i < keys.length; i++) {
+      var list = window.EXERCISES[keys[i]];
+      for (var j = 0; j < list.length; j++) { if (list[j].id === id) return list[j]; }
+    }
+    return null;
+  }
+
+  // So cau dung cua mot chuong, hoac cua ca so neu khong truyen chapterId.
+  function correctCount(chapterId) {
+    var ids = chapterId
+      ? (window.EXERCISES[chapterId] || []).map(function (e) { return e.id; })
+      : Object.keys(state.status);
+    return ids.filter(function (id) { return state.status[id] === "correct"; }).length;
+  }
+
+  function totalCount(chapterId) {
+    if (chapterId) return (window.EXERCISES[chapterId] || []).length;
+    return Object.keys(window.EXERCISES).reduce(function (n, k) {
+      return n + window.EXERCISES[k].length;
+    }, 0);
+  }
+
+  function esc(s) {
+    return String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+  }
+
+  return {
+    get: function () { return state; },
+    replace: function (s) { state = s; if (typeof state.page !== "number") state.page = 0; save(); },
+    reset: function () { state = blank(); save(); },
+    save: save,
+    grade: grade,
+    findEx: findEx,
+    correctCount: correctCount,
+    totalCount: totalCount,
+    esc: esc
+  };
+})();
+
+</script>
+<script>
+// Dung HTML cho tung trang cua cuon so.
+window.NBRender = (function () {
+  var esc = window.NB.esc;
+  var KIND = { translate: "Dịch sang tiếng Anh", fix: "Sửa câu sai", fill: "Điền vào chỗ trống" };
+
+  // Trang 0 la muc luc, moi chuong chiem 2 trang: bai hoc va bai tap.
+  function buildPages() {
+    var pages = [{ kind: "toc", title: "Mục lục", label: "Mục lục" }];
+    window.CHAPTERS.forEach(function (ch, i) {
+      pages.push({ kind: "learn", chapter: ch.id, title: ch.title, label: "Bài học", no: i + 1 });
+      pages.push({ kind: "practice", chapter: ch.id, title: ch.title, label: "Bài tập", no: i + 1 });
+    });
+    return pages;
+  }
+
+  function tocHtml() {
+    var h = '<div class="page-head"><h2>Mục lục</h2>' +
+      '<span class="kicker">Bấm vào chương để mở</span></div>' +
+      '<p class="intro">Sổ tay này ghi lại đúng những gì bạn đã học và những lỗi bạn đã mắc. ' +
+      'Mỗi chương gồm một trang bài học và một trang bài tập.</p><ol class="contents">';
+    window.CHAPTERS.forEach(function (ch, i) {
+      var done = window.NB.correctCount(ch.id), all = window.NB.totalCount(ch.id);
+      h += '<li data-goto="' + (i * 2 + 1) + '"><span class="c-score">' + done + "/" + all + '</span>' +
+        esc(ch.title) + '<span class="c-sub"> — ' + esc(ch.subtitle) + '</span></li>';
+    });
+    h += "</ol>";
+    return h;
+  }
+
+  function chapterScore(chId) {
+    return window.NB.correctCount(chId) + "/" + window.NB.totalCount(chId);
+  }
+
+  function headHtml(ch, label) {
+    return '<div class="page-head"><h2>' + esc(ch.title) + '</h2>' +
+      '<span class="kicker">' + esc(ch.subtitle) + " · " + label + "</span></div>";
+  }
+
+  function tabsHtml(pageIndex, kind) {
+    var learn = kind === "learn" ? pageIndex : pageIndex - 1;
+    return '<div class="tabs">' +
+      '<button data-goto="' + learn + '" class="' + (kind === "learn" ? "on" : "") + '">Bài học</button>' +
+      '<button data-goto="' + (learn + 1) + '" class="' + (kind === "practice" ? "on" : "") + '">Bài tập</button>' +
+      "</div>";
+  }
+
+  function learnHtml(ch, pageIndex) {
+    var st = window.NB.get();
+    var h = headHtml(ch, "Bài học") + tabsHtml(pageIndex, "learn") +
+      '<p class="intro">' + esc(ch.intro) + "</p>";
+
+    h += '<h3 class="sub">Câu mẫu</h3>';
+    ch.samples.forEach(function (s) {
+      h += '<div class="card">' +
+        '<div class="line-wrong"><span class="tag">SAI</span>' + esc(s.wrong) + "</div>" +
+        '<div class="line-right"><span class="tag">ĐÚNG</span>' + esc(s.right) + "</div>" +
+        '<div class="line-native"><span class="tag">TỰ NHIÊN</span>' + esc(s.native) + "</div></div>";
+    });
+
+    h += '<h3 class="sub">Quy tắc cần thuộc</h3><div class="card">';
+    ch.rules.forEach(function (r) {
+      h += '<div class="rule"><div class="r-wrong">✗ ' + esc(r.wrong) + "</div>" +
+        '<div class="r-right">✓ ' + esc(r.right) + "</div>" +
+        '<div class="r-note">' + esc(r.note) + "</div></div>";
+    });
+    h += "</div>";
+
+    h += '<h3 class="sub">Từ vựng</h3><div class="card"><table class="vocab">';
+    (window.VOCABULARY[ch.id] || []).forEach(function (v) {
+      h += '<tr><td class="en">' + esc(v.en) + "</td>" +
+        '<td class="vi' + (st.hideVocab ? " hidden" : "") + '" data-vocab="1">' +
+        esc(v.vi) + "</td></tr>";
+    });
+    h += "</table></div>";
+    return h;
+  }
+
+  function exerciseHtml(ex, n) {
+    var st = window.NB.get();
+    var val = st.answers[ex.id] || "";
+    var cls = st.status[ex.id] || "";
+    return '<div class="ex ' + cls + '" id="ex-' + ex.id + '">' +
+      '<div class="kind">' + KIND[ex.type] + "</div>" +
+      '<div class="prompt-vi"><b>Câu ' + n + ".</b> " + esc(ex.prompt) + "</div>" +
+      '<input class="answer" type="text" placeholder="Gõ câu trả lời của bạn..." value="' +
+      esc(val) + '" data-id="' + ex.id + '">' +
+      '<div class="actions">' +
+      '<button class="primary" data-act="check" data-id="' + ex.id + '">Kiểm tra</button>' +
+      '<button data-act="hint" data-id="' + ex.id + '">Gợi ý</button>' +
+      '<button data-act="reveal" data-id="' + ex.id + '">Xem đáp án</button>' +
+      '</div><div class="feedback" id="fb-' + ex.id + '"></div></div>';
+  }
+
+  function practiceHtml(ch, pageIndex) {
+    var st = window.NB.get();
+    var h = headHtml(ch, "Bài tập") + tabsHtml(pageIndex, "practice") +
+      '<p class="intro">Gõ đáp án rồi bấm Kiểm tra, hoặc nhấn Enter. Chương này bạn đang đúng ' +
+      '<span id="ch-progress" data-ch="' + ch.id + '">' + chapterScore(ch.id) + "</span> câu.</p>";
+    (window.EXERCISES[ch.id] || []).forEach(function (ex, i) { h += exerciseHtml(ex, i + 1); });
+    h += '<h3 class="sub">Ghi chú của bạn</h3><textarea class="notes" data-notes="' + ch.id +
+      '" placeholder="Viết thêm câu bạn tự đặt, từ mới, hoặc lỗi bạn hay quên...">' +
+      esc(st.notes[ch.id] || "") + "</textarea>" +
+      '<div class="saved-hint">Tự lưu khi bạn gõ.</div>';
+    return h;
+  }
+
+  function pageHtml(pages, i) {
+    var p = pages[i];
+    if (p.kind === "toc") return tocHtml();
+    var ch = window.CHAPTERS.filter(function (c) { return c.id === p.chapter; })[0];
+    return p.kind === "learn" ? learnHtml(ch, i) : practiceHtml(ch, i);
+  }
+
+  function bookmarksHtml(pages, cur) {
+    var curCh = pages[cur].chapter;
+    var h = '<button data-goto="0" class="' + (pages[cur].kind === "toc" ? "on" : "") + '">' +
+      '<span class="bm-title">Mục lục</span></button>';
+    window.CHAPTERS.forEach(function (ch, i) {
+      h += '<button data-goto="' + (i * 2 + 1) + '" class="' + (curCh === ch.id ? "on" : "") + '">' +
+        '<span class="bm-title">' + (i + 1) + ". " + esc(ch.title) + "</span>" +
+        '<span class="bm-sub">' + window.NB.correctCount(ch.id) + "/" + window.NB.totalCount(ch.id) + " câu đúng</span></button>";
+    });
+    return h;
+  }
+
+  return {
+    buildPages: buildPages, pageHtml: pageHtml,
+    bookmarksHtml: bookmarksHtml, chapterScore: chapterScore
+  };
+})();
+
+</script>
+<script>
+// Dieu khien cuon so: lat trang, cham diem, luu tru.
+(function () {
+  var NB = window.NB, R = window.NBRender;
+  var PAGES = R.buildPages();
+  var el = {
+    sheet: document.getElementById("sheet"),
+    marks: document.getElementById("bookmarks"),
+    num: document.getElementById("page-num"),
+    prev: document.getElementById("btn-prev"),
+    next: document.getElementById("btn-next"),
+    scoreText: document.getElementById("score-text"),
+    scorePct: document.getElementById("score-pct"),
+    scoreFill: document.getElementById("score-fill")
+  };
+
+  function clampPage(i) { return Math.max(0, Math.min(PAGES.length - 1, i)); }
+
+  function refreshScore() {
+    var done = NB.correctCount(), all = NB.totalCount();
+    el.scoreText.textContent = done + " / " + all + " câu đúng";
+    el.scorePct.textContent = Math.round((done / all) * 100) + "%";
+    el.scoreFill.style.width = (done / all) * 100 + "%";
+  }
+
+  // Cap nhat diem tong, tab bookmark va dong diem cua chuong dang mo.
+  function refreshCounters() {
+    refreshScore();
+    el.marks.innerHTML = R.bookmarksHtml(PAGES, NB.get().page);
+    var chp = document.getElementById("ch-progress");
+    if (chp) chp.textContent = R.chapterScore(chp.dataset.ch);
+  }
+
+  function showFeedback(id, kind) {
+    var ex = NB.findEx(id);
+    var fb = document.getElementById("fb-" + id);
+    var box = document.getElementById("ex-" + id);
+    if (!fb || !box) return;
+    box.classList.remove("correct", "close", "wrong");
+    fb.classList.add("show");
+    if (kind === "correct") {
+      box.classList.add("correct");
+      fb.innerHTML = '<span class="fb-ok">✓ Chính xác!</span>';
+    } else if (kind === "close") {
+      box.classList.add("close");
+      fb.innerHTML = '<span class="fb-warn">⚠ Gần đúng.</span> Từ ngữ đúng rồi, nhưng sai viết hoa hoặc dấu câu.' +
+        '<div class="solution">Đáp án: ' + NB.esc(ex.answers[0]) + ".</div>";
+    } else if (kind === "reveal") {
+      box.classList.add("close");
+      fb.innerHTML = '<span class="fb-warn">Đáp án:</span> ' + NB.esc(ex.answers[0]) + "." +
+        (ex.answers.length > 1 ? '<div class="solution">Cách khác: ' + NB.esc(ex.answers[1]) + ".</div>" : "");
+    } else if (kind === "hint") {
+      fb.innerHTML = '<span class="fb-warn">Gợi ý:</span> ' + NB.esc(ex.hint);
+    } else if (kind === "empty") {
+      fb.innerHTML = '<span class="fb-bad">Bạn chưa viết gì cả.</span>';
+    } else {
+      box.classList.add("wrong");
+      fb.innerHTML = '<span class="fb-bad">✗ Chưa đúng.</span> Thử lại nhé. Gợi ý: ' + NB.esc(ex.hint);
+    }
+  }
+
+  function render(animate) {
+    var st = NB.get();
+    st.page = clampPage(st.page);
+    el.sheet.innerHTML = R.pageHtml(PAGES, st.page);
+    el.marks.innerHTML = R.bookmarksHtml(PAGES, st.page);
+    el.num.textContent = "Trang " + (st.page + 1) + " / " + PAGES.length;
+    el.prev.disabled = st.page === 0;
+    el.next.disabled = st.page === PAGES.length - 1;
+    Object.keys(st.status).forEach(function (id) { showFeedback(id, st.status[id]); });
+    refreshScore();
+    if (animate) {
+      el.sheet.classList.remove("flip");
+      void el.sheet.offsetWidth;
+      el.sheet.classList.add("flip");
+    }
+  }
+
+  function goTo(i) {
+    var st = NB.get();
+    i = clampPage(i);
+    if (i === st.page) return;
+    st.page = i; NB.save(); render(true);
+    document.getElementById("book-top").scrollIntoView({ behavior: "smooth", block: "start" });
+  }
+
+  document.addEventListener("click", function (e) {
+    var t = e.target.closest ? e.target.closest("[data-goto],[data-act],[data-vocab]") : null;
+    if (!t) return;
+    if (t.dataset.goto !== undefined) { goTo(parseInt(t.dataset.goto, 10)); return; }
+    if (t.dataset.vocab) { t.classList.toggle("hidden"); return; }
+
+    var st = NB.get(), id = t.dataset.id, act = t.dataset.act;
+    if (act === "hint") { showFeedback(id, "hint"); return; }
+    if (act === "reveal") {
+      st.status[id] = "close"; NB.save();
+      showFeedback(id, "reveal"); refreshCounters();
+      return;
+    }
+    var input = document.querySelector('input[data-id="' + id + '"]');
+    var res = NB.grade(NB.findEx(id), input.value);
+    st.answers[id] = input.value;
+    if (res !== "empty") st.status[id] = res;
+    NB.save(); showFeedback(id, res); refreshCounters();
+  });
+
+  document.addEventListener("input", function (e) {
+    var t = e.target, st = NB.get();
+    if (t.classList.contains("answer")) { st.answers[t.dataset.id] = t.value; NB.save(); }
+    if (t.dataset && t.dataset.notes) { st.notes[t.dataset.notes] = t.value; NB.save(); }
+  });
+
+  document.addEventListener("keydown", function (e) {
+    var typing = /^(INPUT|TEXTAREA)$/.test(e.target.tagName);
+    if (e.key === "Enter" && typing && e.target.classList.contains("answer")) {
+      document.querySelector('button[data-act="check"][data-id="' + e.target.dataset.id + '"]').click();
+      return;
+    }
+    if (typing) return;
+    if (e.key === "ArrowRight") goTo(NB.get().page + 1);
+    if (e.key === "ArrowLeft") goTo(NB.get().page - 1);
+  });
+
+  el.prev.addEventListener("click", function () { goTo(NB.get().page - 1); });
+  el.next.addEventListener("click", function () { goTo(NB.get().page + 1); });
+
+  document.getElementById("btn-hide-vocab").addEventListener("click", function () {
+    var st = NB.get();
+    st.hideVocab = !st.hideVocab; NB.save();
+    var cells = document.querySelectorAll("td.vi");
+    for (var i = 0; i < cells.length; i++) cells[i].classList.toggle("hidden", st.hideVocab);
+    this.textContent = st.hideVocab ? "Hiện nghĩa từ vựng" : "Ẩn nghĩa (học thẻ)";
+  });
+
+  document.getElementById("btn-reset").addEventListener("click", function () {
+    if (confirm("Xóa toàn bộ bài làm và ghi chú? Không khôi phục được.")) { NB.reset(); render(true); }
+  });
+
+  document.getElementById("btn-export").addEventListener("click", function () {
+    var blob = new Blob([JSON.stringify(NB.get(), null, 2)], { type: "application/json" });
+    var a = document.createElement("a");
+    a.href = URL.createObjectURL(blob);
+    a.download = "english-notebook-backup.json";
+    a.click();
+    URL.revokeObjectURL(a.href);
+  });
+
+  document.getElementById("file-import").addEventListener("change", function (e) {
+    var f = e.target.files[0];
+    if (!f) return;
+    var r = new FileReader();
+    r.onload = function () {
+      try { NB.replace(JSON.parse(r.result)); render(true); alert("Đã nạp lại bài làm."); }
+      catch (err) { alert("File không hợp lệ."); }
+    };
+    r.readAsText(f);
+  });
+
+  if (NB.get().hideVocab) {
+    document.getElementById("btn-hide-vocab").textContent = "Hiện nghĩa từ vựng";
+  }
+  render(false);
+})();
+
+</script>
+</body>
+</html>

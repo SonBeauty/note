@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sổ tay tiếng Anh của Sơn</title>
+<link rel="stylesheet" href="notebook-styles.css">
+</head>
+<body>
+<div class="wrap">
+
+  <header class="book">
+    <h1>Sổ tay tiếng Anh</h1>
+    <p>Học theo chủ đề, làm bài và chấm điểm ngay trong sổ</p>
+  </header>
+
+  <div class="toolbar">
+    <button id="btn-hide-vocab">Ẩn nghĩa (học thẻ)</button>
+    <button id="btn-export">Xuất file backup</button>
+    <button onclick="document.getElementById('file-import').click()">Nạp lại backup</button>
+    <button onclick="window.print()">In ra giấy</button>
+    <button id="btn-reset">Xóa hết làm lại</button>
+    <input type="file" id="file-import" accept="application/json" hidden>
+  </div>
+
+  <div class="score-bar" id="book-top">
+    <div class="label">
+      <span id="score-text">0 / 0 câu đúng</span>
+      <span id="score-pct">0%</span>
+    </div>
+    <div class="track"><div class="fill" id="score-fill"></div></div>
+  </div>
+
+  <div class="book-shell">
+    <div class="sheet" id="sheet"></div>
+    <nav class="bookmarks" id="bookmarks"></nav>
+  </div>
+
+  <div class="pager">
+    <button id="btn-prev">‹ Trang trước</button>
+    <span class="num" id="page-num">Trang 1 / 1</span>
+    <button id="btn-next">Trang sau ›</button>
+  </div>
+
+</div>
+
+<script src="data-chapters.js"></script>
+<script src="data-vocabulary.js"></script>
+<script src="data-exercises.js"></script>
+<script src="notebook-state.js"></script>
+<script src="notebook-render.js"></script>
+<script src="notebook-app.js"></script>
+</body>
+</html>
