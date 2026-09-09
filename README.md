@@ -97,6 +97,23 @@ Sổ sẽ có icon riêng như một app.
 Lưu ý: bài làm trên điện thoại và trên máy tính là hai kho riêng, vì localStorage gắn với
 từng trình duyệt. Muốn đồng bộ thì dùng nút Xuất file backup ở máy này rồi Nạp lại backup ở máy kia.
 
+## Cập nhật bản đang chạy trên mạng
+
+Sổ tay đang chạy tại **https://sonbeauty.github.io/note/** (nhánh `gh-pages` của repo).
+Sau khi sửa nội dung bài học, chạy một lệnh này là xong:
+
+```bash
+./deploy.sh
+```
+
+Hoặc kèm mô tả riêng: `./deploy.sh "feat: thêm chương 6"`.
+
+Script sẽ tự gộp lại file một-file cho điện thoại, lấy nhánh `gh-pages` mới nhất về một
+worktree tạm, chép file sang, commit và push. Nếu không có gì đổi thì nó báo và dừng,
+không tạo commit rác. Thư mục tạm luôn được dọn kể cả khi script lỗi giữa chừng.
+
+Đợi khoảng 1-2 phút cho GitHub build xong rồi tải lại trang.
+
 ## Font tiếng Việt
 
 Sổ dùng font **Cambria** (dự phòng: Constantia, Palatino Linotype, Times New Roman).
@@ -117,7 +134,8 @@ english-notebook/
 ├── data-vocabulary.js    từ vựng
 ├── data-exercises.js     bài tập
 ├── build-single-file.js  gộp tất cả thành 1 file cho điện thoại
-└── serve-lan.js          mở sổ từ điện thoại qua WiFi
+├── serve-lan.js          mở sổ từ điện thoại qua WiFi
+└── deploy.sh             đẩy bản mới lên GitHub Pages
 ```
 
 Thư mục này độc lập hoàn toàn với app Next.js ở repo gốc, có thể di chuyển đi nơi khác tùy ý.
