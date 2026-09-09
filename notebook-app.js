@@ -2,6 +2,7 @@
 (function () {
   var NB = window.NB, R = window.NBRender;
   var PAGES = R.buildPages();
+  var say = function (t) { return window.NBSpeech.btn(t); };
   var el = {
     sheet: document.getElementById("sheet"),
     marks: document.getElementById("bookmarks"),
@@ -39,14 +40,14 @@
     fb.classList.add("show");
     if (kind === "correct") {
       box.classList.add("correct");
-      fb.innerHTML = '<span class="fb-ok">✓ Chính xác!</span>';
+      fb.innerHTML = '<span class="fb-ok">✓ Chính xác!</span> ' + say(ex.answers[0]);
     } else if (kind === "close") {
       box.classList.add("close");
       fb.innerHTML = '<span class="fb-warn">⚠ Gần đúng.</span> Từ ngữ đúng rồi, nhưng sai viết hoa hoặc dấu câu.' +
-        '<div class="solution">Đáp án: ' + NB.esc(ex.answers[0]) + ".</div>";
+        '<div class="solution">Đáp án: ' + NB.esc(ex.answers[0]) + ". " + say(ex.answers[0]) + "</div>";
     } else if (kind === "reveal") {
       box.classList.add("close");
-      fb.innerHTML = '<span class="fb-warn">Đáp án:</span> ' + NB.esc(ex.answers[0]) + "." +
+      fb.innerHTML = '<span class="fb-warn">Đáp án:</span> ' + NB.esc(ex.answers[0]) + ". " + say(ex.answers[0]) +
         (ex.answers.length > 1 ? '<div class="solution">Cách khác: ' + NB.esc(ex.answers[1]) + ".</div>" : "");
     } else if (kind === "hint") {
       fb.innerHTML = '<span class="fb-warn">Gợi ý:</span> ' + NB.esc(ex.hint);
@@ -84,8 +85,9 @@
   }
 
   document.addEventListener("click", function (e) {
-    var t = e.target.closest ? e.target.closest("[data-goto],[data-act],[data-vocab]") : null;
+    var t = e.target.closest ? e.target.closest("[data-say],[data-goto],[data-act],[data-vocab]") : null;
     if (!t) return;
+    if (t.dataset.say !== undefined) { window.NBSpeech.say(t.dataset.say, NB.get().slowSpeech); return; }
     if (t.dataset.goto !== undefined) { goTo(parseInt(t.dataset.goto, 10)); return; }
     if (t.dataset.vocab) { t.classList.toggle("hidden"); return; }
 
@@ -130,6 +132,20 @@
     for (var i = 0; i < cells.length; i++) cells[i].classList.toggle("hidden", st.hideVocab);
     this.textContent = st.hideVocab ? "Hiện nghĩa từ vựng" : "Ẩn nghĩa (học thẻ)";
   });
+
+  var btnSpeed = document.getElementById("btn-speed");
+  if (!window.NBSpeech.supported) {
+    btnSpeed.textContent = "Trình duyệt không đọc được";
+    btnSpeed.disabled = true;
+  } else {
+    btnSpeed.addEventListener("click", function () {
+      var st = NB.get();
+      st.slowSpeech = !st.slowSpeech; NB.save();
+      this.textContent = st.slowSpeech ? "Đang đọc chậm ✓" : "Đọc chậm lại";
+      window.NBSpeech.say("This is the reading speed.", st.slowSpeech);
+    });
+    if (NB.get().slowSpeech) btnSpeed.textContent = "Đang đọc chậm ✓";
+  }
 
   document.getElementById("btn-reset").addEventListener("click", function () {
     if (confirm("Xóa toàn bộ bài làm và ghi chú? Không khôi phục được.")) { NB.reset(); render(true); }

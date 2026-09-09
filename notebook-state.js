@@ -4,7 +4,7 @@ window.NB = (function () {
   var state = load();
 
   function blank() {
-    return { answers: {}, status: {}, notes: {}, hideVocab: false, page: 0 };
+    return { answers: {}, status: {}, notes: {}, hideVocab: false, slowSpeech: false, page: 0 };
   }
   function load() {
     try {

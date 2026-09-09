@@ -86,6 +86,12 @@ h3.sub { font-size: 16px; color: var(--accent); border-bottom: 1px solid var(--b
 .rule .r-right { color: var(--ok); font-weight: bold; }
 .rule .r-note { grid-column: 1 / -1; font-size: 14px; color: var(--ink-soft); }
 
+/* Nut loa doc mau */
+button.say { border: 0; background: none; padding: 0 4px; margin-left: 5px; font-size: 15px;
+  line-height: 1; cursor: pointer; opacity: .45; vertical-align: baseline; }
+button.say:hover { opacity: 1; transform: scale(1.15); }
+button.say:active { transform: scale(.92); }
+
 table.vocab { width: 100%; border-collapse: collapse; }
 table.vocab td { padding: 7px 9px; border-bottom: 1px dashed var(--border); }
 table.vocab td.en { font-weight: bold; width: 45%; }
@@ -146,6 +152,7 @@ ol.contents li .c-score { float: right; font-size: 14px; color: var(--ink-soft);
   /* 16px de iOS khong tu phong to khi go chu */
   .ex input.answer, textarea.notes { font-size: 16px; }
   .ex .actions button { flex: 1 1 auto; min-height: 40px; }
+  button.say { font-size: 19px; padding: 4px 8px; opacity: .6; }
   .tabs button { flex: 1; min-height: 38px; }
   .pager { position: sticky; bottom: 0; background: var(--paper); margin-top: 18px;
     padding: 10px 0; gap: 8px; }
@@ -154,6 +161,6 @@ ol.contents li .c-score { float: right; font-size: 14px; color: var(--ink-soft);
   ol.contents li { padding: 12px 0; }
 }
 @media print {
-  body { background: #fff; } .toolbar, .bookmarks, .pager, .tabs, .ex .actions { display: none; }
+  body { background: #fff; } .toolbar, .bookmarks, .pager, .tabs, .ex .actions, button.say { display: none; }
   .sheet { box-shadow: none; min-height: 0; } .ex .feedback { display: block; }
 }

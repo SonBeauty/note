@@ -93,6 +93,12 @@ h3.sub { font-size: 16px; color: var(--accent); border-bottom: 1px solid var(--b
 .rule .r-right { color: var(--ok); font-weight: bold; }
 .rule .r-note { grid-column: 1 / -1; font-size: 14px; color: var(--ink-soft); }
 
+/* Nut loa doc mau */
+button.say { border: 0; background: none; padding: 0 4px; margin-left: 5px; font-size: 15px;
+  line-height: 1; cursor: pointer; opacity: .45; vertical-align: baseline; }
+button.say:hover { opacity: 1; transform: scale(1.15); }
+button.say:active { transform: scale(.92); }
+
 table.vocab { width: 100%; border-collapse: collapse; }
 table.vocab td { padding: 7px 9px; border-bottom: 1px dashed var(--border); }
 table.vocab td.en { font-weight: bold; width: 45%; }
@@ -153,6 +159,7 @@ ol.contents li .c-score { float: right; font-size: 14px; color: var(--ink-soft);
   /* 16px de iOS khong tu phong to khi go chu */
   .ex input.answer, textarea.notes { font-size: 16px; }
   .ex .actions button { flex: 1 1 auto; min-height: 40px; }
+  button.say { font-size: 19px; padding: 4px 8px; opacity: .6; }
   .tabs button { flex: 1; min-height: 38px; }
   .pager { position: sticky; bottom: 0; background: var(--paper); margin-top: 18px;
     padding: 10px 0; gap: 8px; }
@@ -161,7 +168,7 @@ ol.contents li .c-score { float: right; font-size: 14px; color: var(--ink-soft);
   ol.contents li { padding: 12px 0; }
 }
 @media print {
-  body { background: #fff; } .toolbar, .bookmarks, .pager, .tabs, .ex .actions { display: none; }
+  body { background: #fff; } .toolbar, .bookmarks, .pager, .tabs, .ex .actions, button.say { display: none; }
   .sheet { box-shadow: none; min-height: 0; } .ex .feedback { display: block; }
 }
 
@@ -177,6 +184,7 @@ ol.contents li .c-score { float: right; font-size: 14px; color: var(--ink-soft);
 
   <div class="toolbar">
     <button id="btn-hide-vocab">Ẩn nghĩa (học thẻ)</button>
+    <button id="btn-speed">Đọc chậm lại</button>
     <button id="btn-export">Xuất file backup</button>
     <button onclick="document.getElementById('file-import').click()">Nạp lại backup</button>
     <button onclick="window.print()">In ra giấy</button>
@@ -471,7 +479,7 @@ window.NB = (function () {
   var state = load();
 
   function blank() {
-    return { answers: {}, status: {}, notes: {}, hideVocab: false, page: 0 };
+    return { answers: {}, status: {}, notes: {}, hideVocab: false, slowSpeech: false, page: 0 };
   }
   function load() {
     try {
@@ -553,9 +561,54 @@ window.NB = (function () {
 
 </script>
 <script>
+// Doc mau tieng Anh bang Web Speech API co san trong trinh duyet.
+// Khong can thu vien, khong can mang, dung giong doc cua he dieu hanh.
+window.NBSpeech = (function () {
+  var supported = typeof window.speechSynthesis !== "undefined" &&
+    typeof window.SpeechSynthesisUtterance !== "undefined";
+  var voice = null;
+
+  function pickVoice() {
+    if (!supported) return;
+    var all = window.speechSynthesis.getVoices() || [];
+    var en = all.filter(function (v) { return /^en[-_]/i.test(v.lang); });
+    // Uu tien giong My, khong co thi lay giong Anh bat ky.
+    voice = en.filter(function (v) { return /^en[-_]US/i.test(v.lang); })[0] || en[0] || null;
+  }
+
+  if (supported) {
+    pickVoice();
+    // Chrome nap danh sach giong bat dong bo nen phai nghe su kien nay.
+    window.speechSynthesis.onvoiceschanged = pickVoice;
+  }
+
+  function say(text, slow) {
+    if (!supported || !text) return false;
+    window.speechSynthesis.cancel();
+    var u = new SpeechSynthesisUtterance(String(text));
+    u.lang = voice ? voice.lang : "en-US";
+    u.rate = slow ? 0.6 : 0.95;
+    if (voice) u.voice = voice;
+    window.speechSynthesis.speak(u);
+    return true;
+  }
+
+  // Nut loa dat canh mot cum tieng Anh. Tra ve chuoi rong neu trinh duyet khong ho tro.
+  function btn(text) {
+    if (!supported || !text) return "";
+    return '<button class="say" type="button" data-say="' + window.NB.esc(text) +
+      '" title="Nghe đọc" aria-label="Nghe đọc">🔊</button>';
+  }
+
+  return { supported: supported, say: say, btn: btn };
+})();
+
+</script>
+<script>
 // Dung HTML cho tung trang cua cuon so.
 window.NBRender = (function () {
   var esc = window.NB.esc;
+  var say = function (t) { return window.NBSpeech.btn(t); };
   var KIND = { translate: "Dịch sang tiếng Anh", fix: "Sửa câu sai", fill: "Điền vào chỗ trống" };
 
   // Trang 0 la muc luc, moi chuong chiem 2 trang: bai hoc va bai tap.
@@ -608,21 +661,21 @@ window.NBRender = (function () {
     ch.samples.forEach(function (s) {
       h += '<div class="card">' +
         '<div class="line-wrong"><span class="tag">SAI</span>' + esc(s.wrong) + "</div>" +
-        '<div class="line-right"><span class="tag">ĐÚNG</span>' + esc(s.right) + "</div>" +
-        '<div class="line-native"><span class="tag">TỰ NHIÊN</span>' + esc(s.native) + "</div></div>";
+        '<div class="line-right"><span class="tag">ĐÚNG</span>' + esc(s.right) + say(s.right) + "</div>" +
+        '<div class="line-native"><span class="tag">TỰ NHIÊN</span>' + esc(s.native) + say(s.native) + "</div></div>";
     });
 
     h += '<h3 class="sub">Quy tắc cần thuộc</h3><div class="card">';
     ch.rules.forEach(function (r) {
       h += '<div class="rule"><div class="r-wrong">✗ ' + esc(r.wrong) + "</div>" +
-        '<div class="r-right">✓ ' + esc(r.right) + "</div>" +
+        '<div class="r-right">✓ ' + esc(r.right) + say(r.right) + "</div>" +
         '<div class="r-note">' + esc(r.note) + "</div></div>";
     });
     h += "</div>";
 
     h += '<h3 class="sub">Từ vựng</h3><div class="card"><table class="vocab">';
     (window.VOCABULARY[ch.id] || []).forEach(function (v) {
-      h += '<tr><td class="en">' + esc(v.en) + "</td>" +
+      h += '<tr><td class="en">' + esc(v.en) + say(v.en) + "</td>" +
         '<td class="vi' + (st.hideVocab ? " hidden" : "") + '" data-vocab="1">' +
         esc(v.vi) + "</td></tr>";
     });
@@ -690,6 +743,7 @@ window.NBRender = (function () {
 (function () {
   var NB = window.NB, R = window.NBRender;
   var PAGES = R.buildPages();
+  var say = function (t) { return window.NBSpeech.btn(t); };
   var el = {
     sheet: document.getElementById("sheet"),
     marks: document.getElementById("bookmarks"),
@@ -727,14 +781,14 @@ window.NBRender = (function () {
     fb.classList.add("show");
     if (kind === "correct") {
       box.classList.add("correct");
-      fb.innerHTML = '<span class="fb-ok">✓ Chính xác!</span>';
+      fb.innerHTML = '<span class="fb-ok">✓ Chính xác!</span> ' + say(ex.answers[0]);
     } else if (kind === "close") {
       box.classList.add("close");
       fb.innerHTML = '<span class="fb-warn">⚠ Gần đúng.</span> Từ ngữ đúng rồi, nhưng sai viết hoa hoặc dấu câu.' +
-        '<div class="solution">Đáp án: ' + NB.esc(ex.answers[0]) + ".</div>";
+        '<div class="solution">Đáp án: ' + NB.esc(ex.answers[0]) + ". " + say(ex.answers[0]) + "</div>";
     } else if (kind === "reveal") {
       box.classList.add("close");
-      fb.innerHTML = '<span class="fb-warn">Đáp án:</span> ' + NB.esc(ex.answers[0]) + "." +
+      fb.innerHTML = '<span class="fb-warn">Đáp án:</span> ' + NB.esc(ex.answers[0]) + ". " + say(ex.answers[0]) +
         (ex.answers.length > 1 ? '<div class="solution">Cách khác: ' + NB.esc(ex.answers[1]) + ".</div>" : "");
     } else if (kind === "hint") {
       fb.innerHTML = '<span class="fb-warn">Gợi ý:</span> ' + NB.esc(ex.hint);
@@ -772,8 +826,9 @@ window.NBRender = (function () {
   }
 
   document.addEventListener("click", function (e) {
-    var t = e.target.closest ? e.target.closest("[data-goto],[data-act],[data-vocab]") : null;
+    var t = e.target.closest ? e.target.closest("[data-say],[data-goto],[data-act],[data-vocab]") : null;
     if (!t) return;
+    if (t.dataset.say !== undefined) { window.NBSpeech.say(t.dataset.say, NB.get().slowSpeech); return; }
     if (t.dataset.goto !== undefined) { goTo(parseInt(t.dataset.goto, 10)); return; }
     if (t.dataset.vocab) { t.classList.toggle("hidden"); return; }
 
@@ -818,6 +873,20 @@ window.NBRender = (function () {
     for (var i = 0; i < cells.length; i++) cells[i].classList.toggle("hidden", st.hideVocab);
     this.textContent = st.hideVocab ? "Hiện nghĩa từ vựng" : "Ẩn nghĩa (học thẻ)";
   });
+
+  var btnSpeed = document.getElementById("btn-speed");
+  if (!window.NBSpeech.supported) {
+    btnSpeed.textContent = "Trình duyệt không đọc được";
+    btnSpeed.disabled = true;
+  } else {
+    btnSpeed.addEventListener("click", function () {
+      var st = NB.get();
+      st.slowSpeech = !st.slowSpeech; NB.save();
+      this.textContent = st.slowSpeech ? "Đang đọc chậm ✓" : "Đọc chậm lại";
+      window.NBSpeech.say("This is the reading speed.", st.slowSpeech);
+    });
+    if (NB.get().slowSpeech) btnSpeed.textContent = "Đang đọc chậm ✓";
+  }
 
   document.getElementById("btn-reset").addEventListener("click", function () {
     if (confirm("Xóa toàn bộ bài làm và ghi chú? Không khôi phục được.")) { NB.reset(); render(true); }

@@ -1,6 +1,7 @@
 // Dung HTML cho tung trang cua cuon so.
 window.NBRender = (function () {
   var esc = window.NB.esc;
+  var say = function (t) { return window.NBSpeech.btn(t); };
   var KIND = { translate: "Dịch sang tiếng Anh", fix: "Sửa câu sai", fill: "Điền vào chỗ trống" };
 
   // Trang 0 la muc luc, moi chuong chiem 2 trang: bai hoc va bai tap.
@@ -53,21 +54,21 @@ window.NBRender = (function () {
     ch.samples.forEach(function (s) {
       h += '<div class="card">' +
         '<div class="line-wrong"><span class="tag">SAI</span>' + esc(s.wrong) + "</div>" +
-        '<div class="line-right"><span class="tag">ĐÚNG</span>' + esc(s.right) + "</div>" +
-        '<div class="line-native"><span class="tag">TỰ NHIÊN</span>' + esc(s.native) + "</div></div>";
+        '<div class="line-right"><span class="tag">ĐÚNG</span>' + esc(s.right) + say(s.right) + "</div>" +
+        '<div class="line-native"><span class="tag">TỰ NHIÊN</span>' + esc(s.native) + say(s.native) + "</div></div>";
     });
 
     h += '<h3 class="sub">Quy tắc cần thuộc</h3><div class="card">';
     ch.rules.forEach(function (r) {
       h += '<div class="rule"><div class="r-wrong">✗ ' + esc(r.wrong) + "</div>" +
-        '<div class="r-right">✓ ' + esc(r.right) + "</div>" +
+        '<div class="r-right">✓ ' + esc(r.right) + say(r.right) + "</div>" +
         '<div class="r-note">' + esc(r.note) + "</div></div>";
     });
     h += "</div>";
 
     h += '<h3 class="sub">Từ vựng</h3><div class="card"><table class="vocab">';
     (window.VOCABULARY[ch.id] || []).forEach(function (v) {
-      h += '<tr><td class="en">' + esc(v.en) + "</td>" +
+      h += '<tr><td class="en">' + esc(v.en) + say(v.en) + "</td>" +
         '<td class="vi' + (st.hideVocab ? " hidden" : "") + '" data-vocab="1">' +
         esc(v.vi) + "</td></tr>";
     });
