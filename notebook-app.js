@@ -67,7 +67,7 @@
       fb.innerHTML = '<span class="fb-warn">Gợi ý:</span> ' + NB.esc(ex.hint);
     } else if (kind === "empty") {
       fb.innerHTML = '<span class="fb-bad">Bạn chưa viết gì cả.</span>';
-    } else if (ex.type === "query") {
+    } else if (NB.isMustType(ex)) {
       // Chi ra thanh phan con thieu thay vi chi bao sai.
       box.classList.add("wrong");
       var miss = NB.missingParts(ex, document.querySelector('.answer[data-id="' + id + '"]').value);

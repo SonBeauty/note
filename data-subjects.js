@@ -1,4 +1,16 @@
 // Ba muc chinh cua so tay. Phai nap sau cac file du lieu kia.
+
+// Gop nhieu nhom chuong lai, bo qua nhom nao chua nap duoc.
+// Khong co ham nay thi concat(undefined) se chen mot phan tu rong va lam vo trang.
+function chapterGroups() {
+  var out = [];
+  for (var i = 0; i < arguments.length; i++) {
+    if (Array.isArray(arguments[i])) out = out.concat(arguments[i]);
+    else console.warn("Thiếu một nhóm chương, bỏ qua:", i);
+  }
+  return out;
+}
+
 window.SUBJECTS = [
   {
     id: "en",
@@ -17,7 +29,7 @@ window.SUBJECTS = [
       "Sau đó tới PostgreSQL của b2b, cuối cùng là MySQL trên hệ ERP. " +
       "Bài tập đều là cho sẵn bảng dữ liệu rồi bạn tự viết truy vấn.",
     kind: "blocks",
-    chapters: window.SQL_BASICS.concat(window.SQL_CHAPTERS, window.MYSQL_CHAPTERS)
+    chapters: chapterGroups(window.SQL_BASICS, window.SQL_CHAPTERS, window.MYSQL_CHAPTERS)
   },
   {
     id: "code",
@@ -26,12 +38,12 @@ window.SUBJECTS = [
     tocIntro: "Những đoạn code đáng nhớ trong dự án, kèm lý do vì sao nó được viết như vậy " +
       "và những chỗ nếu làm khác đi thì hỏng.",
     kind: "blocks",
-    chapters: window.SECURITY_CHAPTERS
+    chapters: chapterGroups(window.SECURITY_CHAPTERS, window.TRANSACTION_CHAPTERS)
   }
 ];
 
 // Gop bai tap cua moi mon vao mot bang tra cuu chung theo id chuong.
 window.ALL_EXERCISES = Object.assign(
   {}, window.EXERCISES, window.SQL_BASICS_EXERCISES, window.SQL_EXERCISES,
-  window.MYSQL_EXERCISES, window.SECURITY_EXERCISES
+  window.MYSQL_EXERCISES, window.SECURITY_EXERCISES, window.TRANSACTION_EXERCISES
 );

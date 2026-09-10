@@ -4,7 +4,8 @@ window.NBRender = (function () {
   var say = function (t) { return window.NBSpeech.btn(t); };
   var KIND = {
     translate: "Dịch sang tiếng Anh", fix: "Sửa câu sai", fill: "Điền vào chỗ trống",
-    guess: "Đoán kết quả", sql: "Viết mệnh đề SQL", query: "Viết truy vấn"
+    guess: "Đoán kết quả", sql: "Viết mệnh đề SQL", query: "Viết truy vấn",
+    code: "Viết code"
   };
 
   function subjectById(id) {
@@ -96,9 +97,10 @@ window.NBRender = (function () {
 
   // Dang viet truy van can o nhieu dong, cac dang con lai mot dong la du.
   function fieldHtml(ex, val) {
-    if (ex.type === "query") {
-      return '<textarea class="answer sqlbox" rows="4" spellcheck="false" ' +
-        'placeholder="Viết câu lệnh SQL rồi bấm Kiểm tra..." data-id="' + ex.id + '">' +
+    if (window.NB.isMustType(ex)) {
+      var ph = ex.type === "code" ? "Viết code rồi bấm Kiểm tra..." : "Viết câu lệnh SQL rồi bấm Kiểm tra...";
+      return '<textarea class="answer sqlbox" rows="4" spellcheck="false" placeholder="' + ph +
+        '" data-id="' + ex.id + '">' +
         esc(val) + "</textarea>";
     }
     return '<input class="answer" type="text" placeholder="Gõ câu trả lời của bạn..." value="' +
@@ -135,8 +137,8 @@ window.NBRender = (function () {
   function practiceHtml(ch) {
     var st = window.NB.get();
     var list = window.ALL_EXERCISES[ch.id] || [];
-    var hasQuery = list.some(function (e) { return e.type === "query"; });
-    var keyHint = hasQuery ? "Ctrl+Enter" : "Enter";
+    var hasBox = list.some(function (e) { return window.NB.isMustType(e); });
+    var keyHint = hasBox ? "Ctrl+Enter" : "Enter";
     var h = '<p class="intro">Gõ đáp án rồi bấm Kiểm tra, hoặc nhấn ' + keyHint +
       ". Chương này bạn đang đúng " +
       '<span id="ch-progress" data-ch="' + ch.id + '">' + chapterScore(ch.id) + "</span> câu.</p>";

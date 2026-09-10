@@ -54,8 +54,11 @@ window.NB = (function () {
   // Tu khoa SQL va cac dang dien tu khong phan biet hoa thuong.
   var CASE_FREE = { fill: 1, guess: 1, sql: 1 };
 
-  // Dang "viet truy van": cham theo cac thanh phan bat buoc, khong so tung ky tu,
-  // de nguoi hoc viet kieu nao cung duoc mien la du y.
+  // Cac dang cham theo thanh phan bat buoc thay vi so tung ky tu:
+  // viet truy van SQL va viet code. Nguoi hoc viet kieu nao cung duoc mien la du y.
+  var MUST_TYPES = { query: 1, code: 1 };
+  function isMustType(ex) { return MUST_TYPES[ex.type] === 1; }
+
   function missingParts(ex, input) {
     var s = String(input).toLowerCase().replace(/[`]/g, "").replace(/\s+/g, " ").trim();
     return (ex.must || []).filter(function (m) {
@@ -65,7 +68,7 @@ window.NB = (function () {
 
   function grade(ex, input) {
     if (!norm(input)) return "empty";
-    if (ex.type === "query") {
+    if (isMustType(ex)) {
       return missingParts(ex, input).length === 0 ? "correct" : "wrong";
     }
     var caseFree = CASE_FREE[ex.type] === 1;
@@ -130,6 +133,7 @@ window.NB = (function () {
     save: save,
     grade: grade,
     missingParts: missingParts,
+    isMustType: isMustType,
     findEx: findEx,
     correctCount: correctCount,
     totalCount: totalCount,

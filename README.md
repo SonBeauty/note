@@ -16,7 +16,7 @@ công nghệ để nhìn là biết đang nói về hệ nào:
 |---|---|---|
 | Tiếng Anh | 5 chương: giới thiệu bản thân, kinh nghiệm, dự án, công việc hằng ngày, du lịch | 25 |
 | SQL | SQL căn bản + 3 chương PostgreSQL + 1 chương MySQL | 21 |
-| Lập trình | Kiểm tra file tải lên trong NestJS: Content-Type và magic bytes | 6 |
+| Lập trình | Kiểm tra file tải lên (NestJS) + Transaction (Prisma + PostgreSQL) | 13 |
 
 Chương **SQL căn bản** đi trước, giải thích từng mệnh đề là gì và dùng làm gì, thứ tự chạy
 thật của một câu SELECT, WHERE khác HAVING chỗ nào, hàm gộp, subquery và index. Các chương
@@ -25,6 +25,7 @@ sau mới đi vào code thật của dự án:
 - **PostgreSQL + Prisma 6** — truy vấn thống kê size của `b2b.kamito.vn`, có ví dụ JOIN bấm được để so sánh INNER, LEFT, RIGHT
 - **MySQL** — truy vấn báo cáo công nợ trên hệ ERP kiểu 1C, kèm bảng đối chiếu cú pháp MySQL với PostgreSQL
 - **NestJS 10 + TypeScript** — `upload-validation.util.ts`, vì sao không tin Content-Type và cách đối chiếu chéo với magic bytes
+- **Prisma $transaction + PostgreSQL** — `orders.service.ts`, khóa dòng bằng FOR UPDATE để không bán vượt tồn, sắp xếp id để tránh deadlock
 
 ## Lật sổ
 
@@ -39,9 +40,10 @@ sau mới đi vào code thật của dự án:
 
 - **5 chương theo chủ đề**: giới thiệu bản thân, kinh nghiệm & kỹ năng, nói về dự án, công việc hằng ngày, du lịch & sở thích
 - Mỗi chương gồm: câu mẫu (sai → đúng → cách nói tự nhiên), bảng quy tắc, từ vựng, bài tập, ô ghi chú
-- **52 bài tập**. Phần tiếng Anh là dịch câu, sửa câu sai và điền chỗ trống.
+- **59 bài tập**. Phần tiếng Anh là dịch câu, sửa câu sai và điền chỗ trống.
   Phần SQL là **21 bài viết truy vấn**: mỗi chương cho sẵn bảng dữ liệu mẫu kèm kết quả mong đợi,
   bạn tự viết câu lệnh vào ô nhiều dòng rồi bấm Kiểm tra (hoặc Ctrl+Enter).
+  Phần Lập trình là **13 bài viết code**, chấm theo cùng cơ chế.
 - **Chấm điểm tự động**: gõ đáp án rồi bấm Kiểm tra (hoặc nhấn Enter)
   - ✓ Chính xác
   - ⚠ Gần đúng — đúng từ nhưng sai viết hoa hoặc dấu câu
@@ -88,7 +90,7 @@ Bài viết truy vấn thì khai báo khác, chấm theo thành phần bắt bu�
 ```js
 {
   id: "b1e6",
-  type: "query",
+  type: "query",              // query cho SQL, code cho JS/TS
   prompt: "Đếm số đơn của từng khách hàng.",
   want: "Kết quả mong đợi: An = 2, Bình = 1, Chi = 1.",
   hint: "Đếm dòng chứ không cộng amount.",
@@ -185,6 +187,8 @@ english-notebook/
 ├── data-mysql-exercises.js     bài tập chương đó
 ├── data-security-chapters.js   ghi chú kiểm tra file tải lên
 ├── data-security-exercises.js  bài tập chương đó
+├── data-transaction-chapters.js  ghi chú transaction và khóa dòng
+├── data-transaction-exercises.js bài tập chương đó
 ├── data-subjects.js      khai báo ba mục chính
 ├── build-single-file.js  gộp tất cả thành 1 file cho điện thoại
 ├── serve-lan.js          mở sổ từ điện thoại qua WiFi

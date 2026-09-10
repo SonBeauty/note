@@ -1215,7 +1215,172 @@ window.SECURITY_EXERCISES = {
 
 </script>
 <script>
+// Ghi chu ve transaction, minh hoa bang code that trong apps/api/src cua b2b.kamito.vn.
+window.TRANSACTION_CHAPTERS = [
+  {
+    id: "tx1",
+    title: "Transaction (Prisma + PostgreSQL)",
+    subtitle: "Khóa dòng, tránh bán vượt tồn, tránh deadlock",
+    intro: "Transaction gom nhiều thao tác ghi thành một khối: hoặc thành công hết, hoặc hỏng hết và mọi thứ quay về như cũ. Dự án b2b dùng nó ở 15 file, chỗ khó nhất là đặt hàng vì phải trừ tồn kho.",
+    blocks: [
+      { t: "h", text: "Transaction là gì" },
+      { t: "p", html: "Ví dụ chuyển khoản: trừ tiền tài khoản A rồi cộng tiền tài khoản B. Nếu server sập giữa hai bước thì tiền bốc hơi. Transaction bảo đảm hoặc cả hai bước cùng xong, hoặc không bước nào có hiệu lực." },
+      { t: "p", html: "Khối lệnh chỉ thật sự ghi xuống khi <b>commit</b>. Gặp lỗi thì <b>rollback</b>, mọi thay đổi bên trong bị hủy như chưa từng chạy." },
+
+      { t: "h", text: "Khi nào cần, khi nào không" },
+      { t: "table", head: ["Tình huống", "Cần transaction?"],
+        rows: [
+          ["Một câu <code>INSERT</code> hoặc <code>UPDATE</code> duy nhất", "Không, mỗi câu lệnh vốn đã là một transaction"],
+          ["Tạo đơn hàng rồi trừ tồn kho", "Có, hai việc phải cùng thành công"],
+          ["Đọc nhiều bảng để hiển thị", "Không, trừ khi cần ảnh chụp nhất quán"],
+          ["Đếm tổng và lấy trang dữ liệu cho phân trang", "Nên, để tổng khớp với danh sách"],
+          ["Gọi API bên ngoài rồi mới ghi", "Có, nhưng để lời gọi API <b>ngoài</b> transaction"]
+        ] },
+
+      { t: "h", text: "Hai kiểu viết trong Prisma" },
+      { t: "p", html: "<b>Kiểu mảng</b> cho các thao tác độc lập, chạy tuần tự trong cùng một transaction. Dự án dùng cho phân trang, để tổng và danh sách cùng nhìn một ảnh chụp dữ liệu:" },
+      { t: "code", text: "const [rows, total] = await this.prisma.$transaction([\n  this.prisma.activityLog.findMany({ where, skip, take }),\n  this.prisma.activityLog.count({ where }),\n]);" },
+      { t: "p", html: "<b>Kiểu interactive</b> khi bước sau cần kết quả của bước trước, hoặc cần rẽ nhánh theo điều kiện:" },
+      { t: "code", text: "const order = await this.prisma.$transaction(async (tx) => {\n  // mọi thao tác bên trong phải gọi qua tx\n  const created = await tx.order.create({ data: ... });\n  await tx.sku.update({ where: { id }, data: { qtyReserved: ... } });\n  return created;\n});" },
+
+      { t: "h", text: "Lỗi kinh điển: quên dùng tx" },
+      { t: "code", text: "await this.prisma.$transaction(async (tx) => {\n  await tx.order.create({ ... });        // nằm trong transaction\n  await this.prisma.sku.update({ ... }); // SAI: nằm NGOÀI transaction\n});" },
+      { t: "p", html: "Dòng thứ hai dùng lại <code>this.prisma</code> nên nó chạy trên kết nối khác, không thuộc transaction. Khi rollback, thao tác đó vẫn còn nguyên và dữ liệu lệch." },
+      { t: "hint", html: "Quy tắc: bên trong callback chỉ được gọi <code>tx</code>. Thấy <code>this.prisma</code> hay <code>prisma.</code> trong đó là sai, không có ngoại lệ." },
+
+      { t: "h", text: "Vì sao cần khóa dòng" },
+      { t: "p", html: "Tồn còn 1 cái, hai người bấm đặt hàng cùng lúc:" },
+      { t: "table", head: ["Thời điểm", "Người A", "Người B"],
+        rows: [
+          ["1", "Đọc tồn = 1", ""],
+          ["2", "", "Đọc tồn = 1"],
+          ["3", "Thấy đủ, ghi tồn = 0", ""],
+          ["4", "", "Cũng thấy đủ, ghi tồn = 0"],
+          ["Kết quả", "Bán được 2 cái trong khi chỉ có 1", ""]
+        ] },
+      { t: "p", html: "Transaction không tự cứu được chuyện này, vì cả hai đều đọc trước khi ai kịp ghi. Phải <b>khóa dòng</b> ngay lúc đọc." },
+      { t: "code", text: "await tx.$queryRaw`\n  SELECT id, \"qtyAvailable\", \"qtyReserved\"\n  FROM skus\n  WHERE id IN (${Prisma.join(lockSkuIds)})\n  ORDER BY id\n  FOR UPDATE`;" },
+      { t: "p", html: "<code>FOR UPDATE</code> giữ dòng lại tới khi transaction kết thúc. Người B chạm vào cùng dòng sẽ phải xếp hàng chờ, đọc xong thì đã thấy số mới." },
+
+      { t: "h", text: "Khóa theo thứ tự cố định để tránh deadlock" },
+      { t: "p", html: "Hai transaction khóa chéo nhau thì cả hai cùng đứng chờ, gọi là <b>deadlock</b>. A giữ SKU 1 đợi SKU 2, B giữ SKU 2 đợi SKU 1." },
+      { t: "code", text: "const lockSkuIds = [...qtyBySkuId.keys()].sort();\n// rồi khóa kèm ORDER BY id" },
+      { t: "hint", html: "Sắp xếp id trước khi khóa là mẹo chống deadlock kinh điển. Mọi transaction cùng đi theo một thứ tự thì không bao giờ khóa chéo nhau được. Trong dự án, cả mảng id lẫn câu SQL đều sắp theo <code>id</code>." },
+
+      { t: "h", text: "Ném lỗi là rollback" },
+      { t: "code", text: "if (effectiveAvailable < requestedQty) {\n  throw new BadRequestException('Không đủ tồn kho');\n}" },
+      { t: "p", html: "Không cần gọi rollback thủ công. Callback ném exception thì Prisma tự hủy toàn bộ transaction, kể cả những dòng đã update ở vòng lặp trước." },
+
+      { t: "h", text: "Giữ transaction càng ngắn càng tốt" },
+      { t: "p", html: "Transaction đang mở là đang giữ khóa, mọi request khác chạm vào dòng đó đều phải chờ. Nên đừng gọi HTTP, đừng gửi email, đừng xử lý ảnh ở bên trong." },
+      { t: "code", text: "await this.prisma.$transaction(async (tx) => {\n  ...\n}, { timeout: 30_000, maxWait: 10_000 });" },
+      { t: "hint", html: "<code>timeout</code> là thời gian tối đa transaction được phép chạy, <code>maxWait</code> là thời gian chờ xin được kết nối. Prisma mặc định 5 giây và 2 giây. Dự án nới lên vì luồng đặt hàng khóa nhiều SKU một lúc. Nới số là chữa triệu chứng, gốc rễ vẫn là làm cho transaction ngắn lại." }
+    ]
+  }
+];
+
+</script>
+<script>
+// Bai tap dang viet code, cham theo thanh phan bat buoc.
+window.TRANSACTION_EXERCISES = {
+  tx1: [
+    {
+      id: "t1e1", type: "code",
+      prompt: "Viết khung transaction kiểu interactive của Prisma, đặt tên tham số callback là tx.",
+      want: "Chỉ cần cái khung, chưa cần nội dung bên trong.",
+      hint: "await this.prisma.$transaction(async (tx) => { ... })",
+      must: [
+        { re: "\\$transaction", label: "$transaction" },
+        { re: "async", label: "async" },
+        { re: "\\(\\s*tx\\s*\\)", label: "tham số (tx)" }
+      ],
+      answers: ["await this.prisma.$transaction(async (tx) => { });"]
+    },
+    {
+      id: "t1e2", type: "code",
+      prompt: "Bên trong transaction, tạo một bản ghi order. Nhớ gọi qua tx chứ không phải this.prisma.",
+      want: "Sai chỗ này thì rollback sẽ không cuốn theo thao tác đó.",
+      hint: "Dạng tx.<model>.create({ data: ... }).",
+      must: [
+        { re: "tx\\.order\\.create", label: "tx.order.create" },
+        { re: "data", label: "data: { ... }" }
+      ],
+      answers: ["const created = await tx.order.create({ data: { userId, status: 'CREATED' } });"]
+    },
+    {
+      id: "t1e3", type: "code",
+      prompt: "Viết câu SQL thô khóa dòng sku theo id để người khác phải chờ, dùng bên trong transaction.",
+      want: "Đây chính là chỗ chặn bán vượt tồn.",
+      hint: "SELECT ... FROM skus WHERE ... rồi thêm hai chữ khóa ở cuối.",
+      must: [
+        { re: "select", label: "SELECT" },
+        { re: "from\\s+skus", label: "FROM skus" },
+        { re: "where", label: "WHERE" },
+        { re: "for\\s+update", label: "FOR UPDATE" }
+      ],
+      answers: ["await tx.$queryRaw`SELECT id, \"qtyReserved\" FROM skus WHERE id = ${skuId} FOR UPDATE`;"]
+    },
+    {
+      id: "t1e4", type: "code",
+      prompt: "Trước khi khóa nhiều SKU cùng lúc, xử lý danh sách id thế nào để tránh deadlock?",
+      want: "Một lời gọi hàm duy nhất là đủ.",
+      hint: "Mọi transaction phải đi theo cùng một thứ tự thì mới không khóa chéo nhau.",
+      must: [
+        { re: "sort\\s*\\(", label: "sort()" }
+      ],
+      answers: ["const lockSkuIds = [...qtyBySkuId.keys()].sort();"]
+    },
+    {
+      id: "t1e5", type: "code",
+      prompt: "Trong transaction, nếu tồn kho không đủ thì viết gì để mọi thay đổi trước đó bị hủy hết?",
+      want: "Không có hàm rollback nào cần gọi cả.",
+      hint: "Prisma tự rollback khi callback ném exception.",
+      must: [
+        { re: "throw", label: "throw" }
+      ],
+      answers: ["throw new BadRequestException('Không đủ tồn kho');"]
+    },
+    {
+      id: "t1e6", type: "code",
+      prompt: "Cập nhật qtyReserved của một sku bên trong transaction, cộng thêm số lượng vừa đặt.",
+      want: "Vẫn phải gọi qua tx.",
+      hint: "tx.sku.update cần cả where lẫn data.",
+      must: [
+        { re: "tx\\.sku\\.update", label: "tx.sku.update" },
+        { re: "where", label: "where" },
+        { re: "qtyreserved", label: "qtyReserved" }
+      ],
+      answers: ["await tx.sku.update({ where: { id: skuId }, data: { qtyReserved: locked.qtyReserved + qty } });"]
+    },
+    {
+      id: "t1e7", type: "code",
+      prompt: "Viết tham số tùy chọn cho $transaction để nới thời gian chạy tối đa lên 30 giây.",
+      want: "Đối số thứ hai của $transaction, đơn vị mili giây.",
+      hint: "Một object có khóa timeout.",
+      must: [
+        { re: "timeout", label: "timeout" },
+        { re: "30_?000", label: "30000 hoặc 30_000" }
+      ],
+      answers: ["{ timeout: 30_000, maxWait: 10_000 }"]
+    }
+  ]
+};
+
+</script>
+<script>
 // Ba muc chinh cua so tay. Phai nap sau cac file du lieu kia.
+
+// Gop nhieu nhom chuong lai, bo qua nhom nao chua nap duoc.
+// Khong co ham nay thi concat(undefined) se chen mot phan tu rong va lam vo trang.
+function chapterGroups() {
+  var out = [];
+  for (var i = 0; i < arguments.length; i++) {
+    if (Array.isArray(arguments[i])) out = out.concat(arguments[i]);
+    else console.warn("Thiếu một nhóm chương, bỏ qua:", i);
+  }
+  return out;
+}
+
 window.SUBJECTS = [
   {
     id: "en",
@@ -1234,7 +1399,7 @@ window.SUBJECTS = [
       "Sau đó tới PostgreSQL của b2b, cuối cùng là MySQL trên hệ ERP. " +
       "Bài tập đều là cho sẵn bảng dữ liệu rồi bạn tự viết truy vấn.",
     kind: "blocks",
-    chapters: window.SQL_BASICS.concat(window.SQL_CHAPTERS, window.MYSQL_CHAPTERS)
+    chapters: chapterGroups(window.SQL_BASICS, window.SQL_CHAPTERS, window.MYSQL_CHAPTERS)
   },
   {
     id: "code",
@@ -1243,14 +1408,14 @@ window.SUBJECTS = [
     tocIntro: "Những đoạn code đáng nhớ trong dự án, kèm lý do vì sao nó được viết như vậy " +
       "và những chỗ nếu làm khác đi thì hỏng.",
     kind: "blocks",
-    chapters: window.SECURITY_CHAPTERS
+    chapters: chapterGroups(window.SECURITY_CHAPTERS, window.TRANSACTION_CHAPTERS)
   }
 ];
 
 // Gop bai tap cua moi mon vao mot bang tra cuu chung theo id chuong.
 window.ALL_EXERCISES = Object.assign(
   {}, window.EXERCISES, window.SQL_BASICS_EXERCISES, window.SQL_EXERCISES,
-  window.MYSQL_EXERCISES, window.SECURITY_EXERCISES
+  window.MYSQL_EXERCISES, window.SECURITY_EXERCISES, window.TRANSACTION_EXERCISES
 );
 
 </script>
@@ -1311,8 +1476,11 @@ window.NB = (function () {
   // Tu khoa SQL va cac dang dien tu khong phan biet hoa thuong.
   var CASE_FREE = { fill: 1, guess: 1, sql: 1 };
 
-  // Dang "viet truy van": cham theo cac thanh phan bat buoc, khong so tung ky tu,
-  // de nguoi hoc viet kieu nao cung duoc mien la du y.
+  // Cac dang cham theo thanh phan bat buoc thay vi so tung ky tu:
+  // viet truy van SQL va viet code. Nguoi hoc viet kieu nao cung duoc mien la du y.
+  var MUST_TYPES = { query: 1, code: 1 };
+  function isMustType(ex) { return MUST_TYPES[ex.type] === 1; }
+
   function missingParts(ex, input) {
     var s = String(input).toLowerCase().replace(/[`]/g, "").replace(/\s+/g, " ").trim();
     return (ex.must || []).filter(function (m) {
@@ -1322,7 +1490,7 @@ window.NB = (function () {
 
   function grade(ex, input) {
     if (!norm(input)) return "empty";
-    if (ex.type === "query") {
+    if (isMustType(ex)) {
       return missingParts(ex, input).length === 0 ? "correct" : "wrong";
     }
     var caseFree = CASE_FREE[ex.type] === 1;
@@ -1387,6 +1555,7 @@ window.NB = (function () {
     save: save,
     grade: grade,
     missingParts: missingParts,
+    isMustType: isMustType,
     findEx: findEx,
     correctCount: correctCount,
     totalCount: totalCount,
@@ -1536,7 +1705,8 @@ window.NBRender = (function () {
   var say = function (t) { return window.NBSpeech.btn(t); };
   var KIND = {
     translate: "Dịch sang tiếng Anh", fix: "Sửa câu sai", fill: "Điền vào chỗ trống",
-    guess: "Đoán kết quả", sql: "Viết mệnh đề SQL", query: "Viết truy vấn"
+    guess: "Đoán kết quả", sql: "Viết mệnh đề SQL", query: "Viết truy vấn",
+    code: "Viết code"
   };
 
   function subjectById(id) {
@@ -1628,9 +1798,10 @@ window.NBRender = (function () {
 
   // Dang viet truy van can o nhieu dong, cac dang con lai mot dong la du.
   function fieldHtml(ex, val) {
-    if (ex.type === "query") {
-      return '<textarea class="answer sqlbox" rows="4" spellcheck="false" ' +
-        'placeholder="Viết câu lệnh SQL rồi bấm Kiểm tra..." data-id="' + ex.id + '">' +
+    if (window.NB.isMustType(ex)) {
+      var ph = ex.type === "code" ? "Viết code rồi bấm Kiểm tra..." : "Viết câu lệnh SQL rồi bấm Kiểm tra...";
+      return '<textarea class="answer sqlbox" rows="4" spellcheck="false" placeholder="' + ph +
+        '" data-id="' + ex.id + '">' +
         esc(val) + "</textarea>";
     }
     return '<input class="answer" type="text" placeholder="Gõ câu trả lời của bạn..." value="' +
@@ -1667,8 +1838,8 @@ window.NBRender = (function () {
   function practiceHtml(ch) {
     var st = window.NB.get();
     var list = window.ALL_EXERCISES[ch.id] || [];
-    var hasQuery = list.some(function (e) { return e.type === "query"; });
-    var keyHint = hasQuery ? "Ctrl+Enter" : "Enter";
+    var hasBox = list.some(function (e) { return window.NB.isMustType(e); });
+    var keyHint = hasBox ? "Ctrl+Enter" : "Enter";
     var h = '<p class="intro">Gõ đáp án rồi bấm Kiểm tra, hoặc nhấn ' + keyHint +
       ". Chương này bạn đang đúng " +
       '<span id="ch-progress" data-ch="' + ch.id + '">' + chapterScore(ch.id) + "</span> câu.</p>";
@@ -1780,7 +1951,7 @@ window.NBRender = (function () {
       fb.innerHTML = '<span class="fb-warn">Gợi ý:</span> ' + NB.esc(ex.hint);
     } else if (kind === "empty") {
       fb.innerHTML = '<span class="fb-bad">Bạn chưa viết gì cả.</span>';
-    } else if (ex.type === "query") {
+    } else if (NB.isMustType(ex)) {
       // Chi ra thanh phan con thieu thay vi chi bao sai.
       box.classList.add("wrong");
       var miss = NB.missingParts(ex, document.querySelector('.answer[data-id="' + id + '"]').value);
