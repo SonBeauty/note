@@ -13,15 +13,15 @@ window.SUBJECTS = [
     id: "sql",
     title: "Lập trình",
     tagline: "Ghi chú SQL rút từ chính truy vấn trong dự án của bạn",
-    tocIntro: "Phần này đi từ cách ghép bảng tới cách tổng hợp số liệu, rồi soi lại " +
-      "truy vấn thống kê size trong dự án. Mỗi chương cũng có một trang bài tập.",
+    tocIntro: "Ghi chú rút từ chính code trong dự án của bạn: SQL cho truy vấn thống kê, " +
+      "và cách chặn file tải lên độc hại. Mỗi chương đều có một trang bài tập.",
     kind: "blocks",
-    chapters: window.SQL_CHAPTERS
+    chapters: window.SQL_CHAPTERS.concat(window.SECURITY_CHAPTERS)
   }
 ];
 
 // Gop bai tap cua moi mon vao mot bang tra cuu chung theo id chuong.
-window.ALL_EXERCISES = Object.assign({}, window.EXERCISES, window.SQL_EXERCISES);
+window.ALL_EXERCISES = Object.assign({}, window.EXERCISES, window.SQL_EXERCISES, window.SECURITY_EXERCISES);
 
 // Tra ve mon chua chuong nay.
 window.subjectOfChapter = function (chapterId) {

@@ -14,9 +14,11 @@ Hai tab trên đầu sổ, mỗi tab giữ tiến độ và trang đang đọc r
 | Mục | Nội dung | Số bài tập |
 |---|---|---|
 | Tiếng Anh | 5 chương: giới thiệu bản thân, kinh nghiệm, dự án, công việc hằng ngày, du lịch | 25 |
-| Lập trình | 3 chương SQL: ghép bảng JOIN, tổng hợp dữ liệu, áp dụng vào dự án | 14 |
+| Lập trình | 4 chương: ghép bảng JOIN, tổng hợp dữ liệu, áp dụng vào dự án, kiểm tra file tải lên | 20 |
 
 Phần SQL có ví dụ JOIN bấm được để so sánh INNER, LEFT và RIGHT, kèm các ô cảnh báo chỗ dễ nhầm.
+Chương kiểm tra file tải lên rút từ `upload-validation.util.ts` của dự án b2b.kamito.vn:
+vì sao không tin Content-Type, magic bytes của từng định dạng, và mẹo đối chiếu chéo hai nguồn.
 
 ## Lật sổ
 
@@ -31,7 +33,7 @@ Phần SQL có ví dụ JOIN bấm được để so sánh INNER, LEFT và RIGHT
 
 - **5 chương theo chủ đề**: giới thiệu bản thân, kinh nghiệm & kỹ năng, nói về dự án, công việc hằng ngày, du lịch & sở thích
 - Mỗi chương gồm: câu mẫu (sai → đúng → cách nói tự nhiên), bảng quy tắc, từ vựng, bài tập, ô ghi chú
-- **39 bài tập** năm dạng: dịch sang tiếng Anh, sửa câu sai, điền vào chỗ trống, đoán kết quả, viết mệnh đề SQL
+- **45 bài tập** năm dạng: dịch sang tiếng Anh, sửa câu sai, điền vào chỗ trống, đoán kết quả, viết mệnh đề SQL
 - **Chấm điểm tự động**: gõ đáp án rồi bấm Kiểm tra (hoặc nhấn Enter)
   - ✓ Chính xác
   - ⚠ Gần đúng — đúng từ nhưng sai viết hoa hoặc dấu câu
@@ -152,6 +154,8 @@ english-notebook/
 ├── data-exercises.js     bài tập tiếng Anh
 ├── data-sql-chapters.js  nội dung SQL
 ├── data-sql-exercises.js bài tập SQL
+├── data-security-chapters.js   ghi chú kiểm tra file tải lên
+├── data-security-exercises.js  bài tập chương đó
 ├── data-subjects.js      khai báo hai mục chính
 ├── build-single-file.js  gộp tất cả thành 1 file cho điện thoại
 ├── serve-lan.js          mở sổ từ điện thoại qua WiFi
