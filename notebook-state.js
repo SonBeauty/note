@@ -54,8 +54,20 @@ window.NB = (function () {
   // Tu khoa SQL va cac dang dien tu khong phan biet hoa thuong.
   var CASE_FREE = { fill: 1, guess: 1, sql: 1 };
 
+  // Dang "viet truy van": cham theo cac thanh phan bat buoc, khong so tung ky tu,
+  // de nguoi hoc viet kieu nao cung duoc mien la du y.
+  function missingParts(ex, input) {
+    var s = String(input).toLowerCase().replace(/[`]/g, "").replace(/\s+/g, " ").trim();
+    return (ex.must || []).filter(function (m) {
+      return !new RegExp(m.re, "i").test(s);
+    }).map(function (m) { return m.label; });
+  }
+
   function grade(ex, input) {
     if (!norm(input)) return "empty";
+    if (ex.type === "query") {
+      return missingParts(ex, input).length === 0 ? "correct" : "wrong";
+    }
     var caseFree = CASE_FREE[ex.type] === 1;
     var u = norm(input);
     for (var i = 0; i < ex.answers.length; i++) {
@@ -117,6 +129,7 @@ window.NB = (function () {
     setPage: function (i) { state.pages[state.subject] = i; },
     save: save,
     grade: grade,
+    missingParts: missingParts,
     findEx: findEx,
     correctCount: correctCount,
     totalCount: totalCount,

@@ -27,6 +27,10 @@ window.SQL_CHAPTERS = [
       { t: "code", text: "FROM skus s\nLEFT JOIN order_items oi ON oi.\"skuId\" = s.id\nWHERE oi.qty >= 5" },
       { t: "p", html: "Loại luôn cả SKU không có dòng hàng phù hợp, vì NULL không thỏa điều kiện WHERE." },
       { t: "hint", html: "<b>Dễ nhầm:</b> <code>LEFT JOIN ... WHERE b.id IS NOT NULL</code> loại hết dòng không khớp, làm mất tác dụng giữ dòng của LEFT JOIN. Ngoài ra một dòng bên trái có thể khớp nhiều dòng bên phải, nên chú ý bị cộng lặp khi dùng SUM." }
+    ],
+    dataset: [
+      { name: "order_items", head: ["id", "sku_id"], rows: [["OI1", "S1"], ["OI2", "S9"]] },
+      { name: "skus", head: ["id", "size"], rows: [["S1", "M"], ["S2", "L"]] }
     ]
   },
   {
@@ -65,6 +69,11 @@ window.SQL_CHAPTERS = [
         rows: [["M", "3, 5", "8", "2"], ["L", "2", "2", "1"]] },
       { t: "code", text: "SELECT s.option2 AS size,\n       SUM(oi.qty)::int AS sold\nFROM order_items oi\nJOIN skus s ON s.id = oi.\"skuId\"\nGROUP BY s.option2;" },
       { t: "hint", html: "Cùng size sẽ được cộng chung kể cả khác màu. Không có <code>ORDER BY</code> thì thứ tự kết quả trả về không được bảo đảm." }
+    ],
+    dataset: [
+      { name: "order_items", head: ["id", "sku_id", "qty"],
+        rows: [["OI1", "S1", "3"], ["OI2", "S1", "5"], ["OI3", "S2", "2"]] },
+      { name: "skus", head: ["id", "size"], rows: [["S1", "M"], ["S2", "L"]] }
     ]
   },
   {
@@ -84,6 +93,12 @@ window.SQL_CHAPTERS = [
       { t: "p", html: "Schema có cả <code>option2</code> lẫn <code>Size</code>, truy vấn hiện tại đang dùng <code>option2</code>." },
       { t: "p", html: "<code>sold</code> chỉ là tên cột kết quả, bản thân nó không chứng minh đơn đã giao hay đã thanh toán." },
       { t: "hint", html: "Vì dùng INNER JOIN nên size chưa bán được cái nào sẽ biến mất khỏi báo cáo. Muốn hiện đủ mọi size kể cả bằng 0 thì phải đổi sang LEFT JOIN từ bảng skus." }
+    ],
+    dataset: [
+      { name: "order_items", head: ["id", "skuId", "orderId", "qty"],
+        rows: [["OI1", "S1", "O1", "3"], ["OI2", "S2", "O2", "5"]] },
+      { name: "skus", head: ["id", "option2"], rows: [["S1", "M"], ["S2", "L"]] },
+      { name: "orders", head: ["id", "status"], rows: [["O1", "CONFIRMED"], ["O2", "DRAFT"]] }
     ]
   }
 ];

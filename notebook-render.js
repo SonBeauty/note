@@ -4,7 +4,7 @@ window.NBRender = (function () {
   var say = function (t) { return window.NBSpeech.btn(t); };
   var KIND = {
     translate: "Dịch sang tiếng Anh", fix: "Sửa câu sai", fill: "Điền vào chỗ trống",
-    guess: "Đoán kết quả", sql: "Viết mệnh đề SQL"
+    guess: "Đoán kết quả", sql: "Viết mệnh đề SQL", query: "Viết truy vấn"
   };
 
   function subjectById(id) {
@@ -94,15 +94,37 @@ window.NBRender = (function () {
     return '<p class="intro">' + esc(ch.intro) + "</p>" + window.NBBlocks.render(ch.blocks);
   }
 
+  // Dang viet truy van can o nhieu dong, cac dang con lai mot dong la du.
+  function fieldHtml(ex, val) {
+    if (ex.type === "query") {
+      return '<textarea class="answer sqlbox" rows="4" spellcheck="false" ' +
+        'placeholder="Viết câu lệnh SQL rồi bấm Kiểm tra..." data-id="' + ex.id + '">' +
+        esc(val) + "</textarea>";
+    }
+    return '<input class="answer" type="text" placeholder="Gõ câu trả lời của bạn..." value="' +
+      esc(val) + '" data-id="' + ex.id + '">';
+  }
+
+  // Bang du lieu mau dung chung cho ca trang bai tap.
+  function datasetHtml(ch) {
+    if (!ch.dataset) return "";
+    var h = '<h3 class="sub">Dữ liệu dùng cho bài tập</h3><div class="dataset">';
+    ch.dataset.forEach(function (t) {
+      h += '<div><p class="demo-cap"><b>' + esc(t.name) + "</b></p>" +
+        window.NBBlocks.table(t.head, t.rows) + "</div>";
+    });
+    return h + "</div>";
+  }
+
   function exerciseHtml(ex, n) {
     var st = window.NB.get();
     var val = st.answers[ex.id] || "";
     var cls = st.status[ex.id] || "";
     return '<div class="ex ' + cls + '" id="ex-' + ex.id + '">' +
       '<div class="kind">' + KIND[ex.type] + "</div>" +
-      '<div class="prompt-vi"><b>Câu ' + n + ".</b> " + esc(ex.prompt) + "</div>" +
-      '<input class="answer" type="text" placeholder="Gõ câu trả lời của bạn..." value="' +
-      esc(val) + '" data-id="' + ex.id + '">' +
+      '<div class="prompt-vi"><b>Câu ' + n + '.</b> ' + esc(ex.prompt) + '</div>' +
+      (ex.want ? '<div class="want">' + esc(ex.want) + '</div>' : '') +
+      fieldHtml(ex, val) +
       '<div class="actions">' +
       '<button class="primary" data-act="check" data-id="' + ex.id + '">Kiểm tra</button>' +
       '<button data-act="hint" data-id="' + ex.id + '">Gợi ý</button>' +
@@ -112,9 +134,14 @@ window.NBRender = (function () {
 
   function practiceHtml(ch) {
     var st = window.NB.get();
-    var h = '<p class="intro">Gõ đáp án rồi bấm Kiểm tra, hoặc nhấn Enter. Chương này bạn đang đúng ' +
+    var list = window.ALL_EXERCISES[ch.id] || [];
+    var hasQuery = list.some(function (e) { return e.type === "query"; });
+    var keyHint = hasQuery ? "Ctrl+Enter" : "Enter";
+    var h = '<p class="intro">Gõ đáp án rồi bấm Kiểm tra, hoặc nhấn ' + keyHint +
+      ". Chương này bạn đang đúng " +
       '<span id="ch-progress" data-ch="' + ch.id + '">' + chapterScore(ch.id) + "</span> câu.</p>";
-    (window.ALL_EXERCISES[ch.id] || []).forEach(function (ex, i) { h += exerciseHtml(ex, i + 1); });
+    h += datasetHtml(ch);
+    list.forEach(function (ex, i) { h += exerciseHtml(ex, i + 1); });
     return h + '<h3 class="sub">Ghi chú của bạn</h3><textarea class="notes" data-notes="' + ch.id +
       '" placeholder="Viết thêm ví dụ, từ mới, hoặc chỗ bạn hay quên...">' +
       esc(st.notes[ch.id] || "") + "</textarea>" +

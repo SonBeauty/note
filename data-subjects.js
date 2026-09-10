@@ -13,10 +13,11 @@ window.SUBJECTS = [
     id: "sql",
     title: "SQL",
     tagline: "PostgreSQL và MySQL, rút từ truy vấn thật trong dự án",
-    tocIntro: "Ba chương đầu là PostgreSQL, dùng cho b2b.kamito.vn chạy Prisma. " +
-      "Chương cuối là MySQL trên hệ ERP, kèm bảng đối chiếu cú pháp giữa hai hệ.",
+    tocIntro: "Bắt đầu bằng chương căn bản: từng mệnh đề là gì và chạy lúc nào. " +
+      "Sau đó tới PostgreSQL của b2b, cuối cùng là MySQL trên hệ ERP. " +
+      "Bài tập đều là cho sẵn bảng dữ liệu rồi bạn tự viết truy vấn.",
     kind: "blocks",
-    chapters: window.SQL_CHAPTERS.concat(window.MYSQL_CHAPTERS)
+    chapters: window.SQL_BASICS.concat(window.SQL_CHAPTERS, window.MYSQL_CHAPTERS)
   },
   {
     id: "code",
@@ -31,5 +32,6 @@ window.SUBJECTS = [
 
 // Gop bai tap cua moi mon vao mot bang tra cuu chung theo id chuong.
 window.ALL_EXERCISES = Object.assign(
-  {}, window.EXERCISES, window.SQL_EXERCISES, window.MYSQL_EXERCISES, window.SECURITY_EXERCISES
+  {}, window.EXERCISES, window.SQL_BASICS_EXERCISES, window.SQL_EXERCISES,
+  window.MYSQL_EXERCISES, window.SECURITY_EXERCISES
 );

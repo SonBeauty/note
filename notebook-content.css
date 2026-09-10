@@ -39,6 +39,24 @@ table.data td { padding: 8px 11px; border-bottom: 1px dashed var(--border); }
 table.data tr:last-child td { border-bottom: 0; }
 .null { color: var(--bad); font-style: italic; }
 
+/* Bai tap dang viet truy van */
+textarea.sqlbox {
+  width: 100%; margin: 9px 0; padding: 11px 13px; resize: vertical;
+  font-family: Consolas, "Cascadia Mono", monospace; font-size: 14px; line-height: 1.6;
+  border: 1px solid var(--border); border-radius: 8px;
+  background: var(--code-bg); color: var(--code-ink);
+}
+textarea.sqlbox:focus { outline: 2px solid var(--accent); outline-offset: -1px; }
+textarea.sqlbox::placeholder { color: var(--code-ink); opacity: .4; }
+.want { font-size: 14.5px; color: var(--ink-soft); font-style: italic; margin-top: 5px; }
+.solution-hint { margin-top: 6px; font-size: 14.5px; color: var(--ink-soft); }
+
+/* Bang du lieu mau dat o dau trang bai tap */
+.dataset { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+  gap: 14px; background: var(--paper); border: 1px solid var(--border);
+  border-radius: 10px; padding: 14px; margin-bottom: 18px; }
+.dataset table.data { background: var(--sheet); border-radius: 6px; }
+
 /* Vi du JOIN bam duoc */
 .demo { background: var(--paper); border: 1px solid var(--border); border-radius: 10px;
   padding: 15px; margin-bottom: 14px; }

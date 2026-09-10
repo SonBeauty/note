@@ -83,5 +83,5 @@ window.NBBlocks = (function () {
     show("INNER");
   }
 
-  return { render: render, wireDemo: wireDemo };
+  return { render: render, wireDemo: wireDemo, table: tableHtml };
 })();

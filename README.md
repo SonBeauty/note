@@ -15,10 +15,12 @@ công nghệ để nhìn là biết đang nói về hệ nào:
 | Mục | Nội dung | Số bài tập |
 |---|---|---|
 | Tiếng Anh | 5 chương: giới thiệu bản thân, kinh nghiệm, dự án, công việc hằng ngày, du lịch | 25 |
-| SQL | 3 chương PostgreSQL (JOIN, tổng hợp dữ liệu, truy vấn size của b2b) + 1 chương MySQL (báo cáo công nợ trên ERP) | 21 |
+| SQL | SQL căn bản + 3 chương PostgreSQL + 1 chương MySQL | 21 |
 | Lập trình | Kiểm tra file tải lên trong NestJS: Content-Type và magic bytes | 6 |
 
-Nguồn nội dung đều là code thật trong dự án:
+Chương **SQL căn bản** đi trước, giải thích từng mệnh đề là gì và dùng làm gì, thứ tự chạy
+thật của một câu SELECT, WHERE khác HAVING chỗ nào, hàm gộp, subquery và index. Các chương
+sau mới đi vào code thật của dự án:
 
 - **PostgreSQL + Prisma 6** — truy vấn thống kê size của `b2b.kamito.vn`, có ví dụ JOIN bấm được để so sánh INNER, LEFT, RIGHT
 - **MySQL** — truy vấn báo cáo công nợ trên hệ ERP kiểu 1C, kèm bảng đối chiếu cú pháp MySQL với PostgreSQL
@@ -37,11 +39,15 @@ Nguồn nội dung đều là code thật trong dự án:
 
 - **5 chương theo chủ đề**: giới thiệu bản thân, kinh nghiệm & kỹ năng, nói về dự án, công việc hằng ngày, du lịch & sở thích
 - Mỗi chương gồm: câu mẫu (sai → đúng → cách nói tự nhiên), bảng quy tắc, từ vựng, bài tập, ô ghi chú
-- **52 bài tập** năm dạng: dịch sang tiếng Anh, sửa câu sai, điền vào chỗ trống, đoán kết quả, viết mệnh đề SQL
+- **52 bài tập**. Phần tiếng Anh là dịch câu, sửa câu sai và điền chỗ trống.
+  Phần SQL là **21 bài viết truy vấn**: mỗi chương cho sẵn bảng dữ liệu mẫu kèm kết quả mong đợi,
+  bạn tự viết câu lệnh vào ô nhiều dòng rồi bấm Kiểm tra (hoặc Ctrl+Enter).
 - **Chấm điểm tự động**: gõ đáp án rồi bấm Kiểm tra (hoặc nhấn Enter)
   - ✓ Chính xác
   - ⚠ Gần đúng — đúng từ nhưng sai viết hoa hoặc dấu câu
   - ✗ Chưa đúng — hiện gợi ý
+- Bài viết truy vấn chấm theo **thành phần bắt buộc** chứ không so từng ký tự: viết hoa hay thường,
+  xuống dòng kiểu nào, đặt bí danh gì cũng được. Sai thì nó chỉ đúng chỗ còn thiếu, ví dụ *Còn thiếu: HAVING*.
 - Nút **Gợi ý** và **Xem đáp án** cho từng câu
 - Từ vựng có chế độ **học thẻ**: ẩn nghĩa tiếng Việt, bấm vào ô để lật
 
@@ -59,13 +65,7 @@ sau này bấm **Nạp lại backup** để khôi phục.
 
 ## Thêm bài mới
 
-Mọi nội dung nằm trong ba file dữ liệu, sửa trực tiếp là xong, không cần đụng vào code:
-
-| File | Chứa gì |
-|---|---|
-| `data-chapters.js` | Chương, câu mẫu, bảng quy tắc |
-| `data-vocabulary.js` | Từ vựng theo chương |
-| `data-exercises.js` | Bài tập và đáp án |
+Mọi nội dung nằm trong các file `data-*.js`, sửa trực tiếp là xong, không cần đụng vào code.
 
 Thêm một bài tập mới vào chương 1:
 
@@ -80,8 +80,29 @@ Thêm một bài tập mới vào chương 1:
 ```
 
 Lưu ý khi chấm: dấu chấm cuối câu và khoảng trắng thừa được bỏ qua.
-Dạng `fill` chấm không phân biệt hoa thường, hai dạng còn lại có phân biệt
+Dạng `fill` chấm không phân biệt hoa thường, `translate` và `fix` thì có phân biệt
 vì viết hoa cũng là một phần bài học.
+
+Bài viết truy vấn thì khai báo khác, chấm theo thành phần bắt buộc:
+
+```js
+{
+  id: "b1e6",
+  type: "query",
+  prompt: "Đếm số đơn của từng khách hàng.",
+  want: "Kết quả mong đợi: An = 2, Bình = 1, Chi = 1.",
+  hint: "Đếm dòng chứ không cộng amount.",
+  must: [                                   // thiếu cái nào thì báo đúng cái đó
+    { re: "count\\s*\\(", label: "COUNT(...)" },
+    { re: "group\\s+by\\s+customer", label: "GROUP BY customer" }
+  ],
+  answers: ["SELECT customer, COUNT(*) FROM orders GROUP BY customer;"]
+}
+```
+
+`re` là biểu thức chính quy chạy trên câu trả lời đã hạ về chữ thường và gộp khoảng trắng,
+`label` là tên hiển thị khi người học còn thiếu phần đó. Chương chứa bài dạng này cần thêm
+mảng `dataset` để hiện bảng dữ liệu mẫu ở đầu trang bài tập.
 
 ## Học trên điện thoại
 
@@ -95,7 +116,7 @@ không tự phóng to.
 node build-single-file.js
 ```
 
-Tạo ra `so-tay-tieng-anh.html`, khoảng 41 KB, đã nhét sẵn toàn bộ CSS và JS vào trong.
+Tạo ra `so-tay-tieng-anh.html`, khoảng 100 KB, đã nhét sẵn toàn bộ CSS và JS vào trong.
 Gửi file đó qua Zalo hoặc Google Drive, tải về máy rồi mở bằng Chrome. Không cần mạng.
 Nhớ chạy lại lệnh này mỗi khi bạn sửa nội dung bài học.
 
@@ -144,7 +165,7 @@ Không dùng Georgia vì Georgia thiếu bộ glyph Latin Extended Additional, k
 
 ```
 english-notebook/
-├── index.html            khung sổ, hai tab chính, ngăn kéo mục lục
+├── index.html            khung sổ, ba tab chính, ngăn kéo mục lục
 ├── notebook-styles.css   giao diện tờ giấy, tab, bookmark, ngăn kéo
 ├── notebook-content.css  khối code, bảng dữ liệu, ô cảnh báo cho phần SQL
 ├── notebook-state.js     lưu trữ localStorage, chấm điểm, đếm điểm theo chương và theo mục
@@ -156,6 +177,8 @@ english-notebook/
 ├── data-chapters.js      nội dung tiếng Anh
 ├── data-vocabulary.js    từ vựng tiếng Anh
 ├── data-exercises.js     bài tập tiếng Anh
+├── data-sql-basics.js          chương SQL căn bản
+├── data-sql-basics-exercises.js bài tập chương đó
 ├── data-sql-chapters.js  nội dung PostgreSQL
 ├── data-sql-exercises.js bài tập PostgreSQL
 ├── data-mysql-chapters.js      ghi chú truy vấn công nợ MySQL

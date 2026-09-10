@@ -1,52 +1,157 @@
-// Bai tap SQL. type: fill (dien tu khoa), guess (doan ket qua), sql (viet menh de).
-// Ca ba deu cham khong phan biet hoa thuong vi tu khoa SQL viet kieu nao cung dung.
+// Bai tap PostgreSQL, dang viet truy van tren bo du lieu mau cua tung chuong.
 window.SQL_EXERCISES = {
   sql1: [
-    { id: "q1e1", type: "fill", prompt: "Muốn giữ mọi dòng của bảng bên trái thì dùng ___ JOIN.",
-      hint: "Bảng bên trái là bảng viết sau FROM.",
-      answers: ["LEFT"] },
-    { id: "q1e2", type: "fill", prompt: "Viết JOIN không thôi thì thực chất là ___ JOIN.",
-      hint: "Loại chỉ giữ các cặp khớp ở cả hai bảng.",
-      answers: ["INNER"] },
-    { id: "q1e3", type: "fill", prompt: "Điều kiện ghép hai bảng được viết sau từ khóa ___.",
-      hint: "Không phải WHERE.",
-      answers: ["ON"] },
-    { id: "q1e4", type: "guess", prompt: "order_items có OI1→S1 và OI2→S9, bảng skus chỉ có S1 và S2. INNER JOIN trả về mấy dòng?",
-      hint: "Chỉ đếm cặp khớp được ở cả hai bên. S9 không tồn tại.",
-      answers: ["1", "1 dòng", "một"] },
-    { id: "q1e5", type: "guess", prompt: "Vẫn dữ liệu đó, LEFT JOIN từ order_items sang skus trả về mấy dòng?",
-      hint: "Giữ hết dòng bên trái, dòng không khớp thì phía phải là NULL.",
-      answers: ["2", "2 dòng", "hai"] }
+    {
+      id: "c1q1", type: "query",
+      prompt: "Ghép order_items với skus để mỗi dòng hàng có thêm cột size.",
+      want: "Kết quả mong đợi: 1 dòng, OI1 với size M.",
+      hint: "JOIN không kèm gì thì là INNER JOIN, chỉ giữ cặp khớp cả hai bên.",
+      must: [
+        { re: "from\\s+order_items", label: "FROM order_items" },
+        { re: "join\\s+skus", label: "JOIN skus" },
+        { re: "\\bon\\b", label: "ON điều kiện ghép" }
+      ],
+      answers: ["SELECT oi.id, s.size FROM order_items oi JOIN skus s ON s.id = oi.sku_id;"]
+    },
+    {
+      id: "c1q2", type: "query",
+      prompt: "Lấy mọi dòng hàng, kể cả dòng không khớp SKU nào.",
+      want: "Kết quả mong đợi: OI1 với size M, và OI2 với size NULL.",
+      hint: "Giữ hết bảng bên trái thì dùng loại JOIN nào?",
+      must: [
+        { re: "from\\s+order_items", label: "FROM order_items" },
+        { re: "left\\s+join\\s+skus", label: "LEFT JOIN skus" },
+        { re: "\\bon\\b", label: "ON điều kiện ghép" }
+      ],
+      answers: ["SELECT oi.id, s.size FROM order_items oi LEFT JOIN skus s ON s.id = oi.sku_id;"]
+    },
+    {
+      id: "c1q3", type: "query",
+      prompt: "Đi từ bảng skus, lấy mọi SKU kể cả SKU chưa bán được cái nào.",
+      want: "Kết quả mong đợi: S1 khớp OI1, S2 không khớp gì nên phía dòng hàng là NULL.",
+      hint: "Đổi bảng đứng đầu FROM rồi vẫn dùng LEFT JOIN, không cần RIGHT JOIN.",
+      must: [
+        { re: "from\\s+skus", label: "FROM skus" },
+        { re: "left\\s+join\\s+order_items", label: "LEFT JOIN order_items" },
+        { re: "\\bon\\b", label: "ON điều kiện ghép" }
+      ],
+      answers: ["SELECT s.id, oi.id FROM skus s LEFT JOIN order_items oi ON oi.sku_id = s.id;"]
+    },
+    {
+      id: "c1q4", type: "query",
+      prompt: "Đếm số dòng hàng của từng size, size chưa bán được cái nào vẫn phải hiện với số 0.",
+      want: "Kết quả mong đợi: M = 1, L = 0.",
+      hint: "LEFT JOIN từ skus, rồi đếm cột bên bảng order_items chứ đừng đếm COUNT(*), vì COUNT(*) đếm cả dòng NULL thành 1.",
+      must: [
+        { re: "from\\s+skus", label: "FROM skus" },
+        { re: "left\\s+join\\s+order_items", label: "LEFT JOIN order_items" },
+        { re: "count\\s*\\(", label: "COUNT(...)" },
+        { re: "group\\s+by", label: "GROUP BY" }
+      ],
+      answers: ["SELECT s.size, COUNT(oi.id) FROM skus s LEFT JOIN order_items oi ON oi.sku_id = s.id GROUP BY s.size;"]
+    }
   ],
+
   sql2: [
-    { id: "q2e1", type: "guess", prompt: "Ba dòng hàng có qty là 3, 5 và 2. SUM(oi.qty) bằng bao nhiêu?",
-      hint: "Cộng lại, đừng đếm số dòng.",
-      answers: ["10"] },
-    { id: "q2e2", type: "guess", prompt: "Vẫn ba dòng đó, COUNT(*) bằng bao nhiêu?",
-      hint: "COUNT đếm số dòng chứ không cộng giá trị.",
-      answers: ["3"] },
-    { id: "q2e3", type: "fill", prompt: "Ép tổng về kiểu integer trong PostgreSQL: SUM(oi.qty)___",
-      hint: "Hai dấu hai chấm rồi tới tên kiểu.",
-      answers: ["::int", "::integer"] },
-    { id: "q2e4", type: "guess", prompt: "Gom nhóm theo size: M có qty 3 và 5, L có qty 2. SUM của nhóm M bằng bao nhiêu?",
-      hint: "Chỉ cộng các qty thuộc nhóm M.",
-      answers: ["8"] },
-    { id: "q2e5", type: "sql", prompt: "Viết mệnh đề gom nhóm kết quả theo cột s.option2.",
-      hint: "Hai từ khóa rồi tới tên cột.",
-      answers: ["GROUP BY s.option2"] }
+    {
+      id: "c2q1", type: "query",
+      prompt: "Tính tổng qty của toàn bộ dòng hàng.",
+      want: "Kết quả mong đợi: 10.",
+      hint: "Không cần GROUP BY khi gộp cả bảng thành một con số.",
+      must: [
+        { re: "sum\\s*\\(\\s*(oi\\.)?qty", label: "SUM(qty)" },
+        { re: "from\\s+order_items", label: "FROM order_items" }
+      ],
+      answers: ["SELECT SUM(qty) AS sold FROM order_items;"]
+    },
+    {
+      id: "c2q2", type: "query",
+      prompt: "Đếm xem có bao nhiêu dòng hàng.",
+      want: "Kết quả mong đợi: 3, khác hẳn con số 10 ở câu trên.",
+      hint: "Đếm dòng chứ không cộng giá trị.",
+      must: [
+        { re: "count\\s*\\(", label: "COUNT(...)" },
+        { re: "from\\s+order_items", label: "FROM order_items" }
+      ],
+      answers: ["SELECT COUNT(*) AS item_rows FROM order_items;"]
+    },
+    {
+      id: "c2q3", type: "query",
+      prompt: "Tính tổng qty theo từng size.",
+      want: "Kết quả mong đợi: M = 8, L = 2.",
+      hint: "size nằm ở bảng skus nên phải ghép bảng trước rồi mới gom nhóm.",
+      must: [
+        { re: "sum\\s*\\(\\s*(oi\\.)?qty", label: "SUM(qty)" },
+        { re: "join\\s+skus", label: "JOIN skus" },
+        { re: "group\\s+by", label: "GROUP BY size" }
+      ],
+      answers: ["SELECT s.size, SUM(oi.qty) AS sold FROM order_items oi JOIN skus s ON s.id = oi.sku_id GROUP BY s.size;"]
+    },
+    {
+      id: "c2q4", type: "query",
+      prompt: "Vẫn tổng qty theo size, nhưng chỉ giữ size bán được từ 5 trở lên.",
+      want: "Kết quả mong đợi: chỉ còn M = 8.",
+      hint: "Điều kiện đặt trên kết quả của SUM nên không thể để trong WHERE.",
+      must: [
+        { re: "sum\\s*\\(\\s*(oi\\.)?qty", label: "SUM(qty)" },
+        { re: "group\\s+by", label: "GROUP BY size" },
+        { re: "having", label: "HAVING" }
+      ],
+      answers: ["SELECT s.size, SUM(oi.qty) AS sold FROM order_items oi JOIN skus s ON s.id = oi.sku_id GROUP BY s.size HAVING SUM(oi.qty) >= 5;"]
+    },
+    {
+      id: "c2q5", type: "query",
+      prompt: "Tính tổng qty theo size và ép kết quả về kiểu integer, viết theo cú pháp PostgreSQL.",
+      want: "Kết quả mong đợi: M = 8, L = 2, kiểu integer thay vì bigint.",
+      hint: "Hai dấu hai chấm rồi tới tên kiểu, hoặc dùng CAST.",
+      must: [
+        { re: "sum\\s*\\(\\s*(oi\\.)?qty", label: "SUM(qty)" },
+        { re: "::\\s*int|cast\\s*\\(", label: "::int hoặc CAST" },
+        { re: "group\\s+by", label: "GROUP BY size" }
+      ],
+      answers: ["SELECT s.size, SUM(oi.qty)::int AS sold FROM order_items oi JOIN skus s ON s.id = oi.sku_id GROUP BY s.size;"]
+    }
   ],
+
   sql3: [
-    { id: "q3e1", type: "fill", prompt: "Cột dùng để nối order_items sang bảng skus là oi.___",
-      hint: "Trong schema nó được viết có dấu nháy kép vì chữ hoa chữ thường.",
-      answers: ["skuId", "\"skuId\""] },
-    { id: "q3e2", type: "guess", prompt: "Điều kiện option2 ~ '^[A-Za-z]+$' có nhận giá trị 2XL không?",
-      hint: "Mẫu này chỉ cho phép chữ cái, mà 2XL bắt đầu bằng chữ số.",
-      answers: ["không", "khong", "no", "không nhận"] },
-    { id: "q3e3", type: "fill", prompt: "createdAt là ngày ___ đơn, không phải ngày xuất hàng.",
-      hint: "Một từ tiếng Việt.",
-      answers: ["tạo", "tao"] },
-    { id: "q3e4", type: "sql", prompt: "Viết mệnh đề ghép bảng skus vào order_items, đặt bí danh là s.",
-      hint: "Dạng JOIN <bảng> <bí danh> ON <điều kiện>. Cột skuId cần dấu nháy kép.",
-      answers: ["JOIN skus s ON s.id = oi.\"skuId\"", "INNER JOIN skus s ON s.id = oi.\"skuId\""] }
+    {
+      id: "c3q1", type: "query",
+      prompt: "Tính số lượng bán theo từng size, ghép order_items với skus và gom theo cột option2.",
+      want: "Đây là bộ khung của truy vấn thống kê size trong b2b.",
+      hint: "Tên cột có chữ hoa trong PostgreSQL thì bọc trong nháy kép: oi.\"skuId\".",
+      must: [
+        { re: "sum\\s*\\(", label: "SUM(...)" },
+        { re: "join\\s+skus", label: "JOIN skus" },
+        { re: "group\\s+by", label: "GROUP BY" },
+        { re: "option2", label: "option2" }
+      ],
+      answers: ["SELECT s.option2 AS size, SUM(oi.qty)::int AS sold FROM order_items oi JOIN skus s ON s.id = oi.\"skuId\" GROUP BY s.option2;"]
+    },
+    {
+      id: "c3q2", type: "query",
+      prompt: "Thêm điều kiện chỉ tính những đơn có status là CONFIRMED hoặc EXPORTED.",
+      want: "Phải ghép thêm bảng orders mới có cột status để lọc.",
+      hint: "Ghép thêm orders rồi lọc bằng IN, vì đây là điều kiện trên từng dòng nên đặt ở WHERE.",
+      must: [
+        { re: "join\\s+orders", label: "JOIN orders" },
+        { re: "where", label: "WHERE" },
+        { re: "status", label: "điều kiện trên status" },
+        { re: "confirmed", label: "CONFIRMED" },
+        { re: "exported", label: "EXPORTED" }
+      ],
+      answers: ["SELECT s.option2, SUM(oi.qty)::int FROM order_items oi JOIN skus s ON s.id = oi.\"skuId\" JOIN orders o ON o.id = oi.\"orderId\" WHERE o.status IN ('CONFIRMED', 'EXPORTED') GROUP BY s.option2;"]
+    },
+    {
+      id: "c3q3", type: "query",
+      prompt: "Sửa lại để size chưa bán được cái nào vẫn xuất hiện trong báo cáo.",
+      want: "Đổi chiều: đi từ bảng skus và dùng LEFT JOIN.",
+      hint: "INNER JOIN làm biến mất size không có dòng hàng. Đặt skus lên đầu FROM rồi LEFT JOIN sang order_items.",
+      must: [
+        { re: "from\\s+skus", label: "FROM skus" },
+        { re: "left\\s+join\\s+order_items", label: "LEFT JOIN order_items" },
+        { re: "group\\s+by", label: "GROUP BY" }
+      ],
+      answers: ["SELECT s.option2, COALESCE(SUM(oi.qty), 0)::int AS sold FROM skus s LEFT JOIN order_items oi ON oi.\"skuId\" = s.id GROUP BY s.option2;"]
+    }
   ]
 };

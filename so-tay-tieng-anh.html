@@ -237,6 +237,24 @@ table.data td { padding: 8px 11px; border-bottom: 1px dashed var(--border); }
 table.data tr:last-child td { border-bottom: 0; }
 .null { color: var(--bad); font-style: italic; }
 
+/* Bai tap dang viet truy van */
+textarea.sqlbox {
+  width: 100%; margin: 9px 0; padding: 11px 13px; resize: vertical;
+  font-family: Consolas, "Cascadia Mono", monospace; font-size: 14px; line-height: 1.6;
+  border: 1px solid var(--border); border-radius: 8px;
+  background: var(--code-bg); color: var(--code-ink);
+}
+textarea.sqlbox:focus { outline: 2px solid var(--accent); outline-offset: -1px; }
+textarea.sqlbox::placeholder { color: var(--code-ink); opacity: .4; }
+.want { font-size: 14.5px; color: var(--ink-soft); font-style: italic; margin-top: 5px; }
+.solution-hint { margin-top: 6px; font-size: 14.5px; color: var(--ink-soft); }
+
+/* Bang du lieu mau dat o dau trang bai tap */
+.dataset { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+  gap: 14px; background: var(--paper); border: 1px solid var(--border);
+  border-radius: 10px; padding: 14px; margin-bottom: 18px; }
+.dataset table.data { background: var(--sheet); border-radius: 6px; }
+
 /* Vi du JOIN bam duoc */
 .demo { background: var(--paper); border: 1px solid var(--border); border-radius: 10px;
   padding: 15px; margin-bottom: 14px; }
@@ -574,6 +592,160 @@ window.EXERCISES = {
 
 </script>
 <script>
+// Chuong nen tang: tung menh de la gi, dung lam gi. Khong gan voi du an nao.
+window.SQL_BASICS = [
+  {
+    id: "sql0",
+    title: "SQL căn bản",
+    subtitle: "Các mệnh đề và thứ tự chạy",
+    intro: "Mỗi mệnh đề trả lời một câu hỏi khác nhau. Nắm được nó làm gì và chạy lúc nào thì đọc truy vấn lạ cũng hiểu ngay.",
+    blocks: [
+      { t: "h", text: "Bộ khung một câu SELECT" },
+      { t: "code", text: "SELECT   cột hoặc hàm gộp\nFROM     bảng chính\nJOIN     bảng khác ON điều kiện ghép\nWHERE    lọc từng dòng\nGROUP BY gom nhóm\nHAVING   lọc nhóm\nORDER BY sắp xếp\nLIMIT    giới hạn số dòng" },
+      { t: "p", html: "Thiếu mệnh đề nào cũng được, nhưng không đảo được thứ tự viết." },
+
+      { t: "h", text: "Từng mệnh đề dùng làm gì" },
+      { t: "table", head: ["Mệnh đề", "Là gì", "Dùng khi"],
+        rows: [
+          ["<code>SELECT</code>", "Chọn cột trả về", "Luôn có"],
+          ["<code>FROM</code>", "Nguồn dữ liệu", "Luôn có"],
+          ["<code>JOIN</code>", "Ghép thêm bảng theo điều kiện", "Dữ liệu cần nằm ở bảng khác"],
+          ["<code>WHERE</code>", "Lọc từng dòng riêng lẻ", "Bỏ bớt dòng không quan tâm"],
+          ["<code>GROUP BY</code>", "Gom các dòng cùng giá trị thành một nhóm", "Muốn tính theo từng nhóm"],
+          ["<code>HAVING</code>", "Lọc nhóm sau khi đã gom", "Điều kiện dựa trên kết quả hàm gộp"],
+          ["<code>ORDER BY</code>", "Sắp xếp kết quả", "Muốn thứ tự cố định"],
+          ["<code>LIMIT</code>", "Cắt lấy N dòng đầu", "Lấy top N"]
+        ] },
+
+      { t: "h", text: "Thứ tự chạy khác thứ tự viết" },
+      { t: "code", text: "FROM → JOIN → WHERE → GROUP BY → HAVING → SELECT → ORDER BY → LIMIT" },
+      { t: "p", html: "<code>SELECT</code> chạy gần cuối. Đó là lý do <code>WHERE</code> không dùng được bí danh đặt trong <code>SELECT</code>: lúc <code>WHERE</code> chạy thì bí danh chưa tồn tại. Ngược lại <code>ORDER BY</code> chạy sau <code>SELECT</code> nên dùng bí danh thoải mái." },
+      { t: "hint", html: "MySQL nới lỏng quy tắc này nên cho dùng bí danh trong <code>HAVING</code>, PostgreSQL theo đúng chuẩn nên không cho. Nhớ thứ tự chạy là suy ra được chỗ nào dùng bí danh được." },
+
+      { t: "h", text: "WHERE và HAVING khác nhau chỗ nào" },
+      { t: "table", head: ["", "WHERE", "HAVING"],
+        rows: [
+          ["Lọc cái gì", "Từng dòng", "Từng nhóm"],
+          ["Chạy lúc nào", "Trước GROUP BY", "Sau GROUP BY"],
+          ["Dùng được hàm gộp", "Không", "Có"],
+          ["Ví dụ", "<code>WHERE qty > 0</code>", "<code>HAVING SUM(qty) > 100</code>"]
+        ] },
+      { t: "p", html: "Quy tắc thực dụng: lọc được bằng <code>WHERE</code> thì đừng để tới <code>HAVING</code>. <code>WHERE</code> cắt bớt dòng từ sớm nên phần việc còn lại nhẹ hơn." },
+
+      { t: "h", text: "Hàm gộp là gì" },
+      { t: "p", html: "Hàm nhận vào nhiều dòng và trả về đúng một giá trị. Đi kèm <code>GROUP BY</code> thì trả về một giá trị cho mỗi nhóm." },
+      { t: "table", head: ["Hàm", "Trả về"],
+        rows: [
+          ["<code>COUNT(*)</code>", "Số dòng, tính cả dòng toàn NULL"],
+          ["<code>COUNT(cột)</code>", "Số giá trị khác NULL của cột đó"],
+          ["<code>SUM(cột)</code>", "Tổng"],
+          ["<code>AVG(cột)</code>", "Trung bình"],
+          ["<code>MIN</code> / <code>MAX</code>", "Nhỏ nhất và lớn nhất"]
+        ] },
+      { t: "hint", html: "Mọi hàm gộp đều bỏ qua NULL, trừ <code>COUNT(*)</code>. Và <code>SUM</code> của tập rỗng trả về NULL chứ không phải 0." },
+
+      { t: "h", text: "Truy vấn con, derived table, CTE" },
+      { t: "p", html: "Cùng một ý tưởng: lấy kết quả của truy vấn này làm đầu vào cho truy vấn kia. Khác nhau ở chỗ đặt nó ở đâu." },
+      { t: "table", head: ["Tên gọi", "Đặt ở đâu", "Ghi chú"],
+        rows: [
+          ["Subquery", "Trong <code>SELECT</code> hoặc <code>WHERE</code>", "Trả về một giá trị hoặc một danh sách"],
+          ["Derived table", "Trong <code>FROM</code>", "Bắt buộc phải có bí danh"],
+          ["CTE", "Trong <code>WITH</code> đặt trước <code>SELECT</code>", "Dễ đọc nhất, đặt tên được, tái dùng trong cùng câu"]
+        ] },
+      { t: "code", text: "WITH doanh_thu AS (\n  SELECT customer, SUM(amount) AS tong\n  FROM orders\n  GROUP BY customer\n)\nSELECT * FROM doanh_thu WHERE tong > 100;" },
+
+      { t: "h", text: "Index và chuyện làm mất index" },
+      { t: "p", html: "Index giống mục lục của cuốn sách: thay vì lật từng trang, cơ sở dữ liệu tra thẳng tới nơi. Nhưng chỉ tra được khi điều kiện áp lên <b>chính cột</b> đó." },
+      { t: "code", text: "-- Bọc cột trong hàm: index vô dụng, phải quét cả bảng\nWHERE YEAR(created_at) = 2026\n\n-- Để cột đứng một mình: dùng được index\nWHERE created_at >= '2026-01-01'\n  AND created_at <  '2027-01-01'" },
+      { t: "hint", html: "Điều kiện dùng được index gọi là <b>sargable</b>. Quy tắc dễ nhớ: đừng bọc cột trong hàm ở mệnh đề <code>WHERE</code>, hãy biến đổi phía giá trị so sánh thay vì phía cột." },
+
+      { t: "h", text: "NULL không bằng gì cả" },
+      { t: "code", text: "WHERE col = NULL      -- luôn sai, không bao giờ khớp dòng nào\nWHERE col IS NULL     -- đúng cách" },
+      { t: "hint", html: "NULL nghĩa là <i>không biết</i>, nên so sánh nó với bất cứ thứ gì cũng ra <i>không biết</i>, kể cả so với chính nó. Muốn thay NULL bằng giá trị mặc định thì dùng <code>COALESCE(col, 0)</code>." }
+    ],
+    dataset: [
+      { name: "orders", head: ["id", "customer", "amount", "status"],
+        rows: [["1", "An", "100", "paid"], ["2", "Bình", "50", "new"],
+               ["3", "An", "30", "paid"], ["4", "Chi", "200", "paid"]] }
+    ]
+  }
+];
+
+</script>
+<script>
+// Bai tap dang viet truy van. Cham theo thanh phan bat buoc trong "must",
+// nen viet hoa thuong hay xuong dong kieu nao cung duoc.
+window.SQL_BASICS_EXERCISES = {
+  sql0: [
+    {
+      id: "b1e1", type: "query",
+      prompt: "Lấy toàn bộ các cột của mọi đơn hàng.",
+      want: "Kết quả mong đợi: cả 4 dòng.",
+      hint: "Dấu sao thay cho danh sách cột.",
+      must: [
+        { re: "select", label: "SELECT" },
+        { re: "\\*", label: "*" },
+        { re: "from\\s+orders", label: "FROM orders" }
+      ],
+      answers: ["SELECT * FROM orders;"]
+    },
+    {
+      id: "b1e2", type: "query",
+      prompt: "Chỉ lấy những đơn có status là paid.",
+      want: "Kết quả mong đợi: 3 dòng của An, An và Chi.",
+      hint: "Lọc từng dòng thì dùng WHERE, giá trị chữ đặt trong nháy đơn.",
+      must: [
+        { re: "select", label: "SELECT" },
+        { re: "from\\s+orders", label: "FROM orders" },
+        { re: "where", label: "WHERE" },
+        { re: "status", label: "điều kiện trên cột status" },
+        { re: "paid", label: "'paid'" }
+      ],
+      answers: ["SELECT * FROM orders WHERE status = 'paid';"]
+    },
+    {
+      id: "b1e3", type: "query",
+      prompt: "Tính tổng amount của từng khách hàng.",
+      want: "Kết quả mong đợi: An = 130, Bình = 50, Chi = 200.",
+      hint: "Gom nhóm theo customer rồi cộng amount trong mỗi nhóm.",
+      must: [
+        { re: "sum\\s*\\(\\s*amount", label: "SUM(amount)" },
+        { re: "from\\s+orders", label: "FROM orders" },
+        { re: "group\\s+by\\s+customer", label: "GROUP BY customer" }
+      ],
+      answers: ["SELECT customer, SUM(amount) AS tong FROM orders GROUP BY customer;"]
+    },
+    {
+      id: "b1e4", type: "query",
+      prompt: "Vẫn tính tổng amount theo từng khách, nhưng chỉ giữ khách có tổng lớn hơn 100.",
+      want: "Kết quả mong đợi: An = 130, Chi = 200.",
+      hint: "Điều kiện dựa trên kết quả hàm gộp thì phải đặt sau khi đã gom nhóm.",
+      must: [
+        { re: "sum\\s*\\(\\s*amount", label: "SUM(amount)" },
+        { re: "group\\s+by\\s+customer", label: "GROUP BY customer" },
+        { re: "having", label: "HAVING" }
+      ],
+      answers: ["SELECT customer, SUM(amount) AS tong FROM orders GROUP BY customer HAVING SUM(amount) > 100;"]
+    },
+    {
+      id: "b1e5", type: "query",
+      prompt: "Lấy 2 khách có tổng amount cao nhất, sắp xếp giảm dần.",
+      want: "Kết quả mong đợi: Chi = 200 rồi tới An = 130.",
+      hint: "Sắp xếp giảm dần rồi cắt lấy 2 dòng đầu.",
+      must: [
+        { re: "sum\\s*\\(\\s*amount", label: "SUM(amount)" },
+        { re: "group\\s+by\\s+customer", label: "GROUP BY customer" },
+        { re: "order\\s+by", label: "ORDER BY" },
+        { re: "desc", label: "DESC" },
+        { re: "limit\\s*2", label: "LIMIT 2" }
+      ],
+      answers: ["SELECT customer, SUM(amount) AS tong FROM orders GROUP BY customer ORDER BY tong DESC LIMIT 2;"]
+    }
+  ]
+};
+
+</script>
+<script>
 // Noi dung SQL, giu nguyen y tu ghi chu goc.
 // Khoi noi dung: p (doan van), h (tieu de), table, code, hint, big, demo (vi du bam duoc).
 window.SQL_CHAPTERS = [
@@ -603,6 +775,10 @@ window.SQL_CHAPTERS = [
       { t: "code", text: "FROM skus s\nLEFT JOIN order_items oi ON oi.\"skuId\" = s.id\nWHERE oi.qty >= 5" },
       { t: "p", html: "Loại luôn cả SKU không có dòng hàng phù hợp, vì NULL không thỏa điều kiện WHERE." },
       { t: "hint", html: "<b>Dễ nhầm:</b> <code>LEFT JOIN ... WHERE b.id IS NOT NULL</code> loại hết dòng không khớp, làm mất tác dụng giữ dòng của LEFT JOIN. Ngoài ra một dòng bên trái có thể khớp nhiều dòng bên phải, nên chú ý bị cộng lặp khi dùng SUM." }
+    ],
+    dataset: [
+      { name: "order_items", head: ["id", "sku_id"], rows: [["OI1", "S1"], ["OI2", "S9"]] },
+      { name: "skus", head: ["id", "size"], rows: [["S1", "M"], ["S2", "L"]] }
     ]
   },
   {
@@ -641,6 +817,11 @@ window.SQL_CHAPTERS = [
         rows: [["M", "3, 5", "8", "2"], ["L", "2", "2", "1"]] },
       { t: "code", text: "SELECT s.option2 AS size,\n       SUM(oi.qty)::int AS sold\nFROM order_items oi\nJOIN skus s ON s.id = oi.\"skuId\"\nGROUP BY s.option2;" },
       { t: "hint", html: "Cùng size sẽ được cộng chung kể cả khác màu. Không có <code>ORDER BY</code> thì thứ tự kết quả trả về không được bảo đảm." }
+    ],
+    dataset: [
+      { name: "order_items", head: ["id", "sku_id", "qty"],
+        rows: [["OI1", "S1", "3"], ["OI2", "S1", "5"], ["OI3", "S2", "2"]] },
+      { name: "skus", head: ["id", "size"], rows: [["S1", "M"], ["S2", "L"]] }
     ]
   },
   {
@@ -660,62 +841,173 @@ window.SQL_CHAPTERS = [
       { t: "p", html: "Schema có cả <code>option2</code> lẫn <code>Size</code>, truy vấn hiện tại đang dùng <code>option2</code>." },
       { t: "p", html: "<code>sold</code> chỉ là tên cột kết quả, bản thân nó không chứng minh đơn đã giao hay đã thanh toán." },
       { t: "hint", html: "Vì dùng INNER JOIN nên size chưa bán được cái nào sẽ biến mất khỏi báo cáo. Muốn hiện đủ mọi size kể cả bằng 0 thì phải đổi sang LEFT JOIN từ bảng skus." }
+    ],
+    dataset: [
+      { name: "order_items", head: ["id", "skuId", "orderId", "qty"],
+        rows: [["OI1", "S1", "O1", "3"], ["OI2", "S2", "O2", "5"]] },
+      { name: "skus", head: ["id", "option2"], rows: [["S1", "M"], ["S2", "L"]] },
+      { name: "orders", head: ["id", "status"], rows: [["O1", "CONFIRMED"], ["O2", "DRAFT"]] }
     ]
   }
 ];
 
 </script>
 <script>
-// Bai tap SQL. type: fill (dien tu khoa), guess (doan ket qua), sql (viet menh de).
-// Ca ba deu cham khong phan biet hoa thuong vi tu khoa SQL viet kieu nao cung dung.
+// Bai tap PostgreSQL, dang viet truy van tren bo du lieu mau cua tung chuong.
 window.SQL_EXERCISES = {
   sql1: [
-    { id: "q1e1", type: "fill", prompt: "Muốn giữ mọi dòng của bảng bên trái thì dùng ___ JOIN.",
-      hint: "Bảng bên trái là bảng viết sau FROM.",
-      answers: ["LEFT"] },
-    { id: "q1e2", type: "fill", prompt: "Viết JOIN không thôi thì thực chất là ___ JOIN.",
-      hint: "Loại chỉ giữ các cặp khớp ở cả hai bảng.",
-      answers: ["INNER"] },
-    { id: "q1e3", type: "fill", prompt: "Điều kiện ghép hai bảng được viết sau từ khóa ___.",
-      hint: "Không phải WHERE.",
-      answers: ["ON"] },
-    { id: "q1e4", type: "guess", prompt: "order_items có OI1→S1 và OI2→S9, bảng skus chỉ có S1 và S2. INNER JOIN trả về mấy dòng?",
-      hint: "Chỉ đếm cặp khớp được ở cả hai bên. S9 không tồn tại.",
-      answers: ["1", "1 dòng", "một"] },
-    { id: "q1e5", type: "guess", prompt: "Vẫn dữ liệu đó, LEFT JOIN từ order_items sang skus trả về mấy dòng?",
-      hint: "Giữ hết dòng bên trái, dòng không khớp thì phía phải là NULL.",
-      answers: ["2", "2 dòng", "hai"] }
+    {
+      id: "c1q1", type: "query",
+      prompt: "Ghép order_items với skus để mỗi dòng hàng có thêm cột size.",
+      want: "Kết quả mong đợi: 1 dòng, OI1 với size M.",
+      hint: "JOIN không kèm gì thì là INNER JOIN, chỉ giữ cặp khớp cả hai bên.",
+      must: [
+        { re: "from\\s+order_items", label: "FROM order_items" },
+        { re: "join\\s+skus", label: "JOIN skus" },
+        { re: "\\bon\\b", label: "ON điều kiện ghép" }
+      ],
+      answers: ["SELECT oi.id, s.size FROM order_items oi JOIN skus s ON s.id = oi.sku_id;"]
+    },
+    {
+      id: "c1q2", type: "query",
+      prompt: "Lấy mọi dòng hàng, kể cả dòng không khớp SKU nào.",
+      want: "Kết quả mong đợi: OI1 với size M, và OI2 với size NULL.",
+      hint: "Giữ hết bảng bên trái thì dùng loại JOIN nào?",
+      must: [
+        { re: "from\\s+order_items", label: "FROM order_items" },
+        { re: "left\\s+join\\s+skus", label: "LEFT JOIN skus" },
+        { re: "\\bon\\b", label: "ON điều kiện ghép" }
+      ],
+      answers: ["SELECT oi.id, s.size FROM order_items oi LEFT JOIN skus s ON s.id = oi.sku_id;"]
+    },
+    {
+      id: "c1q3", type: "query",
+      prompt: "Đi từ bảng skus, lấy mọi SKU kể cả SKU chưa bán được cái nào.",
+      want: "Kết quả mong đợi: S1 khớp OI1, S2 không khớp gì nên phía dòng hàng là NULL.",
+      hint: "Đổi bảng đứng đầu FROM rồi vẫn dùng LEFT JOIN, không cần RIGHT JOIN.",
+      must: [
+        { re: "from\\s+skus", label: "FROM skus" },
+        { re: "left\\s+join\\s+order_items", label: "LEFT JOIN order_items" },
+        { re: "\\bon\\b", label: "ON điều kiện ghép" }
+      ],
+      answers: ["SELECT s.id, oi.id FROM skus s LEFT JOIN order_items oi ON oi.sku_id = s.id;"]
+    },
+    {
+      id: "c1q4", type: "query",
+      prompt: "Đếm số dòng hàng của từng size, size chưa bán được cái nào vẫn phải hiện với số 0.",
+      want: "Kết quả mong đợi: M = 1, L = 0.",
+      hint: "LEFT JOIN từ skus, rồi đếm cột bên bảng order_items chứ đừng đếm COUNT(*), vì COUNT(*) đếm cả dòng NULL thành 1.",
+      must: [
+        { re: "from\\s+skus", label: "FROM skus" },
+        { re: "left\\s+join\\s+order_items", label: "LEFT JOIN order_items" },
+        { re: "count\\s*\\(", label: "COUNT(...)" },
+        { re: "group\\s+by", label: "GROUP BY" }
+      ],
+      answers: ["SELECT s.size, COUNT(oi.id) FROM skus s LEFT JOIN order_items oi ON oi.sku_id = s.id GROUP BY s.size;"]
+    }
   ],
+
   sql2: [
-    { id: "q2e1", type: "guess", prompt: "Ba dòng hàng có qty là 3, 5 và 2. SUM(oi.qty) bằng bao nhiêu?",
-      hint: "Cộng lại, đừng đếm số dòng.",
-      answers: ["10"] },
-    { id: "q2e2", type: "guess", prompt: "Vẫn ba dòng đó, COUNT(*) bằng bao nhiêu?",
-      hint: "COUNT đếm số dòng chứ không cộng giá trị.",
-      answers: ["3"] },
-    { id: "q2e3", type: "fill", prompt: "Ép tổng về kiểu integer trong PostgreSQL: SUM(oi.qty)___",
-      hint: "Hai dấu hai chấm rồi tới tên kiểu.",
-      answers: ["::int", "::integer"] },
-    { id: "q2e4", type: "guess", prompt: "Gom nhóm theo size: M có qty 3 và 5, L có qty 2. SUM của nhóm M bằng bao nhiêu?",
-      hint: "Chỉ cộng các qty thuộc nhóm M.",
-      answers: ["8"] },
-    { id: "q2e5", type: "sql", prompt: "Viết mệnh đề gom nhóm kết quả theo cột s.option2.",
-      hint: "Hai từ khóa rồi tới tên cột.",
-      answers: ["GROUP BY s.option2"] }
+    {
+      id: "c2q1", type: "query",
+      prompt: "Tính tổng qty của toàn bộ dòng hàng.",
+      want: "Kết quả mong đợi: 10.",
+      hint: "Không cần GROUP BY khi gộp cả bảng thành một con số.",
+      must: [
+        { re: "sum\\s*\\(\\s*(oi\\.)?qty", label: "SUM(qty)" },
+        { re: "from\\s+order_items", label: "FROM order_items" }
+      ],
+      answers: ["SELECT SUM(qty) AS sold FROM order_items;"]
+    },
+    {
+      id: "c2q2", type: "query",
+      prompt: "Đếm xem có bao nhiêu dòng hàng.",
+      want: "Kết quả mong đợi: 3, khác hẳn con số 10 ở câu trên.",
+      hint: "Đếm dòng chứ không cộng giá trị.",
+      must: [
+        { re: "count\\s*\\(", label: "COUNT(...)" },
+        { re: "from\\s+order_items", label: "FROM order_items" }
+      ],
+      answers: ["SELECT COUNT(*) AS item_rows FROM order_items;"]
+    },
+    {
+      id: "c2q3", type: "query",
+      prompt: "Tính tổng qty theo từng size.",
+      want: "Kết quả mong đợi: M = 8, L = 2.",
+      hint: "size nằm ở bảng skus nên phải ghép bảng trước rồi mới gom nhóm.",
+      must: [
+        { re: "sum\\s*\\(\\s*(oi\\.)?qty", label: "SUM(qty)" },
+        { re: "join\\s+skus", label: "JOIN skus" },
+        { re: "group\\s+by", label: "GROUP BY size" }
+      ],
+      answers: ["SELECT s.size, SUM(oi.qty) AS sold FROM order_items oi JOIN skus s ON s.id = oi.sku_id GROUP BY s.size;"]
+    },
+    {
+      id: "c2q4", type: "query",
+      prompt: "Vẫn tổng qty theo size, nhưng chỉ giữ size bán được từ 5 trở lên.",
+      want: "Kết quả mong đợi: chỉ còn M = 8.",
+      hint: "Điều kiện đặt trên kết quả của SUM nên không thể để trong WHERE.",
+      must: [
+        { re: "sum\\s*\\(\\s*(oi\\.)?qty", label: "SUM(qty)" },
+        { re: "group\\s+by", label: "GROUP BY size" },
+        { re: "having", label: "HAVING" }
+      ],
+      answers: ["SELECT s.size, SUM(oi.qty) AS sold FROM order_items oi JOIN skus s ON s.id = oi.sku_id GROUP BY s.size HAVING SUM(oi.qty) >= 5;"]
+    },
+    {
+      id: "c2q5", type: "query",
+      prompt: "Tính tổng qty theo size và ép kết quả về kiểu integer, viết theo cú pháp PostgreSQL.",
+      want: "Kết quả mong đợi: M = 8, L = 2, kiểu integer thay vì bigint.",
+      hint: "Hai dấu hai chấm rồi tới tên kiểu, hoặc dùng CAST.",
+      must: [
+        { re: "sum\\s*\\(\\s*(oi\\.)?qty", label: "SUM(qty)" },
+        { re: "::\\s*int|cast\\s*\\(", label: "::int hoặc CAST" },
+        { re: "group\\s+by", label: "GROUP BY size" }
+      ],
+      answers: ["SELECT s.size, SUM(oi.qty)::int AS sold FROM order_items oi JOIN skus s ON s.id = oi.sku_id GROUP BY s.size;"]
+    }
   ],
+
   sql3: [
-    { id: "q3e1", type: "fill", prompt: "Cột dùng để nối order_items sang bảng skus là oi.___",
-      hint: "Trong schema nó được viết có dấu nháy kép vì chữ hoa chữ thường.",
-      answers: ["skuId", "\"skuId\""] },
-    { id: "q3e2", type: "guess", prompt: "Điều kiện option2 ~ '^[A-Za-z]+$' có nhận giá trị 2XL không?",
-      hint: "Mẫu này chỉ cho phép chữ cái, mà 2XL bắt đầu bằng chữ số.",
-      answers: ["không", "khong", "no", "không nhận"] },
-    { id: "q3e3", type: "fill", prompt: "createdAt là ngày ___ đơn, không phải ngày xuất hàng.",
-      hint: "Một từ tiếng Việt.",
-      answers: ["tạo", "tao"] },
-    { id: "q3e4", type: "sql", prompt: "Viết mệnh đề ghép bảng skus vào order_items, đặt bí danh là s.",
-      hint: "Dạng JOIN <bảng> <bí danh> ON <điều kiện>. Cột skuId cần dấu nháy kép.",
-      answers: ["JOIN skus s ON s.id = oi.\"skuId\"", "INNER JOIN skus s ON s.id = oi.\"skuId\""] }
+    {
+      id: "c3q1", type: "query",
+      prompt: "Tính số lượng bán theo từng size, ghép order_items với skus và gom theo cột option2.",
+      want: "Đây là bộ khung của truy vấn thống kê size trong b2b.",
+      hint: "Tên cột có chữ hoa trong PostgreSQL thì bọc trong nháy kép: oi.\"skuId\".",
+      must: [
+        { re: "sum\\s*\\(", label: "SUM(...)" },
+        { re: "join\\s+skus", label: "JOIN skus" },
+        { re: "group\\s+by", label: "GROUP BY" },
+        { re: "option2", label: "option2" }
+      ],
+      answers: ["SELECT s.option2 AS size, SUM(oi.qty)::int AS sold FROM order_items oi JOIN skus s ON s.id = oi.\"skuId\" GROUP BY s.option2;"]
+    },
+    {
+      id: "c3q2", type: "query",
+      prompt: "Thêm điều kiện chỉ tính những đơn có status là CONFIRMED hoặc EXPORTED.",
+      want: "Phải ghép thêm bảng orders mới có cột status để lọc.",
+      hint: "Ghép thêm orders rồi lọc bằng IN, vì đây là điều kiện trên từng dòng nên đặt ở WHERE.",
+      must: [
+        { re: "join\\s+orders", label: "JOIN orders" },
+        { re: "where", label: "WHERE" },
+        { re: "status", label: "điều kiện trên status" },
+        { re: "confirmed", label: "CONFIRMED" },
+        { re: "exported", label: "EXPORTED" }
+      ],
+      answers: ["SELECT s.option2, SUM(oi.qty)::int FROM order_items oi JOIN skus s ON s.id = oi.\"skuId\" JOIN orders o ON o.id = oi.\"orderId\" WHERE o.status IN ('CONFIRMED', 'EXPORTED') GROUP BY s.option2;"]
+    },
+    {
+      id: "c3q3", type: "query",
+      prompt: "Sửa lại để size chưa bán được cái nào vẫn xuất hiện trong báo cáo.",
+      want: "Đổi chiều: đi từ bảng skus và dùng LEFT JOIN.",
+      hint: "INNER JOIN làm biến mất size không có dòng hàng. Đặt skus lên đầu FROM rồi LEFT JOIN sang order_items.",
+      must: [
+        { re: "from\\s+skus", label: "FROM skus" },
+        { re: "left\\s+join\\s+order_items", label: "LEFT JOIN order_items" },
+        { re: "group\\s+by", label: "GROUP BY" }
+      ],
+      answers: ["SELECT s.option2, COALESCE(SUM(oi.qty), 0)::int AS sold FROM skus s LEFT JOIN order_items oi ON oi.\"skuId\" = s.id GROUP BY s.option2;"]
+    }
   ]
 };
 
@@ -732,15 +1024,7 @@ window.MYSQL_CHAPTERS = [
       { t: "h", text: "Truy vấn gốc" },
       { t: "code", text: "SELECT\n  p.Code AS ma_dl,\n  p.Description AS ten_dai_ly,\n  ROUND(SUM(x.sign_debt)) AS tong_ar,\n  ROUND(SUM(CASE WHEN LEFT(x.PlannedRepaymentDate, 10) < DATE_FORMAT(CURDATE(), '%Y-%m-%d')\n                 THEN x.sign_debt ELSE 0 END)) AS qua_han\nFROM (\n  SELECT\n    CASE WHEN RecordType = 'Receipt' THEN Debt ELSE -Debt END AS sign_debt,\n    PlannedRepaymentDate,\n    AccountingDimensionByPartners_Key\n  FROM CustomersARAPAccountingByDueDates_RecordType\n  WHERE IFNULL(ReversingEntry, 0) = 0\n    AND IFNULL(Active, 0) = 1\n) x\nJOIN DimensionKeysOfAccountingByPartners d ON d.Ref_Key = x.AccountingDimensionByPartners_Key\nJOIN Partners p ON p.Ref_Key = d.Partner_Key\nGROUP BY p.Code, p.Description\nHAVING tong_ar <> 0\nORDER BY tong_ar DESC\nLIMIT 10;" },
 
-      { t: "h", text: "Đọc từ trong ra ngoài" },
-      { t: "table", head: ["Lớp", "Làm gì"],
-        rows: [
-          ["Bảng con <code>x</code>", "Lọc bút toán còn hiệu lực, đổi dấu Debt theo RecordType"],
-          ["Hai <code>JOIN</code>", "Ref_Key → Partner_Key → Partners để lấy mã và tên đại lý"],
-          ["<code>GROUP BY</code>", "Gom về từng đại lý"],
-          ["<code>HAVING</code>", "Bỏ đại lý có tổng bằng 0"],
-          ["<code>ORDER BY</code> + <code>LIMIT</code>", "Lấy 10 đại lý nợ nhiều nhất"]
-        ] },
+      { t: "p", html: "Đọc từ trong ra ngoài: bảng con <code>x</code> lọc bút toán còn hiệu lực và đổi dấu Debt, hai <code>JOIN</code> lần theo Ref_Key để lấy tên đại lý, rồi gom nhóm và lấy top 10." },
       { t: "p", html: "Truy vấn con nằm trong <code>FROM</code> gọi là <b>derived table</b>. MySQL bắt buộc phải đặt bí danh cho nó, ở đây là <code>x</code>, thiếu là báo lỗi ngay." },
 
       { t: "h", text: "Mẹo đổi dấu để một SUM làm được hai việc" },
@@ -782,39 +1066,72 @@ window.MYSQL_CHAPTERS = [
         ] },
       { t: "hint", html: "<code>COALESCE</code> là chuẩn SQL nên MySQL cũng hiểu. Muốn truy vấn chạy được cả hai bên thì dùng <code>COALESCE</code> thay vì <code>IFNULL</code> ngay từ đầu." },
 
-      { t: "h", text: "Hai điều dễ bỏ sót" },
-      { t: "hint", html: "<code>GROUP BY p.Code, p.Description</code> phải liệt kê đủ mọi cột không nằm trong hàm gộp. MySQL đời cũ cho phép thiếu và trả về giá trị bất kỳ, nhưng từ 5.7 chế độ <code>ONLY_FULL_GROUP_BY</code> bật mặc định thì sẽ báo lỗi. PostgreSQL thì luôn bắt buộc." },
-      { t: "hint", html: "Hai mệnh đề <code>JOIN</code> đều là <code>INNER JOIN</code>, nên đại lý chưa phát sinh bút toán nào sẽ không xuất hiện trong báo cáo. Với báo cáo công nợ thì thường đúng ý, nhưng nếu muốn thấy cả đại lý dư nợ bằng 0 thì phải đổi sang <code>LEFT JOIN</code> đi từ bảng <code>Partners</code>." }
+      { t: "hint", html: "Hai điều dễ bỏ sót: <code>GROUP BY</code> phải liệt kê đủ mọi cột không nằm trong hàm gộp, MySQL từ 5.7 bật <code>ONLY_FULL_GROUP_BY</code> mặc định nên thiếu là báo lỗi. Và cả hai <code>JOIN</code> đều là INNER nên đại lý chưa phát sinh bút toán sẽ không xuất hiện." }
+    ],
+    dataset: [
+      { name: "ar_entries", head: ["RecordType", "Debt", "PlannedRepaymentDate", "Partner"],
+        rows: [
+          ["Receipt", "100", "2026-08-01", "An"],
+          ["Payment", "40", "2026-12-31", "An"],
+          ["Receipt", "60", "2026-09-01", "Bình"]
+        ] }
     ]
   }
 ];
 
 </script>
 <script>
-// Bai tap cho chuong bao cao cong no MySQL.
+// Bai tap MySQL, dang viet truy van tren bang ar_entries rut gon.
 window.MYSQL_EXERCISES = {
   my1: [
-    { id: "m1e1", type: "fill", prompt: "Truy vấn con nằm trong FROM và bắt buộc phải có bí danh gọi là ___ table (tiếng Anh).",
-      hint: "Nghĩa là bảng được dẫn xuất ra từ một truy vấn khác.",
-      answers: ["derived"] },
-    { id: "m1e2", type: "guess", prompt: "MySQL dùng IFNULL, PostgreSQL dùng hàm nào tương đương?",
-      hint: "Hàm chuẩn SQL, cả hai hệ đều hiểu, nhận nhiều đối số.",
-      answers: ["COALESCE"] },
-    { id: "m1e3", type: "guess", prompt: "HAVING tong_ar <> 0 dùng bí danh của cột kết quả. Câu này chạy được trên PostgreSQL không?",
-      hint: "PostgreSQL chỉ cho dùng bí danh trong GROUP BY và ORDER BY.",
-      answers: ["không", "khong", "no"] },
-    { id: "m1e4", type: "fill", prompt: "Bọc cột trong hàm ở WHERE làm mất khả năng dùng index, thuật ngữ tiếng Anh là non-___",
-      hint: "Từ này bắt nguồn từ Search ARGument ABLE.",
-      answers: ["sargable"] },
-    { id: "m1e5", type: "guess", prompt: "Điều kiện IFNULL(Active, 0) = 1 rút gọn được thành gì?",
-      hint: "NULL thay bằng 0 thì không bao giờ bằng 1, nên nhánh NULL là thừa.",
-      answers: ["Active = 1", "Active=1"] },
-    { id: "m1e6", type: "guess", prompt: "CURDATE() của MySQL tương ứng với gì trong PostgreSQL?",
-      hint: "Hai từ nối bằng gạch dưới, không có dấu ngoặc.",
-      answers: ["CURRENT_DATE"] },
-    { id: "m1e7", type: "sql", prompt: "Viết lại điều kiện lọc ngày quá hạn cho dùng được index, giả sử cột đúng kiểu DATE.",
-      hint: "Bỏ hết LEFT và DATE_FORMAT đi, so thẳng cột với hàm ngày hôm nay.",
-      answers: ["x.PlannedRepaymentDate < CURDATE()", "PlannedRepaymentDate < CURDATE()"] }
+    {
+      id: "m1q1", type: "query",
+      prompt: "Viết cột sign_debt: dòng Receipt giữ nguyên Debt, dòng còn lại đảo thành số âm.",
+      want: "Kết quả mong đợi: 100, −40, 60.",
+      hint: "Dùng CASE WHEN ... THEN ... ELSE ... END rồi đặt tên bằng AS.",
+      must: [
+        { re: "case\\s+when", label: "CASE WHEN" },
+        { re: "recordtype", label: "điều kiện trên RecordType" },
+        { re: "receipt", label: "'Receipt'" },
+        { re: "else", label: "ELSE" },
+        { re: "-\\s*debt", label: "-Debt" },
+        { re: "sign_debt", label: "AS sign_debt" }
+      ],
+      answers: ["CASE WHEN RecordType = 'Receipt' THEN Debt ELSE -Debt END AS sign_debt"]
+    },
+    {
+      id: "m1q2", type: "query",
+      prompt: "Tính tổng công nợ của từng đại lý, dùng cột sign_debt vừa tạo.",
+      want: "Kết quả mong đợi: An = 60, Bình = 60.",
+      hint: "Gom nhóm theo Partner rồi cộng sign_debt.",
+      must: [
+        { re: "sum\\s*\\(", label: "SUM(...)" },
+        { re: "group\\s+by\\s+partner", label: "GROUP BY Partner" }
+      ],
+      answers: ["SELECT Partner, SUM(sign_debt) AS tong_ar FROM ar_entries GROUP BY Partner;"]
+    },
+    {
+      id: "m1q3", type: "query",
+      prompt: "Thêm một cột nữa chỉ cộng phần đã quá hạn, tính trong cùng một lần quét bảng.",
+      want: "Cột thứ hai chỉ cộng những dòng có ngày hẹn trả nhỏ hơn hôm nay.",
+      hint: "Đặt CASE WHEN vào bên trong SUM, nhánh không thỏa thì cộng 0.",
+      must: [
+        { re: "sum\\s*\\(\\s*case\\s+when", label: "SUM(CASE WHEN ...)" },
+        { re: "group\\s+by\\s+partner", label: "GROUP BY Partner" }
+      ],
+      answers: ["SELECT Partner, SUM(sign_debt) AS tong_ar, SUM(CASE WHEN PlannedRepaymentDate < CURDATE() THEN sign_debt ELSE 0 END) AS qua_han FROM ar_entries GROUP BY Partner;"]
+    },
+    {
+      id: "m1q4", type: "query",
+      prompt: "Viết điều kiện lọc dòng đã quá hạn sao cho MySQL vẫn dùng được index, biết PlannedRepaymentDate đúng kiểu DATE.",
+      want: "Không bọc cột trong bất kỳ hàm nào.",
+      hint: "Bỏ hết LEFT và DATE_FORMAT, so thẳng cột với hàm ngày hôm nay của MySQL.",
+      must: [
+        { re: "plannedrepaymentdate\\s*<", label: "PlannedRepaymentDate đứng một mình rồi tới dấu <" },
+        { re: "curdate\\s*\\(\\s*\\)", label: "CURDATE()" }
+      ],
+      answers: ["WHERE PlannedRepaymentDate < CURDATE()"]
+    }
   ]
 };
 
@@ -913,10 +1230,11 @@ window.SUBJECTS = [
     id: "sql",
     title: "SQL",
     tagline: "PostgreSQL và MySQL, rút từ truy vấn thật trong dự án",
-    tocIntro: "Ba chương đầu là PostgreSQL, dùng cho b2b.kamito.vn chạy Prisma. " +
-      "Chương cuối là MySQL trên hệ ERP, kèm bảng đối chiếu cú pháp giữa hai hệ.",
+    tocIntro: "Bắt đầu bằng chương căn bản: từng mệnh đề là gì và chạy lúc nào. " +
+      "Sau đó tới PostgreSQL của b2b, cuối cùng là MySQL trên hệ ERP. " +
+      "Bài tập đều là cho sẵn bảng dữ liệu rồi bạn tự viết truy vấn.",
     kind: "blocks",
-    chapters: window.SQL_CHAPTERS.concat(window.MYSQL_CHAPTERS)
+    chapters: window.SQL_BASICS.concat(window.SQL_CHAPTERS, window.MYSQL_CHAPTERS)
   },
   {
     id: "code",
@@ -931,7 +1249,8 @@ window.SUBJECTS = [
 
 // Gop bai tap cua moi mon vao mot bang tra cuu chung theo id chuong.
 window.ALL_EXERCISES = Object.assign(
-  {}, window.EXERCISES, window.SQL_EXERCISES, window.MYSQL_EXERCISES, window.SECURITY_EXERCISES
+  {}, window.EXERCISES, window.SQL_BASICS_EXERCISES, window.SQL_EXERCISES,
+  window.MYSQL_EXERCISES, window.SECURITY_EXERCISES
 );
 
 </script>
@@ -992,8 +1311,20 @@ window.NB = (function () {
   // Tu khoa SQL va cac dang dien tu khong phan biet hoa thuong.
   var CASE_FREE = { fill: 1, guess: 1, sql: 1 };
 
+  // Dang "viet truy van": cham theo cac thanh phan bat buoc, khong so tung ky tu,
+  // de nguoi hoc viet kieu nao cung duoc mien la du y.
+  function missingParts(ex, input) {
+    var s = String(input).toLowerCase().replace(/[`]/g, "").replace(/\s+/g, " ").trim();
+    return (ex.must || []).filter(function (m) {
+      return !new RegExp(m.re, "i").test(s);
+    }).map(function (m) { return m.label; });
+  }
+
   function grade(ex, input) {
     if (!norm(input)) return "empty";
+    if (ex.type === "query") {
+      return missingParts(ex, input).length === 0 ? "correct" : "wrong";
+    }
     var caseFree = CASE_FREE[ex.type] === 1;
     var u = norm(input);
     for (var i = 0; i < ex.answers.length; i++) {
@@ -1055,6 +1386,7 @@ window.NB = (function () {
     setPage: function (i) { state.pages[state.subject] = i; },
     save: save,
     grade: grade,
+    missingParts: missingParts,
     findEx: findEx,
     correctCount: correctCount,
     totalCount: totalCount,
@@ -1193,7 +1525,7 @@ window.NBBlocks = (function () {
     show("INNER");
   }
 
-  return { render: render, wireDemo: wireDemo };
+  return { render: render, wireDemo: wireDemo, table: tableHtml };
 })();
 
 </script>
@@ -1204,7 +1536,7 @@ window.NBRender = (function () {
   var say = function (t) { return window.NBSpeech.btn(t); };
   var KIND = {
     translate: "Dịch sang tiếng Anh", fix: "Sửa câu sai", fill: "Điền vào chỗ trống",
-    guess: "Đoán kết quả", sql: "Viết mệnh đề SQL"
+    guess: "Đoán kết quả", sql: "Viết mệnh đề SQL", query: "Viết truy vấn"
   };
 
   function subjectById(id) {
@@ -1294,15 +1626,37 @@ window.NBRender = (function () {
     return '<p class="intro">' + esc(ch.intro) + "</p>" + window.NBBlocks.render(ch.blocks);
   }
 
+  // Dang viet truy van can o nhieu dong, cac dang con lai mot dong la du.
+  function fieldHtml(ex, val) {
+    if (ex.type === "query") {
+      return '<textarea class="answer sqlbox" rows="4" spellcheck="false" ' +
+        'placeholder="Viết câu lệnh SQL rồi bấm Kiểm tra..." data-id="' + ex.id + '">' +
+        esc(val) + "</textarea>";
+    }
+    return '<input class="answer" type="text" placeholder="Gõ câu trả lời của bạn..." value="' +
+      esc(val) + '" data-id="' + ex.id + '">';
+  }
+
+  // Bang du lieu mau dung chung cho ca trang bai tap.
+  function datasetHtml(ch) {
+    if (!ch.dataset) return "";
+    var h = '<h3 class="sub">Dữ liệu dùng cho bài tập</h3><div class="dataset">';
+    ch.dataset.forEach(function (t) {
+      h += '<div><p class="demo-cap"><b>' + esc(t.name) + "</b></p>" +
+        window.NBBlocks.table(t.head, t.rows) + "</div>";
+    });
+    return h + "</div>";
+  }
+
   function exerciseHtml(ex, n) {
     var st = window.NB.get();
     var val = st.answers[ex.id] || "";
     var cls = st.status[ex.id] || "";
     return '<div class="ex ' + cls + '" id="ex-' + ex.id + '">' +
       '<div class="kind">' + KIND[ex.type] + "</div>" +
-      '<div class="prompt-vi"><b>Câu ' + n + ".</b> " + esc(ex.prompt) + "</div>" +
-      '<input class="answer" type="text" placeholder="Gõ câu trả lời của bạn..." value="' +
-      esc(val) + '" data-id="' + ex.id + '">' +
+      '<div class="prompt-vi"><b>Câu ' + n + '.</b> ' + esc(ex.prompt) + '</div>' +
+      (ex.want ? '<div class="want">' + esc(ex.want) + '</div>' : '') +
+      fieldHtml(ex, val) +
       '<div class="actions">' +
       '<button class="primary" data-act="check" data-id="' + ex.id + '">Kiểm tra</button>' +
       '<button data-act="hint" data-id="' + ex.id + '">Gợi ý</button>' +
@@ -1312,9 +1666,14 @@ window.NBRender = (function () {
 
   function practiceHtml(ch) {
     var st = window.NB.get();
-    var h = '<p class="intro">Gõ đáp án rồi bấm Kiểm tra, hoặc nhấn Enter. Chương này bạn đang đúng ' +
+    var list = window.ALL_EXERCISES[ch.id] || [];
+    var hasQuery = list.some(function (e) { return e.type === "query"; });
+    var keyHint = hasQuery ? "Ctrl+Enter" : "Enter";
+    var h = '<p class="intro">Gõ đáp án rồi bấm Kiểm tra, hoặc nhấn ' + keyHint +
+      ". Chương này bạn đang đúng " +
       '<span id="ch-progress" data-ch="' + ch.id + '">' + chapterScore(ch.id) + "</span> câu.</p>";
-    (window.ALL_EXERCISES[ch.id] || []).forEach(function (ex, i) { h += exerciseHtml(ex, i + 1); });
+    h += datasetHtml(ch);
+    list.forEach(function (ex, i) { h += exerciseHtml(ex, i + 1); });
     return h + '<h3 class="sub">Ghi chú của bạn</h3><textarea class="notes" data-notes="' + ch.id +
       '" placeholder="Viết thêm ví dụ, từ mới, hoặc chỗ bạn hay quên...">' +
       esc(st.notes[ch.id] || "") + "</textarea>" +
@@ -1421,6 +1780,13 @@ window.NBRender = (function () {
       fb.innerHTML = '<span class="fb-warn">Gợi ý:</span> ' + NB.esc(ex.hint);
     } else if (kind === "empty") {
       fb.innerHTML = '<span class="fb-bad">Bạn chưa viết gì cả.</span>';
+    } else if (ex.type === "query") {
+      // Chi ra thanh phan con thieu thay vi chi bao sai.
+      box.classList.add("wrong");
+      var miss = NB.missingParts(ex, document.querySelector('.answer[data-id="' + id + '"]').value);
+      fb.innerHTML = '<span class="fb-bad">✗ Còn thiếu:</span> ' +
+        miss.map(function (m) { return "<code>" + NB.esc(m) + "</code>"; }).join(", ") +
+        '<div class="solution-hint">Gợi ý: ' + NB.esc(ex.hint) + "</div>";
     } else {
       box.classList.add("wrong");
       fb.innerHTML = '<span class="fb-bad">✗ Chưa đúng.</span> Thử lại nhé. Gợi ý: ' + NB.esc(ex.hint);
@@ -1481,7 +1847,7 @@ window.NBRender = (function () {
       showFeedback(id, "reveal"); refreshCounters();
       return;
     }
-    var input = document.querySelector('input[data-id="' + id + '"]');
+    var input = document.querySelector('.answer[data-id="' + id + '"]');
     var res = NB.grade(NB.findEx(id), input.value);
     st.answers[id] = input.value;
     if (res !== "empty") st.status[id] = res;
@@ -1496,7 +1862,8 @@ window.NBRender = (function () {
 
   document.addEventListener("keydown", function (e) {
     var typing = /^(INPUT|TEXTAREA)$/.test(e.target.tagName);
-    if (e.key === "Enter" && typing && e.target.classList.contains("answer")) {
+    var multiline = e.target.tagName === "TEXTAREA";
+    if (e.key === "Enter" && typing && e.target.classList.contains("answer") && (!multiline || e.ctrlKey)) {
       document.querySelector('button[data-act="check"][data-id="' + e.target.dataset.id + '"]').click();
       return;
     }

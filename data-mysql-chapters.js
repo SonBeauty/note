@@ -9,15 +9,7 @@ window.MYSQL_CHAPTERS = [
       { t: "h", text: "Truy vấn gốc" },
       { t: "code", text: "SELECT\n  p.Code AS ma_dl,\n  p.Description AS ten_dai_ly,\n  ROUND(SUM(x.sign_debt)) AS tong_ar,\n  ROUND(SUM(CASE WHEN LEFT(x.PlannedRepaymentDate, 10) < DATE_FORMAT(CURDATE(), '%Y-%m-%d')\n                 THEN x.sign_debt ELSE 0 END)) AS qua_han\nFROM (\n  SELECT\n    CASE WHEN RecordType = 'Receipt' THEN Debt ELSE -Debt END AS sign_debt,\n    PlannedRepaymentDate,\n    AccountingDimensionByPartners_Key\n  FROM CustomersARAPAccountingByDueDates_RecordType\n  WHERE IFNULL(ReversingEntry, 0) = 0\n    AND IFNULL(Active, 0) = 1\n) x\nJOIN DimensionKeysOfAccountingByPartners d ON d.Ref_Key = x.AccountingDimensionByPartners_Key\nJOIN Partners p ON p.Ref_Key = d.Partner_Key\nGROUP BY p.Code, p.Description\nHAVING tong_ar <> 0\nORDER BY tong_ar DESC\nLIMIT 10;" },
 
-      { t: "h", text: "Đọc từ trong ra ngoài" },
-      { t: "table", head: ["Lớp", "Làm gì"],
-        rows: [
-          ["Bảng con <code>x</code>", "Lọc bút toán còn hiệu lực, đổi dấu Debt theo RecordType"],
-          ["Hai <code>JOIN</code>", "Ref_Key → Partner_Key → Partners để lấy mã và tên đại lý"],
-          ["<code>GROUP BY</code>", "Gom về từng đại lý"],
-          ["<code>HAVING</code>", "Bỏ đại lý có tổng bằng 0"],
-          ["<code>ORDER BY</code> + <code>LIMIT</code>", "Lấy 10 đại lý nợ nhiều nhất"]
-        ] },
+      { t: "p", html: "Đọc từ trong ra ngoài: bảng con <code>x</code> lọc bút toán còn hiệu lực và đổi dấu Debt, hai <code>JOIN</code> lần theo Ref_Key để lấy tên đại lý, rồi gom nhóm và lấy top 10." },
       { t: "p", html: "Truy vấn con nằm trong <code>FROM</code> gọi là <b>derived table</b>. MySQL bắt buộc phải đặt bí danh cho nó, ở đây là <code>x</code>, thiếu là báo lỗi ngay." },
 
       { t: "h", text: "Mẹo đổi dấu để một SUM làm được hai việc" },
@@ -59,9 +51,15 @@ window.MYSQL_CHAPTERS = [
         ] },
       { t: "hint", html: "<code>COALESCE</code> là chuẩn SQL nên MySQL cũng hiểu. Muốn truy vấn chạy được cả hai bên thì dùng <code>COALESCE</code> thay vì <code>IFNULL</code> ngay từ đầu." },
 
-      { t: "h", text: "Hai điều dễ bỏ sót" },
-      { t: "hint", html: "<code>GROUP BY p.Code, p.Description</code> phải liệt kê đủ mọi cột không nằm trong hàm gộp. MySQL đời cũ cho phép thiếu và trả về giá trị bất kỳ, nhưng từ 5.7 chế độ <code>ONLY_FULL_GROUP_BY</code> bật mặc định thì sẽ báo lỗi. PostgreSQL thì luôn bắt buộc." },
-      { t: "hint", html: "Hai mệnh đề <code>JOIN</code> đều là <code>INNER JOIN</code>, nên đại lý chưa phát sinh bút toán nào sẽ không xuất hiện trong báo cáo. Với báo cáo công nợ thì thường đúng ý, nhưng nếu muốn thấy cả đại lý dư nợ bằng 0 thì phải đổi sang <code>LEFT JOIN</code> đi từ bảng <code>Partners</code>." }
+      { t: "hint", html: "Hai điều dễ bỏ sót: <code>GROUP BY</code> phải liệt kê đủ mọi cột không nằm trong hàm gộp, MySQL từ 5.7 bật <code>ONLY_FULL_GROUP_BY</code> mặc định nên thiếu là báo lỗi. Và cả hai <code>JOIN</code> đều là INNER nên đại lý chưa phát sinh bút toán sẽ không xuất hiện." }
+    ],
+    dataset: [
+      { name: "ar_entries", head: ["RecordType", "Debt", "PlannedRepaymentDate", "Partner"],
+        rows: [
+          ["Receipt", "100", "2026-08-01", "An"],
+          ["Payment", "40", "2026-12-31", "An"],
+          ["Receipt", "60", "2026-09-01", "Bình"]
+        ] }
     ]
   }
 ];

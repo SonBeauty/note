@@ -1,26 +1,53 @@
-// Bai tap cho chuong bao cao cong no MySQL.
+// Bai tap MySQL, dang viet truy van tren bang ar_entries rut gon.
 window.MYSQL_EXERCISES = {
   my1: [
-    { id: "m1e1", type: "fill", prompt: "Truy vấn con nằm trong FROM và bắt buộc phải có bí danh gọi là ___ table (tiếng Anh).",
-      hint: "Nghĩa là bảng được dẫn xuất ra từ một truy vấn khác.",
-      answers: ["derived"] },
-    { id: "m1e2", type: "guess", prompt: "MySQL dùng IFNULL, PostgreSQL dùng hàm nào tương đương?",
-      hint: "Hàm chuẩn SQL, cả hai hệ đều hiểu, nhận nhiều đối số.",
-      answers: ["COALESCE"] },
-    { id: "m1e3", type: "guess", prompt: "HAVING tong_ar <> 0 dùng bí danh của cột kết quả. Câu này chạy được trên PostgreSQL không?",
-      hint: "PostgreSQL chỉ cho dùng bí danh trong GROUP BY và ORDER BY.",
-      answers: ["không", "khong", "no"] },
-    { id: "m1e4", type: "fill", prompt: "Bọc cột trong hàm ở WHERE làm mất khả năng dùng index, thuật ngữ tiếng Anh là non-___",
-      hint: "Từ này bắt nguồn từ Search ARGument ABLE.",
-      answers: ["sargable"] },
-    { id: "m1e5", type: "guess", prompt: "Điều kiện IFNULL(Active, 0) = 1 rút gọn được thành gì?",
-      hint: "NULL thay bằng 0 thì không bao giờ bằng 1, nên nhánh NULL là thừa.",
-      answers: ["Active = 1", "Active=1"] },
-    { id: "m1e6", type: "guess", prompt: "CURDATE() của MySQL tương ứng với gì trong PostgreSQL?",
-      hint: "Hai từ nối bằng gạch dưới, không có dấu ngoặc.",
-      answers: ["CURRENT_DATE"] },
-    { id: "m1e7", type: "sql", prompt: "Viết lại điều kiện lọc ngày quá hạn cho dùng được index, giả sử cột đúng kiểu DATE.",
-      hint: "Bỏ hết LEFT và DATE_FORMAT đi, so thẳng cột với hàm ngày hôm nay.",
-      answers: ["x.PlannedRepaymentDate < CURDATE()", "PlannedRepaymentDate < CURDATE()"] }
+    {
+      id: "m1q1", type: "query",
+      prompt: "Viết cột sign_debt: dòng Receipt giữ nguyên Debt, dòng còn lại đảo thành số âm.",
+      want: "Kết quả mong đợi: 100, −40, 60.",
+      hint: "Dùng CASE WHEN ... THEN ... ELSE ... END rồi đặt tên bằng AS.",
+      must: [
+        { re: "case\\s+when", label: "CASE WHEN" },
+        { re: "recordtype", label: "điều kiện trên RecordType" },
+        { re: "receipt", label: "'Receipt'" },
+        { re: "else", label: "ELSE" },
+        { re: "-\\s*debt", label: "-Debt" },
+        { re: "sign_debt", label: "AS sign_debt" }
+      ],
+      answers: ["CASE WHEN RecordType = 'Receipt' THEN Debt ELSE -Debt END AS sign_debt"]
+    },
+    {
+      id: "m1q2", type: "query",
+      prompt: "Tính tổng công nợ của từng đại lý, dùng cột sign_debt vừa tạo.",
+      want: "Kết quả mong đợi: An = 60, Bình = 60.",
+      hint: "Gom nhóm theo Partner rồi cộng sign_debt.",
+      must: [
+        { re: "sum\\s*\\(", label: "SUM(...)" },
+        { re: "group\\s+by\\s+partner", label: "GROUP BY Partner" }
+      ],
+      answers: ["SELECT Partner, SUM(sign_debt) AS tong_ar FROM ar_entries GROUP BY Partner;"]
+    },
+    {
+      id: "m1q3", type: "query",
+      prompt: "Thêm một cột nữa chỉ cộng phần đã quá hạn, tính trong cùng một lần quét bảng.",
+      want: "Cột thứ hai chỉ cộng những dòng có ngày hẹn trả nhỏ hơn hôm nay.",
+      hint: "Đặt CASE WHEN vào bên trong SUM, nhánh không thỏa thì cộng 0.",
+      must: [
+        { re: "sum\\s*\\(\\s*case\\s+when", label: "SUM(CASE WHEN ...)" },
+        { re: "group\\s+by\\s+partner", label: "GROUP BY Partner" }
+      ],
+      answers: ["SELECT Partner, SUM(sign_debt) AS tong_ar, SUM(CASE WHEN PlannedRepaymentDate < CURDATE() THEN sign_debt ELSE 0 END) AS qua_han FROM ar_entries GROUP BY Partner;"]
+    },
+    {
+      id: "m1q4", type: "query",
+      prompt: "Viết điều kiện lọc dòng đã quá hạn sao cho MySQL vẫn dùng được index, biết PlannedRepaymentDate đúng kiểu DATE.",
+      want: "Không bọc cột trong bất kỳ hàm nào.",
+      hint: "Bỏ hết LEFT và DATE_FORMAT, so thẳng cột với hàm ngày hôm nay của MySQL.",
+      must: [
+        { re: "plannedrepaymentdate\\s*<", label: "PlannedRepaymentDate đứng một mình rồi tới dấu <" },
+        { re: "curdate\\s*\\(\\s*\\)", label: "CURDATE()" }
+      ],
+      answers: ["WHERE PlannedRepaymentDate < CURDATE()"]
+    }
   ]
 };

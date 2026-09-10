@@ -67,6 +67,13 @@
       fb.innerHTML = '<span class="fb-warn">Gợi ý:</span> ' + NB.esc(ex.hint);
     } else if (kind === "empty") {
       fb.innerHTML = '<span class="fb-bad">Bạn chưa viết gì cả.</span>';
+    } else if (ex.type === "query") {
+      // Chi ra thanh phan con thieu thay vi chi bao sai.
+      box.classList.add("wrong");
+      var miss = NB.missingParts(ex, document.querySelector('.answer[data-id="' + id + '"]').value);
+      fb.innerHTML = '<span class="fb-bad">✗ Còn thiếu:</span> ' +
+        miss.map(function (m) { return "<code>" + NB.esc(m) + "</code>"; }).join(", ") +
+        '<div class="solution-hint">Gợi ý: ' + NB.esc(ex.hint) + "</div>";
     } else {
       box.classList.add("wrong");
       fb.innerHTML = '<span class="fb-bad">✗ Chưa đúng.</span> Thử lại nhé. Gợi ý: ' + NB.esc(ex.hint);
@@ -127,7 +134,7 @@
       showFeedback(id, "reveal"); refreshCounters();
       return;
     }
-    var input = document.querySelector('input[data-id="' + id + '"]');
+    var input = document.querySelector('.answer[data-id="' + id + '"]');
     var res = NB.grade(NB.findEx(id), input.value);
     st.answers[id] = input.value;
     if (res !== "empty") st.status[id] = res;
@@ -142,7 +149,8 @@
 
   document.addEventListener("keydown", function (e) {
     var typing = /^(INPUT|TEXTAREA)$/.test(e.target.tagName);
-    if (e.key === "Enter" && typing && e.target.classList.contains("answer")) {
+    var multiline = e.target.tagName === "TEXTAREA";
+    if (e.key === "Enter" && typing && e.target.classList.contains("answer") && (!multiline || e.ctrlKey)) {
       document.querySelector('button[data-act="check"][data-id="' + e.target.dataset.id + '"]').click();
       return;
     }
