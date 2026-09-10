@@ -3,23 +3,31 @@ window.NB = (function () {
   var KEY = "english-notebook-v1";
   var state = load();
 
+  function subjectIds() {
+    return window.SUBJECTS.map(function (s) { return s.id; });
+  }
+
   function blank() {
+    var pages = {};
+    subjectIds().forEach(function (id) { pages[id] = 0; });
     return {
       answers: {}, status: {}, notes: {},
       hideVocab: false, slowSpeech: false,
-      subject: "en", pages: { en: 0, sql: 0 }
+      subject: subjectIds()[0], pages: pages
     };
   }
 
-  // Ban backup cu chi co mot so trang duy nhat, chuyen sang dang tach theo mon.
+  // Ban backup cu chi co mot so trang duy nhat, va co the thieu mon moi them.
   function normalize(s) {
     if (!s || typeof s !== "object" || !s.answers) return blank();
+    var ids = subjectIds();
     if (typeof s.pages !== "object" || !s.pages) {
-      s.pages = { en: typeof s.page === "number" ? s.page : 0, sql: 0 };
+      s.pages = { en: typeof s.page === "number" ? s.page : 0 };
     }
-    if (typeof s.pages.en !== "number") s.pages.en = 0;
-    if (typeof s.pages.sql !== "number") s.pages.sql = 0;
-    if (s.subject !== "en" && s.subject !== "sql") s.subject = "en";
+    ids.forEach(function (id) {
+      if (typeof s.pages[id] !== "number") s.pages[id] = 0;
+    });
+    if (ids.indexOf(s.subject) < 0) s.subject = ids[0];
     delete s.page;
     return s;
   }

@@ -1,4 +1,4 @@
-// Hai muc chinh cua so tay. Phai nap sau cac file du lieu kia.
+// Ba muc chinh cua so tay. Phai nap sau cac file du lieu kia.
 window.SUBJECTS = [
   {
     id: "en",
@@ -11,25 +11,25 @@ window.SUBJECTS = [
   },
   {
     id: "sql",
-    title: "Lập trình",
-    tagline: "Ghi chú SQL rút từ chính truy vấn trong dự án của bạn",
-    tocIntro: "Ghi chú rút từ chính code trong dự án của bạn: SQL cho truy vấn thống kê, " +
-      "và cách chặn file tải lên độc hại. Mỗi chương đều có một trang bài tập.",
+    title: "SQL",
+    tagline: "PostgreSQL và MySQL, rút từ truy vấn thật trong dự án",
+    tocIntro: "Ba chương đầu là PostgreSQL, dùng cho b2b.kamito.vn chạy Prisma. " +
+      "Chương cuối là MySQL trên hệ ERP, kèm bảng đối chiếu cú pháp giữa hai hệ.",
     kind: "blocks",
-    chapters: window.SQL_CHAPTERS.concat(window.SECURITY_CHAPTERS)
+    chapters: window.SQL_CHAPTERS.concat(window.MYSQL_CHAPTERS)
+  },
+  {
+    id: "code",
+    title: "Lập trình",
+    tagline: "NestJS, TypeScript, Next.js — ghi chú rút từ code của bạn",
+    tocIntro: "Những đoạn code đáng nhớ trong dự án, kèm lý do vì sao nó được viết như vậy " +
+      "và những chỗ nếu làm khác đi thì hỏng.",
+    kind: "blocks",
+    chapters: window.SECURITY_CHAPTERS
   }
 ];
 
 // Gop bai tap cua moi mon vao mot bang tra cuu chung theo id chuong.
-window.ALL_EXERCISES = Object.assign({}, window.EXERCISES, window.SQL_EXERCISES, window.SECURITY_EXERCISES);
-
-// Tra ve mon chua chuong nay.
-window.subjectOfChapter = function (chapterId) {
-  for (var i = 0; i < window.SUBJECTS.length; i++) {
-    var s = window.SUBJECTS[i];
-    for (var j = 0; j < s.chapters.length; j++) {
-      if (s.chapters[j].id === chapterId) return s;
-    }
-  }
-  return window.SUBJECTS[0];
-};
+window.ALL_EXERCISES = Object.assign(
+  {}, window.EXERCISES, window.SQL_EXERCISES, window.MYSQL_EXERCISES, window.SECURITY_EXERCISES
+);

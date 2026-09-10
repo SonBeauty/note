@@ -1,24 +1,28 @@
 # Sổ tay học tập
 
-Sổ tay học cá nhân gồm hai phần: **Tiếng Anh** và **Lập trình**. Chạy offline bằng trình duyệt,
-không cần server, không cần cài gì.
+Sổ tay học cá nhân gồm ba phần: **Tiếng Anh**, **SQL** và **Lập trình**. Chạy offline bằng
+trình duyệt, không cần server, không cần cài gì.
 
 ## Mở sổ
 
 Nháy đúp vào `index.html`, hoặc kéo file đó thả vào cửa sổ Chrome/Edge.
 
-## Hai mục chính
+## Ba mục chính
 
-Hai tab trên đầu sổ, mỗi tab giữ tiến độ và trang đang đọc riêng:
+Ba tab trên đầu sổ, mỗi tab giữ tiến độ và trang đang đọc riêng. Tiêu đề chương luôn ghi rõ
+công nghệ để nhìn là biết đang nói về hệ nào:
 
 | Mục | Nội dung | Số bài tập |
 |---|---|---|
 | Tiếng Anh | 5 chương: giới thiệu bản thân, kinh nghiệm, dự án, công việc hằng ngày, du lịch | 25 |
-| Lập trình | 4 chương: ghép bảng JOIN, tổng hợp dữ liệu, áp dụng vào dự án, kiểm tra file tải lên | 20 |
+| SQL | 3 chương PostgreSQL (JOIN, tổng hợp dữ liệu, truy vấn size của b2b) + 1 chương MySQL (báo cáo công nợ trên ERP) | 21 |
+| Lập trình | Kiểm tra file tải lên trong NestJS: Content-Type và magic bytes | 6 |
 
-Phần SQL có ví dụ JOIN bấm được để so sánh INNER, LEFT và RIGHT, kèm các ô cảnh báo chỗ dễ nhầm.
-Chương kiểm tra file tải lên rút từ `upload-validation.util.ts` của dự án b2b.kamito.vn:
-vì sao không tin Content-Type, magic bytes của từng định dạng, và mẹo đối chiếu chéo hai nguồn.
+Nguồn nội dung đều là code thật trong dự án:
+
+- **PostgreSQL + Prisma 6** — truy vấn thống kê size của `b2b.kamito.vn`, có ví dụ JOIN bấm được để so sánh INNER, LEFT, RIGHT
+- **MySQL** — truy vấn báo cáo công nợ trên hệ ERP kiểu 1C, kèm bảng đối chiếu cú pháp MySQL với PostgreSQL
+- **NestJS 10 + TypeScript** — `upload-validation.util.ts`, vì sao không tin Content-Type và cách đối chiếu chéo với magic bytes
 
 ## Lật sổ
 
@@ -33,7 +37,7 @@ vì sao không tin Content-Type, magic bytes của từng định dạng, và m�
 
 - **5 chương theo chủ đề**: giới thiệu bản thân, kinh nghiệm & kỹ năng, nói về dự án, công việc hằng ngày, du lịch & sở thích
 - Mỗi chương gồm: câu mẫu (sai → đúng → cách nói tự nhiên), bảng quy tắc, từ vựng, bài tập, ô ghi chú
-- **45 bài tập** năm dạng: dịch sang tiếng Anh, sửa câu sai, điền vào chỗ trống, đoán kết quả, viết mệnh đề SQL
+- **52 bài tập** năm dạng: dịch sang tiếng Anh, sửa câu sai, điền vào chỗ trống, đoán kết quả, viết mệnh đề SQL
 - **Chấm điểm tự động**: gõ đáp án rồi bấm Kiểm tra (hoặc nhấn Enter)
   - ✓ Chính xác
   - ⚠ Gần đúng — đúng từ nhưng sai viết hoa hoặc dấu câu
@@ -152,11 +156,13 @@ english-notebook/
 ├── data-chapters.js      nội dung tiếng Anh
 ├── data-vocabulary.js    từ vựng tiếng Anh
 ├── data-exercises.js     bài tập tiếng Anh
-├── data-sql-chapters.js  nội dung SQL
-├── data-sql-exercises.js bài tập SQL
+├── data-sql-chapters.js  nội dung PostgreSQL
+├── data-sql-exercises.js bài tập PostgreSQL
+├── data-mysql-chapters.js      ghi chú truy vấn công nợ MySQL
+├── data-mysql-exercises.js     bài tập chương đó
 ├── data-security-chapters.js   ghi chú kiểm tra file tải lên
 ├── data-security-exercises.js  bài tập chương đó
-├── data-subjects.js      khai báo hai mục chính
+├── data-subjects.js      khai báo ba mục chính
 ├── build-single-file.js  gộp tất cả thành 1 file cho điện thoại
 ├── serve-lan.js          mở sổ từ điện thoại qua WiFi
 └── deploy.sh             đẩy bản mới lên GitHub Pages

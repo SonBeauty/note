@@ -3,8 +3,8 @@
 window.SQL_CHAPTERS = [
   {
     id: "sql1",
-    title: "Ghép bảng bằng JOIN",
-    subtitle: "JOIN, ON và WHERE",
+    title: "JOIN trong PostgreSQL",
+    subtitle: "INNER, LEFT, RIGHT và mệnh đề ON",
     intro: "Ghép dữ liệu giữa hai bảng bằng điều kiện ON. Ba loại JOIN khác nhau ở cách xử lý các dòng không khớp.",
     blocks: [
       { t: "h", text: "Nhớ nhanh" },
@@ -31,9 +31,9 @@ window.SQL_CHAPTERS = [
   },
   {
     id: "sql2",
-    title: "Tổng hợp dữ liệu",
-    subtitle: "SUM, COUNT, ép kiểu, GROUP BY",
-    intro: "Bốn thứ hay đi cùng nhau khi tính toán số liệu. Cùng một bộ dữ liệu qty = 3, 5, 2 xuyên suốt để dễ so sánh.",
+    title: "Tổng hợp dữ liệu trong PostgreSQL",
+    subtitle: "SUM, COUNT, ép kiểu ::int, GROUP BY",
+    intro: "Bốn thứ hay đi cùng nhau khi tính toán số liệu trong PostgreSQL. Cùng một bộ dữ liệu qty = 3, 5, 2 xuyên suốt để dễ so sánh.",
     blocks: [
       { t: "h", text: "SUM cộng số lượng" },
       { t: "table", head: ["Dòng", "qty"], rows: [["OI1", "3"], ["OI2", "5"], ["OI3", "2"]] },
@@ -69,8 +69,8 @@ window.SQL_CHAPTERS = [
   },
   {
     id: "sql3",
-    title: "Áp dụng vào dự án",
-    subtitle: "Schema và truy vấn thống kê size",
+    title: "Truy vấn thống kê size (PostgreSQL + Prisma)",
+    subtitle: "Schema b2b.kamito.vn và cách ráp truy vấn",
     intro: "Đọc lại truy vấn thật của bạn theo quan hệ giữa các bảng, kèm những chỗ dễ hiểu sai.",
     blocks: [
       { t: "h", text: "Quan hệ giữa các bảng" },

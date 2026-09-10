@@ -31,9 +31,9 @@ button.primary:hover { opacity: .87; color: #fff; }
 button:disabled { opacity: .35; cursor: default; }
 button:disabled:hover { border-color: var(--border); color: var(--ink); }
 
-/* ---- Hai tab chinh: Tieng Anh / Lap trinh ---- */
+/* ---- Cac tab chinh: Tieng Anh / SQL / Lap trinh ---- */
 .subject-tabs { display: flex; gap: 8px; justify-content: center; margin: 6px 0 4px; }
-.subject-tabs button { font-size: 16px; padding: 10px 26px; border-radius: 10px 10px 0 0;
+.subject-tabs button { font-size: 16px; padding: 10px 22px; border-radius: 10px 10px 0 0;
   border-bottom-width: 3px; line-height: 1.2; }
 .subject-tabs button small { display: block; font-size: 12px; color: var(--ink-soft); margin-top: 2px; }
 .subject-tabs button.on { background: var(--accent); border-color: var(--accent); color: #fff; font-weight: bold; }
@@ -155,7 +155,8 @@ ol.contents li .c-score { float: right; font-size: 14px; color: var(--ink-soft);
   .toc-fab { display: block; }
   .sheet { padding: 20px 16px 24px 22px; }
   .rule { grid-template-columns: 1fr; }
-  .subject-tabs button { flex: 1; padding: 10px 8px; }
+  .subject-tabs { gap: 5px; }
+  .subject-tabs button { flex: 1; padding: 9px 4px; font-size: 14px; }
 }
 
 /* ---- Dien thoai: chu to hon, nut de bam, thanh lat trang luon trong tam tay ---- */

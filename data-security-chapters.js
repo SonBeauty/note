@@ -2,9 +2,9 @@
 window.SECURITY_CHAPTERS = [
   {
     id: "sec1",
-    title: "Kiểm tra file tải lên",
-    subtitle: "Content-Type khai báo và magic bytes",
-    intro: "Content-Type do client tự khai nên không tin được. Magic bytes nằm trong chính nội dung file mới là bằng chứng. Hàm sniffMime trong dự án b2b làm đúng việc này.",
+    title: "Kiểm tra file tải lên (NestJS)",
+    subtitle: "TypeScript · Content-Type khai báo và magic bytes",
+    intro: "Content-Type do client tự khai nên không tin được. Magic bytes nằm trong chính nội dung file mới là bằng chứng. Hàm sniffMime trong API NestJS của b2b.kamito.vn làm đúng việc này.",
     blocks: [
       { t: "h", text: "Vì sao không tin Content-Type" },
       { t: "p", html: "Trong <code>multipart/form-data</code>, Content-Type của từng phần là do phía gửi tự điền. Trình duyệt điền tử tế, nhưng người dùng curl thì điền gì cũng được." },
