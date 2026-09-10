@@ -42,6 +42,16 @@
     if (chp) chp.textContent = R.chapterScore(chp.dataset.ch);
   }
 
+  // Danh dau tung tu sai trong cau nguoi hoc vua viet, kem danh sach loi cu the.
+  function diffBlock(ex, id) {
+    var val = NB.get().answers[id] || "";
+    if (!val.trim()) return "";
+    var d = window.NBDiff.explain(ex.answers, val);
+    if (!d.notes.length) return "";
+    return '<div class="diff">' + d.html + "</div>" +
+      '<ul class="diff-notes"><li>' + d.notes.join("</li><li>") + "</li></ul>";
+  }
+
   function showFeedback(id, kind) {
     var ex = NB.findEx(id);
     var fb = document.getElementById("fb-" + id);
@@ -55,7 +65,8 @@
       fb.innerHTML = '<span class="fb-ok">✓ Chính xác!</span> ' + (readable ? say(ex.answers[0]) : "");
     } else if (kind === "close") {
       box.classList.add("close");
-      fb.innerHTML = '<span class="fb-warn">⚠ Gần đúng.</span> Từ ngữ đúng rồi, nhưng sai viết hoa hoặc dấu câu.' +
+      fb.innerHTML = '<span class="fb-warn">⚠ Gần đúng.</span> Từ ngữ đúng rồi, chỉ vướng mấy chỗ này:' +
+        diffBlock(ex, id) +
         '<div class="solution">Đáp án: ' + NB.esc(ex.answers[0]) + ". " +
         (readable ? say(ex.answers[0]) : "") + "</div>";
     } else if (kind === "reveal") {
@@ -76,7 +87,9 @@
         '<div class="solution-hint">Gợi ý: ' + NB.esc(ex.hint) + "</div>";
     } else {
       box.classList.add("wrong");
-      fb.innerHTML = '<span class="fb-bad">✗ Chưa đúng.</span> Thử lại nhé. Gợi ý: ' + NB.esc(ex.hint);
+      fb.innerHTML = '<span class="fb-bad">✗ Chưa đúng.</span> Soi lại mấy chỗ được đánh dấu:' +
+        diffBlock(ex, id) +
+        '<div class="solution-hint">Gợi ý: ' + NB.esc(ex.hint) + "</div>";
     }
   }
 

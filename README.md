@@ -47,7 +47,11 @@ sau mới đi vào code thật của dự án:
 - **Chấm điểm tự động**: gõ đáp án rồi bấm Kiểm tra (hoặc nhấn Enter)
   - ✓ Chính xác
   - ⚠ Gần đúng — đúng từ nhưng sai viết hoa hoặc dấu câu
-  - ✗ Chưa đúng — hiện gợi ý
+  - ✗ Chưa đúng — đánh dấu từng chỗ sai ngay trên câu bạn vừa viết
+- Bài tiếng Anh sai thì **so từng từ với đáp án** rồi tô màu ngay trên câu của bạn:
+  đỏ gạch ngang là từ thừa, đỏ gạch chân là từ sai, cam chấm chân là sai viết hoa,
+  dấu ▾ đỏ là chỗ thiếu từ. Bên dưới liệt kê rõ loại lỗi: *sai chính tả*, *sai số ít hay số nhiều*,
+  *thừa từ*, *thiếu một từ ở dấu ▾*. Không lộ từ đúng, muốn biết thì bấm Xem đáp án.
 - Bài viết truy vấn chấm theo **thành phần bắt buộc** chứ không so từng ký tự: viết hoa hay thường,
   xuống dòng kiểu nào, đặt bí danh gì cũng được. Sai thì nó chỉ đúng chỗ còn thiếu, ví dụ *Còn thiếu: HAVING*.
 - Nút **Gợi ý** và **Xem đáp án** cho từng câu
@@ -172,6 +176,7 @@ english-notebook/
 ├── notebook-content.css  khối code, bảng dữ liệu, ô cảnh báo cho phần SQL
 ├── notebook-state.js     lưu trữ localStorage, chấm điểm, đếm điểm theo chương và theo mục
 ├── notebook-speech.js    đọc mẫu tiếng Anh bằng Web Speech API
+├── notebook-diff.js      so từng từ với đáp án để chỉ ra sai ở đâu, sai kiểu gì
 ├── notebook-blocks.js    dựng khối nội dung SQL và ví dụ JOIN bấm được
 ├── notebook-render.js    dựng HTML cho mục lục, trang bài học, trang bài tập
 ├── notebook-app.js       đổi mục, lật trang, bắt sự kiện

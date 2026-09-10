@@ -139,6 +139,16 @@ table.vocab td.vi.hidden { color: transparent; background: var(--paper-line); bo
 .fb-bad { color: var(--bad); font-weight: bold; }
 .solution { margin-top: 5px; color: var(--ok); }
 
+/* Danh dau tung tu sai trong cau nguoi hoc viet */
+.diff { margin: 8px 0 6px; padding: 9px 12px; background: var(--sheet);
+  border: 1px solid var(--border); border-radius: 7px; line-height: 2; }
+.d-case { color: var(--warn); border-bottom: 2px dotted var(--warn); }
+.d-wrong { color: var(--bad); border-bottom: 2px solid var(--bad); }
+.d-extra { color: var(--bad); text-decoration: line-through; opacity: .75; }
+.d-gap { color: var(--bad); font-weight: bold; cursor: help; }
+ul.diff-notes { margin: 4px 0 0; padding-left: 20px; font-size: 14.5px; color: var(--ink-soft); }
+ul.diff-notes li { margin: 2px 0; }
+
 textarea.notes { width: 100%; min-height: 120px; font: inherit; font-size: 15px; padding: 11px;
   border: 1px solid var(--border); border-radius: 8px; background: var(--paper); color: var(--ink); resize: vertical; }
 .saved-hint { font-size: 13px; color: var(--ink-soft); margin-top: 5px; }
