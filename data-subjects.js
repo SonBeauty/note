@@ -38,12 +38,12 @@ window.SUBJECTS = [
     tocIntro: "Những đoạn code đáng nhớ trong dự án, kèm lý do vì sao nó được viết như vậy " +
       "và những chỗ nếu làm khác đi thì hỏng.",
     kind: "blocks",
-    chapters: chapterGroups(window.SECURITY_CHAPTERS, window.TRANSACTION_CHAPTERS)
+    chapters: chapterGroups(window.SECURITY_CHAPTERS, window.TRANSACTION_CHAPTERS, window.ALGO_CHAPTERS)
   }
 ];
 
 // Gop bai tap cua moi mon vao mot bang tra cuu chung theo id chuong.
 window.ALL_EXERCISES = Object.assign(
   {}, window.EXERCISES, window.SQL_BASICS_EXERCISES, window.SQL_EXERCISES,
-  window.MYSQL_EXERCISES, window.SECURITY_EXERCISES, window.TRANSACTION_EXERCISES
+  window.MYSQL_EXERCISES, window.SECURITY_EXERCISES, window.TRANSACTION_EXERCISES, window.ALGO_EXERCISES
 );
