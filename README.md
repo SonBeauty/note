@@ -16,7 +16,7 @@ công nghệ để nhìn là biết đang nói về hệ nào:
 |---|---|---|
 | Tiếng Anh | 5 chương: giới thiệu bản thân, kinh nghiệm, dự án, công việc hằng ngày, du lịch | 25 |
 | SQL | SQL căn bản + 3 chương PostgreSQL + 1 chương MySQL | 21 |
-| Lập trình | Kiểm tra file tải lên (NestJS) + Transaction (Prisma) + Thuật toán LCS | 18 |
+| Lập trình | Upload validation (NestJS), Transaction (Prisma), Thuật toán LCS, Object và prototype | 24 |
 
 Chương **SQL căn bản** đi trước, giải thích từng mệnh đề là gì và dùng làm gì, thứ tự chạy
 thật của một câu SELECT, WHERE khác HAVING chỗ nào, hàm gộp, subquery và index. Các chương
@@ -27,6 +27,7 @@ sau mới đi vào code thật của dự án:
 - **NestJS 10 + TypeScript** — `upload-validation.util.ts`, vì sao không tin Content-Type và cách đối chiếu chéo với magic bytes
 - **Prisma $transaction + PostgreSQL** — `orders.service.ts`, khóa dòng bằng FOR UPDATE để không bán vượt tồn, sắp xếp id để tránh deadlock
 - **Thuật toán LCS** — nền tảng của mọi công cụ diff, và cũng là thứ đang chấm bài tiếng Anh trong chính cuốn sổ này
+- **JavaScript** — Object.entries và prototype, nối nhau ở câu hỏi thuộc tính là của chính object hay đi mượn
 
 ## Lật sổ
 
@@ -41,10 +42,10 @@ sau mới đi vào code thật của dự án:
 
 - **5 chương theo chủ đề**: giới thiệu bản thân, kinh nghiệm & kỹ năng, nói về dự án, công việc hằng ngày, du lịch & sở thích
 - Mỗi chương gồm: câu mẫu (sai → đúng → cách nói tự nhiên), bảng quy tắc, từ vựng, bài tập, ô ghi chú
-- **64 bài tập**. Phần tiếng Anh là dịch câu, sửa câu sai và điền chỗ trống.
+- **70 bài tập**. Phần tiếng Anh là dịch câu, sửa câu sai và điền chỗ trống.
   Phần SQL là **21 bài viết truy vấn**: mỗi chương cho sẵn bảng dữ liệu mẫu kèm kết quả mong đợi,
   bạn tự viết câu lệnh vào ô nhiều dòng rồi bấm Kiểm tra (hoặc Ctrl+Enter).
-  Phần Lập trình là **18 bài viết code**, chấm theo cùng cơ chế.
+  Phần Lập trình là **24 bài viết code**, chấm theo cùng cơ chế.
 - **Chấm điểm tự động**: gõ đáp án rồi bấm Kiểm tra (hoặc nhấn Enter)
   - ✓ Chính xác
   - ⚠ Gần đúng — đúng từ nhưng sai viết hoa hoặc dấu câu
@@ -197,6 +198,8 @@ english-notebook/
 ├── data-transaction-exercises.js bài tập chương đó
 ├── data-algo-chapters.js         ghi chú thuật toán LCS
 ├── data-algo-exercises.js        bài tập chương đó
+├── data-js-chapters.js           ghi chú JavaScript, thêm chương mới thì nối vào mảng này
+├── data-js-exercises.js          bài tập chương JavaScript
 ├── data-subjects.js      khai báo ba mục chính
 ├── build-single-file.js  gộp tất cả thành 1 file cho điện thoại
 ├── serve-lan.js          mở sổ từ điện thoại qua WiFi
