@@ -42,6 +42,11 @@
     if (chp) chp.textContent = R.chapterScore(chp.dataset.ch);
   }
 
+  // Dap an nao da co dau cau o cuoi thi khong cong them dau cham nua.
+  function answerText(s) {
+    return NB.esc(s) + (/[.;!?]$/.test(String(s).trim()) ? " " : ". ");
+  }
+
   // Danh dau tung tu sai trong cau nguoi hoc vua viet, kem danh sach loi cu the.
   function diffBlock(ex, id) {
     var val = NB.get().answers[id] || "";
@@ -67,11 +72,11 @@
       box.classList.add("close");
       fb.innerHTML = '<span class="fb-warn">⚠ Gần đúng.</span> Từ ngữ đúng rồi, chỉ vướng mấy chỗ này:' +
         diffBlock(ex, id) +
-        '<div class="solution">Đáp án: ' + NB.esc(ex.answers[0]) + ". " +
+        '<div class="solution">Đáp án: ' + answerText(ex.answers[0]) +
         (readable ? say(ex.answers[0]) : "") + "</div>";
     } else if (kind === "reveal") {
       box.classList.add("close");
-      fb.innerHTML = '<span class="fb-warn">Đáp án:</span> ' + NB.esc(ex.answers[0]) + ". " +
+      fb.innerHTML = '<span class="fb-warn">Đáp án:</span> ' + answerText(ex.answers[0]) +
         (readable ? say(ex.answers[0]) : "") +
         (ex.answers.length > 1 ? '<div class="solution">Cách khác: ' + NB.esc(ex.answers[1]) + ".</div>" : "");
     } else if (kind === "hint") {

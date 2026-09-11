@@ -26,10 +26,12 @@ window.SUBJECTS = [
     title: "SQL",
     tagline: "PostgreSQL và MySQL, rút từ truy vấn thật trong dự án",
     tocIntro: "Bắt đầu bằng chương căn bản: từng mệnh đề là gì và chạy lúc nào. " +
-      "Sau đó tới PostgreSQL của b2b, cuối cùng là MySQL trên hệ ERP. " +
+      "Kế tiếp là bốn chương đào sâu mệnh đề, NULL, JOIN, UNION và index — dùng đúng bảng " +
+      "orders / partners của dự án. Sau đó tới PostgreSQL của b2b, cuối cùng là MySQL trên hệ ERP. " +
       "Bài tập đều là cho sẵn bảng dữ liệu rồi bạn tự viết truy vấn.",
     kind: "blocks",
-    chapters: chapterGroups(window.SQL_BASICS, window.SQL_CHAPTERS, window.MYSQL_CHAPTERS)
+    chapters: chapterGroups(window.SQL_BASICS, window.SQL_CLAUSES, window.SQL_JOIN_UNION, window.SQL_SUBQUERY, window.SQL_AGING,
+      window.SQL_CHAPTERS, window.MYSQL_CHAPTERS)
   },
   {
     id: "code",
@@ -38,13 +40,14 @@ window.SUBJECTS = [
     tocIntro: "Những đoạn code đáng nhớ trong dự án, kèm lý do vì sao nó được viết như vậy " +
       "và những chỗ nếu làm khác đi thì hỏng.",
     kind: "blocks",
-    chapters: chapterGroups(window.SECURITY_CHAPTERS, window.TRANSACTION_CHAPTERS,
+    chapters: chapterGroups(window.SECURITY_CHAPTERS, window.API_SECURITY_CHAPTERS, window.TRANSACTION_CHAPTERS,
       window.ALGO_CHAPTERS, window.JS_CHAPTERS)
   }
 ];
 
 // Gop bai tap cua moi mon vao mot bang tra cuu chung theo id chuong.
 window.ALL_EXERCISES = Object.assign(
-  {}, window.EXERCISES, window.SQL_BASICS_EXERCISES, window.SQL_EXERCISES,
-  window.MYSQL_EXERCISES, window.SECURITY_EXERCISES, window.TRANSACTION_EXERCISES, window.ALGO_EXERCISES, window.JS_EXERCISES
+  {}, window.EXERCISES, window.SQL_BASICS_EXERCISES,
+  window.SQL_CLAUSES_EXERCISES, window.SQL_JOIN_UNION_EXERCISES, window.SQL_SUBQUERY_EXERCISES, window.SQL_AGING_EXERCISES, window.SQL_EXERCISES,
+  window.MYSQL_EXERCISES, window.SECURITY_EXERCISES, window.API_SECURITY_EXERCISES, window.TRANSACTION_EXERCISES, window.ALGO_EXERCISES, window.JS_EXERCISES
 );

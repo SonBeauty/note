@@ -14,18 +14,30 @@ công nghệ để nhìn là biết đang nói về hệ nào:
 
 | Mục | Nội dung | Số bài tập |
 |---|---|---|
-| Tiếng Anh | 5 chương: giới thiệu bản thân, kinh nghiệm, dự án, công việc hằng ngày, du lịch | 25 |
-| SQL | SQL căn bản + 3 chương PostgreSQL + 1 chương MySQL | 21 |
-| Lập trình | Upload validation (NestJS), Transaction (Prisma), Thuật toán LCS, Object và prototype | 24 |
+| Tiếng Anh | 7 chương: giới thiệu bản thân, kinh nghiệm, dự án, công việc hằng ngày, du lịch, nhờ người nước ngoài luyện nói, đọc tên cột bảng tài chính | 41 |
+| SQL | SQL căn bản + 7 chương đào sâu (mệnh đề, NULL, JOIN, UNION, index, truy vấn con, tuổi nợ) + 3 chương PostgreSQL + 1 chương MySQL | 50 |
+| Lập trình | Upload validation, Tham số hóa truy vấn, Phân quyền theo token, Transaction (Prisma), Thuật toán LCS, Object và prototype | 36 |
 
 Chương **SQL căn bản** đi trước, giải thích từng mệnh đề là gì và dùng làm gì, thứ tự chạy
 thật của một câu SELECT, WHERE khác HAVING chỗ nào, hàm gộp, subquery và index. Các chương
-sau mới đi vào code thật của dự án:
+sau đào sâu từng chỗ hay sai, dùng đúng bảng `orders` / `partners` của dự án:
+
+- **Mệnh đề SQL: cái nào làm gì, chạy lúc nào** — thứ tự chạy 8 bước, vì sao `WHERE` không dùng được bí danh, `GROUP BY` gom cái gì thì `SELECT` được cái đó, bốn cách viết `ORDER BY`, `LIMIT`/`OFFSET`
+- **NULL và hàm gộp** — `COUNT(*)` khác `COUNT(cột)` khác `COUNT(DISTINCT)`, `SUM` tập rỗng ra NULL, `COALESCE`, bẫy `NOT IN`, gộp có điều kiện bằng `CASE WHEN` và `FILTER`
+- **JOIN: đặt điều kiện ở ON hay ở WHERE** — cái bẫy làm `LEFT JOIN` âm thầm thành `INNER JOIN`, anti-join tìm đại lý chưa đặt đơn, cột camelCase của Prisma phải bọc nháy kép
+- **UNION: nối kết quả theo chiều dọc** — `UNION` / `UNION ALL` / `INTERSECT` / `EXCEPT`, ba luật bắt buộc, khi nào đừng dùng UNION
+- **Truy vấn con** — subquery / derived table / CTE, mổ đúng câu công nợ 1C: vì sao phải bọc bảng tạm để đặt tên cho `sign_debt`
+- **Tuổi nợ (AR aging)** — nợ quá hạn bao lâu, vì sao một con số tổng là không đủ, chia mốc 1-30/31-60/61-90/>90 bằng gộp hai tầng
+- **Index và chuyện làm mất index** — vì sao `YEAR(createdAt) = 2026` quét cả bảng, sargable, index nhiều cột đi từ trái sang, `EXPLAIN ANALYZE`
+
+Các chương còn lại đi vào code thật của dự án:
 
 - **PostgreSQL + Prisma 6** — truy vấn thống kê size của `b2b.kamito.vn`, có ví dụ JOIN bấm được để so sánh INNER, LEFT, RIGHT
 - **MySQL** — truy vấn báo cáo công nợ trên hệ ERP kiểu 1C, kèm bảng đối chiếu cú pháp MySQL với PostgreSQL
 - **NestJS 10 + TypeScript** — `upload-validation.util.ts`, vì sao không tin Content-Type và cách đối chiếu chéo với magic bytes
 - **Prisma $transaction + PostgreSQL** — `orders.service.ts`, khóa dòng bằng FOR UPDATE để không bán vượt tồn, sắp xếp id để tránh deadlock
+- **Tham số hóa truy vấn** — vì sao nối chuỗi vào SQL là lỗ hổng, dấu `?` hoạt động thế nào, chỗ nào tham số hóa không cứu được (tên cột, ORDER BY)
+- **Đừng tin client** — lỗi IDOR, lấy `partnerId` từ token chứ không từ URL, ba tầng chặn Guard / Roles / lọc ở service
 - **Thuật toán LCS** — nền tảng của mọi công cụ diff, và cũng là thứ đang chấm bài tiếng Anh trong chính cuốn sổ này
 - **JavaScript** — Object.entries và prototype, nối nhau ở câu hỏi thuộc tính là của chính object hay đi mượn
 
@@ -40,12 +52,12 @@ sau mới đi vào code thật của dự án:
 
 ## Có gì trong sổ
 
-- **5 chương theo chủ đề**: giới thiệu bản thân, kinh nghiệm & kỹ năng, nói về dự án, công việc hằng ngày, du lịch & sở thích
+- **7 chương theo chủ đề**: giới thiệu bản thân, kinh nghiệm & kỹ năng, nói về dự án, công việc hằng ngày, du lịch & sở thích, nhờ người nước ngoài luyện tiếng Anh, đọc tên cột bảng tài chính
 - Mỗi chương gồm: câu mẫu (sai → đúng → cách nói tự nhiên), bảng quy tắc, từ vựng, bài tập, ô ghi chú
-- **70 bài tập**. Phần tiếng Anh là dịch câu, sửa câu sai và điền chỗ trống.
-  Phần SQL là **21 bài viết truy vấn**: mỗi chương cho sẵn bảng dữ liệu mẫu kèm kết quả mong đợi,
+- **127 bài tập**. Phần tiếng Anh là dịch câu, sửa câu sai và điền chỗ trống.
+  Phần SQL là **50 bài viết truy vấn**: mỗi chương cho sẵn bảng dữ liệu mẫu kèm kết quả mong đợi,
   bạn tự viết câu lệnh vào ô nhiều dòng rồi bấm Kiểm tra (hoặc Ctrl+Enter).
-  Phần Lập trình là **24 bài viết code**, chấm theo cùng cơ chế.
+  Phần Lập trình là **36 bài viết code**, chấm theo cùng cơ chế.
 - **Chấm điểm tự động**: gõ đáp án rồi bấm Kiểm tra (hoặc nhấn Enter)
   - ✓ Chính xác
   - ⚠ Gần đúng — đúng từ nhưng sai viết hoa hoặc dấu câu
@@ -56,6 +68,9 @@ sau mới đi vào code thật của dự án:
   *thừa từ*, *thiếu một từ ở dấu ▾*. Không lộ từ đúng, muốn biết thì bấm Xem đáp án.
 - Bài viết truy vấn chấm theo **thành phần bắt buộc** chứ không so từng ký tự: viết hoa hay thường,
   xuống dòng kiểu nào, đặt bí danh gì cũng được. Sai thì nó chỉ đúng chỗ còn thiếu, ví dụ *Còn thiếu: HAVING*.
+- Bài nào đáp án là truy vấn hoàn chỉnh thì **bắt buộc có `SELECT` và `FROM`**, nếu không thì viết
+  mỗi mấy mảnh rời như `GROUP BY Partner` vẫn được chấm đúng dù câu đó không chạy được.
+  Ngoài ra sổ còn soi **thứ tự mệnh đề**: đủ từ khóa mà đặt `GROUP BY` trước `FROM` thì vẫn báo sai.
 - Nút **Gợi ý** và **Xem đáp án** cho từng câu
 - Từ vựng có chế độ **học thẻ**: ẩn nghĩa tiếng Việt, bấm vào ô để lật
 

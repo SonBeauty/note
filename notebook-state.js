@@ -59,11 +59,32 @@ window.NB = (function () {
   var MUST_TYPES = { query: 1, code: 1 };
   function isMustType(ex) { return MUST_TYPES[ex.type] === 1; }
 
+  // Menh de SQL co thu tu co dinh. Du du tu khoa ma dat sai cho thi cau van sai.
+  var SQL_ORDER = [
+    /\bselect\b/, /\bfrom\b/, /\bjoin\b/, /\bwhere\b/,
+    /\bgroup\s+by\b/, /\bhaving\b/, /\border\s+by\b/, /\blimit\b/
+  ];
+  var ORDER_LABEL = "đúng thứ tự SELECT → FROM → JOIN → WHERE → GROUP BY → HAVING → ORDER BY → LIMIT";
+
+  function clauseOrderOk(s) {
+    var last = -1;
+    for (var i = 0; i < SQL_ORDER.length; i++) {
+      var at = s.search(SQL_ORDER[i]);
+      if (at < 0) continue;
+      if (at < last) return false;
+      last = at;
+    }
+    return true;
+  }
+
   function missingParts(ex, input) {
     var s = String(input).toLowerCase().replace(/[`]/g, "").replace(/\s+/g, " ").trim();
-    return (ex.must || []).filter(function (m) {
+    var miss = (ex.must || []).filter(function (m) {
       return !new RegExp(m.re, "i").test(s);
     }).map(function (m) { return m.label; });
+    // Chi soi thu tu khi da du tu khoa, de khong bao mot luc qua nhieu thu.
+    if (ex.type === "query" && miss.length === 0 && !clauseOrderOk(s)) miss.push(ORDER_LABEL);
+    return miss;
   }
 
   function grade(ex, input) {

@@ -18,10 +18,12 @@ window.MYSQL_EXERCISES = {
     },
     {
       id: "m1q2", type: "query",
-      prompt: "Tính tổng công nợ của từng đại lý, dùng cột sign_debt vừa tạo.",
+      prompt: "Viết truy vấn hoàn chỉnh tính tổng công nợ của từng đại lý trên bảng ar_entries, coi sign_debt là cột đã có sẵn.",
       want: "Kết quả mong đợi: An = 60, Bình = 60.",
       hint: "Gom nhóm theo Partner rồi cộng sign_debt.",
       must: [
+        { re: "select", label: "SELECT" },
+        { re: "from\\s+ar_entries", label: "FROM ar_entries" },
         { re: "sum\\s*\\(", label: "SUM(...)" },
         { re: "group\\s+by\\s+partner", label: "GROUP BY Partner" }
       ],
@@ -29,10 +31,12 @@ window.MYSQL_EXERCISES = {
     },
     {
       id: "m1q3", type: "query",
-      prompt: "Thêm một cột nữa chỉ cộng phần đã quá hạn, tính trong cùng một lần quét bảng.",
+      prompt: "Viết lại cả truy vấn, thêm một cột nữa chỉ cộng phần đã quá hạn, tính trong cùng một lần quét bảng.",
       want: "Cột thứ hai chỉ cộng những dòng có ngày hẹn trả nhỏ hơn hôm nay.",
       hint: "Đặt CASE WHEN vào bên trong SUM, nhánh không thỏa thì cộng 0.",
       must: [
+        { re: "select", label: "SELECT" },
+        { re: "from\\s+ar_entries", label: "FROM ar_entries" },
         { re: "sum\\s*\\(\\s*case\\s+when", label: "SUM(CASE WHEN ...)" },
         { re: "group\\s+by\\s+partner", label: "GROUP BY Partner" }
       ],

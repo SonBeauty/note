@@ -441,6 +441,76 @@ window.CHAPTERS = [
       { wrong: "delecious", right: "delicious", note: "Nhớ chữ i ở giữa. Phát âm: đi-LI-shợs." },
       { wrong: "is delicious like ramen", right: "is delicious, especially ramen", note: "Dùng especially để nêu ví dụ nổi bật, không dùng like." }
     ]
+  },
+  {
+    id: "ch6",
+    title: "Nhờ người nước ngoài luyện tiếng Anh",
+    subtitle: "Asking for a language partner",
+    intro: "Bạn gặp một người nước ngoài và muốn nhờ họ nói chuyện để luyện tiếng Anh. Ba việc phải làm đúng: bắt chuyện lịch sự, đề nghị đổi lại thứ gì đó, và xin họ sửa lỗi cho mình.",
+    samples: [
+      {
+        wrong: "Hello, can you teach English for me? I very want to speak English fluent.",
+        right: "Hi, sorry to bother you. Would you mind helping me practice my English? I really want to speak English fluently.",
+        native: "Hey, sorry to bother you — do you have a minute? I'm trying to practice my English, and I'd love to chat if you're up for it."
+      },
+      {
+        wrong: "I hope you can talk with me every week. I will teach you Vietnamese for exchange, do you agree?",
+        right: "I hope we can talk every week. I can teach you Vietnamese in exchange. Would that work for you?",
+        native: "Maybe we could do a language exchange — an hour of English, an hour of Vietnamese. Would that work for you?"
+      },
+      {
+        wrong: "Please correct me if I say wrong. Don't mind about my mistake, I am not good English.",
+        right: "Please correct me if I say something wrong. Don't worry about my mistakes — my English isn't good yet.",
+        native: "Feel free to jump in and correct me. I'd rather hear it than keep making the same mistake."
+      }
+    ],
+    rules: [
+      { wrong: "teach English for me", right: "teach me English", note: "teach + người + môn học, không có for. Với người lạ nên nói nhẹ hơn: help me practice English." },
+      { wrong: "Can you teach me?", right: "Would you mind helping me?", note: "Can you nghe như sai khiến. Với người mới quen dùng Could you hoặc Would you mind + V-ing." },
+      { wrong: "I very want", right: "I really want", note: "very không bao giờ đứng trước động từ. Bổ nghĩa cho động từ dùng really." },
+      { wrong: "speak English fluent", right: "speak English fluently", note: "fluent là tính từ, fluently là trạng từ. Sau động từ speak phải dùng trạng từ." },
+      { wrong: "for exchange", right: "in exchange", note: "Cụm cố định: in exchange, hoặc in exchange for something." },
+      { wrong: "if I say wrong", right: "if I say something wrong", note: "say là ngoại động từ, luôn cần tân ngữ đứng sau." },
+      { wrong: "Don't mind about my mistake", right: "Don't worry about my mistakes", note: "worry about mới là lo lắng về. mistake đếm được nên thêm -s." },
+      { wrong: "I am not good English", right: "My English isn't good yet", note: "Không nói I am not good + danh từ. Nói My English isn't good, hoặc I'm not good at English." },
+      { wrong: "Where are you come from?", right: "Where are you from?", note: "Một câu chỉ có một động từ chính. Hoặc Where do you come from, không dùng cả are lẫn come." },
+      { wrong: "Can you repeat again?", right: "Could you say that again?", note: "repeat đã có nghĩa lặp lại rồi, thêm again là thừa." }
+    ]
+  },
+  {
+    id: "ch7",
+    title: "Đọc tên cột bảng tài chính",
+    subtitle: "Reading finance table columns",
+    intro: "Tên cột trong bảng kế toán ERP viết tắt rất nhiều. Thuộc 5 quy ước đặt tên là đoán được gần hết bảng: hậu tố _Key, _Type, Local, Man và tiền tố Cor.",
+    samples: [
+      {
+        wrong: "This column is prepayment of man, I don't know what is it mean.",
+        right: "I'm not sure what this column means. Does PrepaymentMan stand for the prepayment amount in the management currency?",
+        native: "Quick question about PrepaymentMan — is that the prepayment amount in management currency? The naming isn't obvious to me."
+      },
+      {
+        wrong: "Debt is money customer must pay to we, DebtLocal is same but local money.",
+        right: "Debt is the amount the customer owes us in the document currency, and DebtLocal is the same amount converted into our local currency.",
+        native: "Debt holds the balance in the original document currency; DebtLocal is that same balance converted to our local currency."
+      },
+      {
+        wrong: "ReversingEntry mean the record is cancel, right? I want confirm with you.",
+        right: "Does ReversingEntry mean the row cancels an earlier entry? I'd like to confirm with you.",
+        native: "Just to confirm — a row flagged ReversingEntry reverses an earlier posting, right?"
+      }
+    ],
+    rules: [
+      { wrong: "PrepaymentMan = trả trước cho một người", right: "PrepaymentMan = prepayment in the management currency", note: "Man viết tắt của Management (kế toán quản trị), không phải man là người. Cùng bộ: Prepayment (nguyên tệ) → PrepaymentLocal (bản tệ) → PrepaymentMan (tiền tệ quản trị)." },
+      { wrong: "Local nghĩa là ở địa phương", right: "local currency = bản tệ, đồng tiền hạch toán của công ty", note: "Cột kết thúc bằng Local luôn là số tiền đã quy đổi sang bản tệ, ví dụ VND. Cột không có đuôi là nguyên tệ trên chứng từ." },
+      { wrong: "Cor... nghĩa là correct", right: "Cor = corresponding, nghĩa là đối ứng", note: "CorARAPObject_Key là đối tượng công nợ ĐỐI ỨNG. Trong kế toán, corresponding account = tài khoản đối ứng." },
+      { wrong: "_Key là chìa khóa", right: "_Key = foreign key, trỏ sang bảng danh mục khác", note: "Currency_Key không chứa chữ USD, nó chứa id của dòng bên bảng tiền tệ. Phải JOIN mới ra tên thật." },
+      { wrong: "Recorder = người ghi sổ", right: "recorder = chứng từ đã sinh ra dòng này", note: "Trong ERP, Recorder là chứng từ ghi sổ chứ không phải người. Recorder_Type cho biết đó là loại chứng từ nào, vì mỗi loại nằm ở một bảng khác nhau." },
+      { wrong: "ARAP là một tên riêng", right: "AR + AP = Accounts Receivable + Accounts Payable", note: "AR = phải thu (khách nợ mình). AP = phải trả (mình nợ nhà cung cấp). Ghép lại thành công nợ nói chung." },
+      { wrong: "Debt nghĩa là nợ xấu", right: "debt = số dư công nợ còn lại", note: "Debt chỉ là số tiền còn nợ theo chứng từ, không mang nghĩa xấu. Nợ khó đòi tiếng Anh là bad debt hoặc doubtful debt." },
+      { wrong: "Active = đang hoạt động", right: "active = dòng này có được tính vào số dư hay không", note: "Active bằng false thì bản ghi vẫn nằm trong bảng nhưng bị bỏ qua khi cộng số dư. Luôn lọc WHERE Active = true." },
+      { wrong: "OccurrenceDate = ngày tạo bản ghi", right: "occurrence date = ngày nghiệp vụ thực sự phát sinh", note: "Khác PlannedRepaymentDate là ngày DỰ KIẾN thanh toán. Thời điểm ghi sổ nằm ở cột Period." },
+      { wrong: "ReversingEntry = xóa dòng cũ", right: "reversing entry = bút toán đảo", note: "Kế toán không xóa. Họ ghi thêm một dòng ngược dấu để hủy dòng cũ. Tiếng Việt gọi là bút toán đảo hoặc storno." }
+    ]
   }
 ];
 
@@ -497,6 +567,61 @@ window.VOCABULARY = {
     { en: "a trip", vi: "chuyến đi" },
     { en: "abroad", vi: "ở nước ngoài" },
     { en: "to explore", vi: "khám phá, đi lang thang tìm hiểu" }
+  ],
+  ch6: [
+    { en: "Sorry to bother you", vi: "Xin lỗi đã làm phiền (câu mở đầu an toàn nhất)" },
+    { en: "Would you mind...?", vi: "Bạn có phiền... không? (lịch sự, theo sau là V-ing)" },
+    { en: "to strike up a conversation", vi: "bắt chuyện" },
+    { en: "small talk", vi: "chuyện phiếm lúc mới làm quen" },
+    { en: "a native speaker", vi: "người bản xứ" },
+    { en: "a language exchange", vi: "trao đổi ngôn ngữ (mình dạy tiếng Việt, họ dạy tiếng Anh)" },
+    { en: "a language partner", vi: "bạn cùng luyện ngôn ngữ" },
+    { en: "to practice English", vi: "luyện tiếng Anh" },
+    { en: "in exchange", vi: "đổi lại" },
+    { en: "to correct someone", vi: "sửa lỗi cho ai đó" },
+    { en: "to be up for something", vi: "sẵn sàng, hào hứng làm gì đó" },
+    { en: "fluently", vi: "trôi chảy (trạng từ)" },
+    { en: "an accent", vi: "giọng, chất giọng vùng miền" },
+    { en: "to pick up a language", vi: "học được một ngôn ngữ một cách tự nhiên" },
+    { en: "to keep in touch", vi: "giữ liên lạc" },
+    { en: "Could you say that again?", vi: "Bạn nói lại được không?" }
+  ],
+  ch7: [
+    { en: "Period", vi: "kỳ / thời điểm dòng này được ghi sổ" },
+    { en: "Recorder", vi: "chứng từ đã sinh ra dòng này (không phải người ghi)" },
+    { en: "Recorder_Type", vi: "loại chứng từ ghi sổ — cho biết phải JOIN sang bảng nào" },
+    { en: "LineNumber", vi: "số thứ tự dòng trong chứng từ" },
+    { en: "Active", vi: "dòng này có được tính vào số dư không" },
+    { en: "RecordType", vi: "loại bút toán: ghi tăng (receipt) hay ghi giảm (expense)" },
+    { en: "AR — Accounts Receivable", vi: "công nợ phải thu (khách nợ mình)" },
+    { en: "AP — Accounts Payable", vi: "công nợ phải trả (mình nợ nhà cung cấp)" },
+    { en: "ARAPObject_Key", vi: "khóa của đối tượng công nợ: hợp đồng, đơn hàng, hóa đơn" },
+    { en: "ARAPDocument", vi: "chứng từ công nợ gốc" },
+    { en: "AccountingDimension", vi: "chiều phân tích kế toán (nhóm số liệu theo đối tác, hợp đồng...)" },
+    { en: "Currency_Key", vi: "khóa ngoại trỏ sang bảng tiền tệ" },
+    { en: "DocumentCurrency", vi: "đồng tiền ghi trên chứng từ (nguyên tệ)" },
+    { en: "local currency", vi: "bản tệ — đồng tiền hạch toán của công ty, ví dụ VND" },
+    { en: "management currency (Man)", vi: "tiền tệ dùng cho kế toán quản trị" },
+    { en: "Prepayment", vi: "tiền trả trước" },
+    { en: "Debt", vi: "số dư công nợ còn lại (không phải nợ xấu)" },
+    { en: "a bad debt", vi: "nợ khó đòi" },
+    { en: "PlannedRepaymentDate", vi: "ngày dự kiến thanh toán / tất toán công nợ" },
+    { en: "OccurrenceDate", vi: "ngày nghiệp vụ thực sự phát sinh" },
+    { en: "to settle a debt", vi: "tất toán, cấn trừ công nợ" },
+    { en: "SettlementProcedure", vi: "cách cấn trừ công nợ: theo đơn hàng hay theo hợp đồng" },
+    { en: "OperationProcedure", vi: "quy trình nghiệp vụ áp dụng cho dòng này" },
+    { en: "BusinessOperation", vi: "loại nghiệp vụ kinh doanh" },
+    { en: "BusinessTransactionSetting", vi: "thiết lập định khoản cho loại giao dịch đó" },
+    { en: "LinkedDocument", vi: "chứng từ liên kết" },
+    { en: "CashFlowItem", vi: "khoản mục dòng tiền (dùng để lên báo cáo lưu chuyển tiền tệ)" },
+    { en: "Cor — corresponding", vi: "đối ứng, ví dụ corresponding account = tài khoản đối ứng" },
+    { en: "FinRecordID", vi: "mã định danh của bản ghi tài chính" },
+    { en: "a reversing entry", vi: "bút toán đảo — ghi ngược dấu để hủy dòng cũ" },
+    { en: "to post an entry", vi: "ghi sổ một bút toán" },
+    { en: "a balance", vi: "số dư" },
+    { en: "to convert into", vi: "quy đổi sang (loại tiền khác)" },
+    { en: "to stand for", vi: "là viết tắt của" },
+    { en: "a foreign key", vi: "khóa ngoại" }
   ]
 };
 
@@ -597,6 +722,65 @@ window.EXERCISES = {
     { id: "c5e5", type: "translate", prompt: "Đồ ăn ở đó rất ngon, đặc biệt là ramen.",
       hint: "đồ ăn ở đó = the food there. đặc biệt là = especially.",
       answers: ["The food there is delicious, especially ramen"] }
+  ],
+  ch6: [
+    { id: "c6e1", type: "fix", prompt: "Can you teach English for me?",
+      hint: "teach + người + môn học. Bỏ for đi.",
+      answers: ["Can you teach me English", "Could you teach me English", "Would you teach me English"] },
+    { id: "c6e2", type: "fill", prompt: "Would you mind ___ me practice my English? (help)",
+      hint: "Sau mind luôn là V-ing.",
+      answers: ["helping"] },
+    { id: "c6e3", type: "fix", prompt: "I very want to speak English fluent",
+      hint: "Hai lỗi: very không đứng trước động từ, và fluent bổ nghĩa cho speak.",
+      answers: ["I really want to speak English fluently"] },
+    { id: "c6e4", type: "translate", prompt: "Tôi có thể dạy bạn tiếng Việt để đổi lại.",
+      hint: "teach + người + môn. đổi lại = in exchange.",
+      answers: ["I can teach you Vietnamese in exchange"] },
+    { id: "c6e5", type: "translate", prompt: "Làm ơn sửa cho tôi nếu tôi nói sai điều gì đó.",
+      hint: "sửa cho ai = correct me. say cần tân ngữ: say something wrong.",
+      answers: ["Please correct me if I say something wrong"] },
+    { id: "c6e6", type: "fix", prompt: "Don't mind about my mistake, I am not good English",
+      hint: "Lo lắng về = worry about. mistake đếm được. Và không nói good + danh từ.",
+      answers: ["Don't worry about my mistakes, my English isn't good yet",
+                "Don't worry about my mistakes, my English is not good yet",
+                "Don't worry about my mistakes, I'm not good at English"] },
+    { id: "c6e7", type: "fix", prompt: "Where are you come from?",
+      hint: "Một câu chỉ có một động từ chính.",
+      answers: ["Where are you from", "Where do you come from"] },
+    { id: "c6e8", type: "translate", prompt: "Xin lỗi đã làm phiền, bạn nói lại được không?",
+      hint: "Sorry to bother you. Nói lại = say that again, không dùng repeat again.",
+      answers: ["Sorry to bother you, could you say that again",
+                "Sorry to bother you, can you say that again"] }
+  ],
+  ch7: [
+    { id: "c7e1", type: "fill", prompt: "In these ERP tables, the suffix Man is short for ___ currency.",
+      hint: "Không phải man là người. Kế toán quản trị.",
+      answers: ["management"] },
+    { id: "c7e2", type: "fill", prompt: "AR stands for accounts ___. (tiền khách còn nợ mình)",
+      hint: "Bắt đầu bằng chữ r.",
+      answers: ["receivable"] },
+    { id: "c7e3", type: "fill", prompt: "AP stands for accounts ___. (tiền mình còn nợ nhà cung cấp)",
+      hint: "Bắt đầu bằng chữ p.",
+      answers: ["payable"] },
+    { id: "c7e4", type: "fix", prompt: "I don't know what is this column mean",
+      hint: "Câu hỏi gián tiếp thì trật tự là chủ ngữ trước động từ, và động từ phải chia.",
+      answers: ["I don't know what this column means"] },
+    { id: "c7e5", type: "fix", prompt: "Can you explain me what this field mean?",
+      hint: "explain cần to trước người nghe. Và chia động từ theo field.",
+      answers: ["Can you explain to me what this field means",
+                "Could you explain to me what this field means"] },
+    { id: "c7e6", type: "translate", prompt: "Cột này là số tiền trả trước đã quy đổi sang bản tệ.",
+      hint: "quy đổi sang = converted into. bản tệ = the local currency.",
+      answers: ["This column is the prepayment amount converted into the local currency",
+                "This column is the prepayment converted into the local currency"] },
+    { id: "c7e7", type: "translate", prompt: "Bút toán đảo dùng để hủy một bút toán trước đó.",
+      hint: "bút toán đảo = a reversing entry. hủy = to cancel.",
+      answers: ["A reversing entry is used to cancel an earlier entry",
+                "A reversing entry is used to cancel a previous entry"] },
+    { id: "c7e8", type: "translate", prompt: "Bạn xác nhận giúp mình cột này là đồng tiền của chứng từ nhé?",
+      hint: "Could you confirm that... đồng tiền của chứng từ = the document currency.",
+      answers: ["Could you confirm that this column is the document currency",
+                "Can you confirm that this column is the document currency"] }
   ]
 };
 
@@ -719,6 +903,7 @@ window.SQL_BASICS_EXERCISES = {
       want: "Kết quả mong đợi: An = 130, Bình = 50, Chi = 200.",
       hint: "Gom nhóm theo customer rồi cộng amount trong mỗi nhóm.",
       must: [
+        { re: "select", label: "SELECT" },
         { re: "sum\\s*\\(\\s*amount", label: "SUM(amount)" },
         { re: "from\\s+orders", label: "FROM orders" },
         { re: "group\\s+by\\s+customer", label: "GROUP BY customer" }
@@ -727,10 +912,12 @@ window.SQL_BASICS_EXERCISES = {
     },
     {
       id: "b1e4", type: "query",
-      prompt: "Vẫn tính tổng amount theo từng khách, nhưng chỉ giữ khách có tổng lớn hơn 100.",
+      prompt: "Viết lại cả truy vấn, chỉ giữ khách có tổng amount lớn hơn 100.",
       want: "Kết quả mong đợi: An = 130, Chi = 200.",
       hint: "Điều kiện dựa trên kết quả hàm gộp thì phải đặt sau khi đã gom nhóm.",
       must: [
+        { re: "select", label: "SELECT" },
+        { re: "from\\s+orders", label: "FROM orders" },
         { re: "sum\\s*\\(\\s*amount", label: "SUM(amount)" },
         { re: "group\\s+by\\s+customer", label: "GROUP BY customer" },
         { re: "having", label: "HAVING" }
@@ -743,6 +930,8 @@ window.SQL_BASICS_EXERCISES = {
       want: "Kết quả mong đợi: Chi = 200 rồi tới An = 130.",
       hint: "Sắp xếp giảm dần rồi cắt lấy 2 dòng đầu.",
       must: [
+        { re: "select", label: "SELECT" },
+        { re: "from\\s+orders", label: "FROM orders" },
         { re: "sum\\s*\\(\\s*amount", label: "SUM(amount)" },
         { re: "group\\s+by\\s+customer", label: "GROUP BY customer" },
         { re: "order\\s+by", label: "ORDER BY" },
@@ -751,6 +940,811 @@ window.SQL_BASICS_EXERCISES = {
       ],
       answers: ["SELECT customer, SUM(amount) AS tong FROM orders GROUP BY customer ORDER BY tong DESC LIMIT 2;"]
     }
+  ]
+};
+
+</script>
+<script>
+// Menh de SQL va NULL/ham gop. Du lieu mau lay theo schema that cua b2b.kamito.vn.
+window.SQL_CLAUSES = [
+  {
+    id: "sqlc1",
+    title: "Mệnh đề SQL: cái nào làm gì, chạy lúc nào",
+    subtitle: "GROUP BY, ORDER BY, HAVING, LIMIT và chuyện bí danh",
+    intro: "Đọc một truy vấn lạ mà biết ngay mệnh đề nào chạy trước thì hết bị bất ngờ. Chương này dùng đúng bảng của dự án: orders, partners.",
+    blocks: [
+      { t: "h", text: "Nhớ nhanh" },
+      { t: "table", head: ["Mệnh đề", "Trả lời câu hỏi", "Ví dụ trên orders"],
+        rows: [
+          ["<code>FROM</code>", "Lấy dữ liệu từ đâu", "<code>FROM orders</code>"],
+          ["<code>JOIN</code>", "Ghép thêm bảng nào", "<code>JOIN partners p ON p.id = o.\"partnerId\"</code>"],
+          ["<code>WHERE</code>", "Giữ lại những <b>dòng</b> nào", "<code>WHERE o.status = 'CONFIRMED'</code>"],
+          ["<code>GROUP BY</code>", "Gom dòng thành nhóm theo cái gì", "<code>GROUP BY o.\"partnerId\"</code>"],
+          ["<code>HAVING</code>", "Giữ lại những <b>nhóm</b> nào", "<code>HAVING SUM(o.total) &gt; 1000000</code>"],
+          ["<code>SELECT</code>", "Trả về cột nào", "<code>SELECT p.name, SUM(o.total)</code>"],
+          ["<code>ORDER BY</code>", "Sắp xếp theo gì", "<code>ORDER BY SUM(o.total) DESC</code>"],
+          ["<code>LIMIT</code>", "Lấy mấy dòng", "<code>LIMIT 10</code>"]
+        ] },
+
+      { t: "h", text: "Thứ tự viết khác thứ tự chạy" },
+      { t: "code", text: "Thu tu BAT BUOC phai viet:\nSELECT -> FROM -> JOIN -> WHERE -> GROUP BY -> HAVING -> ORDER BY -> LIMIT\n\nThu tu may THUC SU chay:\n1. FROM      lay bang goc\n2. JOIN      ghep bang, luc nay con du moi dong\n3. WHERE     vut bot DONG\n4. GROUP BY  gom dong con lai thanh NHOM\n5. HAVING    vut bot NHOM\n6. SELECT    tinh cot tra ve, BI DANH ra doi o buoc nay\n7. ORDER BY  sap xep\n8. LIMIT     cat lay N dong dau" },
+      { t: "p", html: "Bí danh (<code>AS tong</code>) chỉ ra đời ở <b>bước 6</b>. Mọi mệnh đề chạy trước bước 6 đều chưa biết nó là gì." },
+
+      { t: "h", text: "Vì sao WHERE không dùng được bí danh" },
+      { t: "code", text: "-- SAI: loi \"column tong does not exist\"\nSELECT \"partnerId\", SUM(total) AS tong\nFROM orders\nWHERE tong > 1000000          -- buoc 3, luc nay tong chua ton tai\nGROUP BY \"partnerId\";\n\n-- DUNG: loc nhom thi dung HAVING, va phai viet lai ca ham gop\nSELECT \"partnerId\", SUM(total) AS tong\nFROM orders\nGROUP BY \"partnerId\"\nHAVING SUM(total) > 1000000   -- buoc 5\nORDER BY tong DESC;           -- buoc 7, sau SELECT nen dung bi danh thoai mai" },
+      { t: "hint", html: "PostgreSQL theo đúng chuẩn: <code>HAVING</code> phải viết lại <code>SUM(total)</code>, không cho dùng <code>tong</code>. MySQL nới lỏng nên cho. Nhớ thứ tự chạy là tự suy ra được, khỏi học thuộc." },
+
+      { t: "h", text: "GROUP BY: gom theo cái gì thì SELECT được cái đó" },
+      { t: "p", html: "Sau khi gom, mỗi nhóm chỉ còn <b>một</b> dòng kết quả. Nên cột trong <code>SELECT</code> chỉ được phép là: cột đã có trong <code>GROUP BY</code>, hoặc một hàm gộp." },
+      { t: "code", text: "-- SAI: loi \"column orders.status must appear in the GROUP BY clause\"\nSELECT \"partnerId\", status, SUM(total)\nFROM orders GROUP BY \"partnerId\";\n-- Mot dai ly co nhieu don voi status khac nhau, may khong biet chon cai nao\n\n-- Cach 1: gom theo ca hai cot\nSELECT \"partnerId\", status, SUM(total) FROM orders GROUP BY \"partnerId\", status;\n\n-- Cach 2: bao may chon giup bang mot ham gop\nSELECT \"partnerId\", MAX(status), SUM(total) FROM orders GROUP BY \"partnerId\";" },
+
+      { t: "h", text: "ORDER BY: bốn cách viết đều hợp lệ" },
+      { t: "table", head: ["Viết", "Nghĩa"],
+        rows: [
+          ["<code>ORDER BY total DESC</code>", "Theo tên cột, giảm dần. Không ghi gì thì mặc định <code>ASC</code>"],
+          ["<code>ORDER BY tong DESC</code>", "Theo bí danh — được, vì chạy sau <code>SELECT</code>"],
+          ["<code>ORDER BY 2 DESC</code>", "Theo <b>vị trí cột</b> thứ 2 trong SELECT. Ngắn nhưng sửa SELECT là sai"],
+          ["<code>ORDER BY p.name, o.total DESC</code>", "Nhiều tiêu chí: bằng tên thì mới xét tới total"]
+        ] },
+      { t: "code", text: "-- NULL xep o dau?\nORDER BY \"partnerId\" ASC NULLS LAST    -- PostgreSQL: ASC mac dinh da la NULLS LAST\nORDER BY \"partnerId\" DESC NULLS LAST   -- DESC mac dinh NULLS FIRST, muon khac phai ghi ro" },
+      { t: "hint", html: "MySQL coi NULL là nhỏ nhất nên <code>ASC</code> đẩy NULL lên đầu — ngược với PostgreSQL. Chuyển truy vấn giữa hai hệ thì để ý chỗ này." },
+
+      { t: "h", text: "LIMIT và OFFSET" },
+      { t: "code", text: "ORDER BY o.\"createdAt\" DESC, o.id\nLIMIT 20 OFFSET 40;   -- bo 40 dong dau, lay 20 dong tiep = trang thu 3" },
+      { t: "hint", html: "<code>LIMIT</code> mà không có <code>ORDER BY</code> thì thứ tự <b>không được đảm bảo</b>: chạy hai lần có thể ra hai kết quả khác nhau. Phân trang luôn phải kèm <code>ORDER BY</code>, và thêm <code>, id</code> để chốt thứ tự khi có nhiều dòng trùng ngày." }
+    ],
+    dataset: [
+      { name: "orders", head: ["id", "partnerId", "total", "status", "createdAt"],
+        rows: [["O1", "P1", "1200000", "CONFIRMED", "2026-01-05"],
+               ["O2", "P1", "800000", "DRAFT", "2026-02-11"],
+               ["O3", "P2", "500000", "CONFIRMED", "2026-02-20"],
+               ["O4", "NULL", "300000", "CONFIRMED", "2026-03-02"]] },
+      { name: "partners", head: ["id", "name", "isActive"],
+        rows: [["P1", "Đại lý Hà Nội", "true"], ["P2", "Đại lý Đà Nẵng", "true"],
+               ["P3", "Đại lý Cần Thơ", "false"]] }
+    ]
+  },
+
+  {
+    id: "sqlc2",
+    title: "NULL và hàm gộp",
+    subtitle: "COUNT ba kiểu, SUM rỗng, gộp có điều kiện",
+    intro: "NULL nghĩa là KHÔNG BIẾT — không phải rỗng, cũng không phải 0. Hiểu sai chỗ này thì báo cáo ra sai số mà không ai phát hiện.",
+    blocks: [
+      { t: "h", text: "COUNT có ba kiểu, ra ba số khác nhau" },
+      { t: "table", head: ["Viết", "Đếm cái gì", "Trên bảng orders ở dưới"],
+        rows: [
+          ["<code>COUNT(*)</code>", "Số <b>dòng</b>, kể cả dòng toàn NULL", "<b>4</b>"],
+          ["<code>COUNT(\"partnerId\")</code>", "Số <b>giá trị khác NULL</b> của cột đó", "<b>3</b> — O4 có partnerId NULL"],
+          ["<code>COUNT(DISTINCT \"partnerId\")</code>", "Số giá trị khác nhau, vẫn bỏ NULL", "<b>2</b> — P1 và P2"]
+        ] },
+      { t: "hint", html: "Đây là lỗi hay gặp nhất khi làm báo cáo: <code>COUNT(cột)</code> âm thầm bỏ qua NULL nên ra số nhỏ hơn thực tế. Muốn đếm dòng thì luôn dùng <code>COUNT(*)</code>." },
+
+      { t: "h", text: "Mọi hàm gộp đều bỏ qua NULL" },
+      { t: "code", text: "-- Gia su bang co 5 dong, trong do 1 dong co total = NULL\nSUM(total)   -- cong 4 so, bo qua dong NULL\nAVG(total)   -- chia cho 4 chu khong phai 5 (mau so khong tinh dong NULL)\nMIN / MAX    -- cung bo qua NULL\nCOUNT(*)     -- NGOAI LE duy nhat, van dem du 5" },
+
+      { t: "h", text: "SUM của tập rỗng trả về NULL, không phải 0" },
+      { t: "code", text: "-- Khong co don nao status = 'CANCELLED'\nSELECT SUM(total) FROM orders WHERE status = 'CANCELLED';\n-- Ket qua: NULL  (KHONG phai 0)\n\n-- Ben TypeScript: total.toFixed(0) se no vi total la null\nSELECT COALESCE(SUM(total), 0) AS tong\nFROM orders WHERE status = 'CANCELLED';\n-- Ket qua: 0" },
+      { t: "p", html: "<code>COALESCE(a, b, c)</code> trả về giá trị <b>đầu tiên khác NULL</b>. Hàm gộp trả thẳng ra API thì gần như luôn phải bọc <code>COALESCE(..., 0)</code>, không thì phía web nhận <code>null</code> rồi vỡ." },
+
+      { t: "h", text: "NULL không bằng gì cả, kể cả chính nó" },
+      { t: "code", text: "WHERE \"partnerId\" = NULL         -- luon khong khop dong nao\nWHERE \"partnerId\" IS NULL        -- dung cach\nWHERE \"partnerId\" IS NOT NULL    -- nguoc lai\n\n-- Bay: NOT IN gap NULL thi tra ve rong\nWHERE \"partnerId\" NOT IN (SELECT id FROM partners WHERE \"groupId\" IS NULL);\n-- Neu danh sach ben trong co du MOT gia tri NULL, ca cau tra ve 0 dong.\n-- Dung NOT EXISTS thay cho NOT IN de tranh hoan toan." },
+      { t: "table", head: ["Phép tính", "Kết quả"],
+        rows: [
+          ["<code>100 + NULL</code>", "<code>NULL</code> — một NULL làm hỏng cả biểu thức"],
+          ["<code>'Đại lý ' || NULL</code>", "<code>NULL</code> trong PostgreSQL. Dùng <code>CONCAT()</code> thì NULL bị coi là chuỗi rỗng"],
+          ["<code>NULL = NULL</code>", "Không phải true, mà là <i>unknown</i> → dòng bị loại"],
+          ["<code>NULL IS NOT DISTINCT FROM NULL</code>", "<code>true</code> — cách so sánh coi hai NULL là bằng nhau"]
+        ] },
+
+      { t: "h", text: "Gộp có điều kiện: một lần quét, nhiều con số" },
+      { t: "p", html: "Cần cả \"tổng đã chốt\" lẫn \"tổng còn nháp\" trên <b>cùng một dòng</b> thì đừng chạy hai câu rồi ghép ở code. Đưa điều kiện vào trong hàm gộp." },
+      { t: "code", text: "-- Cach 1: CASE WHEN — chay o moi he CSDL\nSELECT \"partnerId\",\n       SUM(CASE WHEN status = 'CONFIRMED' THEN total ELSE 0 END) AS da_chot,\n       SUM(CASE WHEN status = 'DRAFT'     THEN total ELSE 0 END) AS con_nhap\nFROM orders\nGROUP BY \"partnerId\";\n\n-- Cach 2: FILTER — chi PostgreSQL, de doc hon\nSELECT \"partnerId\",\n       SUM(total)  FILTER (WHERE status = 'CONFIRMED') AS da_chot,\n       SUM(total)  FILTER (WHERE status = 'DRAFT')     AS con_nhap,\n       COUNT(*)    FILTER (WHERE status = 'DRAFT')     AS so_don_nhap\nFROM orders GROUP BY \"partnerId\";" },
+      { t: "hint", html: "Khác nhau nhỏ mà quan trọng: <code>CASE ... ELSE 0</code> ra <b>0</b> khi nhóm không có dòng nào khớp, còn <code>FILTER</code> ra <b>NULL</b>. Muốn chắc thì bọc <code>COALESCE</code>." },
+
+      { t: "h", text: "Bốn cái bẫy nên thuộc" },
+      { t: "table", head: ["Bẫy", "Hậu quả"],
+        rows: [
+          ["<code>COUNT(cột)</code> thay vì <code>COUNT(*)</code>", "Đếm thiếu đúng bằng số dòng NULL"],
+          ["Quên <code>COALESCE</code> quanh <code>SUM</code>", "API trả <code>null</code>, phía web vỡ"],
+          ["<code>= NULL</code>", "Lọc ra 0 dòng, tưởng là không có dữ liệu"],
+          ["<code>NOT IN</code> với danh sách có NULL", "Trả về rỗng mà không báo lỗi gì"]
+        ] }
+    ],
+    dataset: [
+      { name: "orders", head: ["id", "partnerId", "total", "status", "createdAt"],
+        rows: [["O1", "P1", "1200000", "CONFIRMED", "2026-01-05"],
+               ["O2", "P1", "800000", "DRAFT", "2026-02-11"],
+               ["O3", "P2", "500000", "CONFIRMED", "2026-02-20"],
+               ["O4", "NULL", "300000", "CONFIRMED", "2026-03-02"]] }
+    ]
+  }
+];
+
+</script>
+<script>
+// Bai tap cho sqlc1, sqlc2. Cham theo thanh phan bat buoc trong "must".
+window.SQL_CLAUSES_EXERCISES = {
+  sqlc1: [
+    {
+      id: "c1x1", type: "query",
+      prompt: "Lấy 10 đơn mới nhất, mới nhất lên đầu.",
+      want: "Kết quả mong đợi: O4, O3, O2, O1 (bảng mẫu chỉ có 4 dòng).",
+      hint: "Sắp xếp giảm dần theo createdAt rồi cắt bớt. Cột camelCase nhớ bọc nháy kép.",
+      must: [
+        { re: "select", label: "SELECT" },
+        { re: "from\\s+orders", label: "FROM orders" },
+        { re: "order\\s+by\\s+\"?createdat\"?", label: "ORDER BY \"createdAt\"" },
+        { re: "desc", label: "DESC" },
+        { re: "limit\\s+10", label: "LIMIT 10" }
+      ],
+      answers: ["SELECT * FROM orders ORDER BY \"createdAt\" DESC LIMIT 10;"]
+    },
+    {
+      id: "c1x2", type: "query",
+      prompt: "Tổng total theo từng đại lý, chỉ giữ đại lý có tổng lớn hơn 1000000, sắp xếp tổng giảm dần.",
+      want: "Kết quả mong đợi: P1 = 2000000.",
+      hint: "Lọc NHÓM thì không phải WHERE. Và ở PostgreSQL, HAVING phải viết lại cả hàm gộp chứ không dùng được bí danh.",
+      must: [
+        { re: "select", label: "SELECT" },
+        { re: "from\\s+orders", label: "FROM orders" },
+        { re: "sum\\s*\\(\\s*total", label: "SUM(total)" },
+        { re: "group\\s+by\\s+\"?partnerid\"?", label: "GROUP BY \"partnerId\"" },
+        { re: "having\\s+sum\\s*\\(\\s*total\\s*\\)\\s*>", label: "HAVING SUM(total) > ..." },
+        { re: "order\\s+by", label: "ORDER BY" },
+        { re: "desc", label: "DESC" }
+      ],
+      answers: ["SELECT \"partnerId\", SUM(total) AS tong FROM orders GROUP BY \"partnerId\" HAVING SUM(total) > 1000000 ORDER BY tong DESC;"]
+    },
+    {
+      id: "c1x3", type: "query",
+      prompt: "Câu này lỗi \"column tong does not exist\", viết lại cho chạy được: SELECT \"partnerId\", SUM(total) AS tong FROM orders WHERE tong > 500000 GROUP BY \"partnerId\";",
+      want: "Kết quả mong đợi: P1 = 2000000, P2 = 500000 nếu điều kiện là > 400000.",
+      hint: "Bí danh ra đời ở bước SELECT, mà WHERE chạy trước đó. Điều kiện dựa trên hàm gộp thì thuộc về mệnh đề nào?",
+      must: [
+        { re: "select", label: "SELECT" },
+        { re: "from\\s+orders", label: "FROM orders" },
+        { re: "group\\s+by", label: "GROUP BY" },
+        { re: "having", label: "HAVING (thay cho WHERE)" },
+        { re: "sum\\s*\\(\\s*total\\s*\\)\\s*>", label: "SUM(total) > ... viết lại trong HAVING" }
+      ],
+      answers: ["SELECT \"partnerId\", SUM(total) AS tong FROM orders GROUP BY \"partnerId\" HAVING SUM(total) > 500000;"]
+    },
+    {
+      id: "c1x4", type: "query",
+      prompt: "Đếm số đơn của từng cặp (đại lý, trạng thái).",
+      want: "Kết quả mong đợi: P1/CONFIRMED = 1, P1/DRAFT = 1, P2/CONFIRMED = 1, NULL/CONFIRMED = 1.",
+      hint: "Cột nào xuất hiện trong SELECT mà không nằm trong hàm gộp thì phải có mặt ở GROUP BY.",
+      must: [
+        { re: "select", label: "SELECT" },
+        { re: "from\\s+orders", label: "FROM orders" },
+        { re: "count\\s*\\(", label: "COUNT(...)" },
+        { re: "group\\s+by\\s+\"?partnerid\"?\\s*,\\s*status", label: "GROUP BY \"partnerId\", status" }
+      ],
+      answers: ["SELECT \"partnerId\", status, COUNT(*) FROM orders GROUP BY \"partnerId\", status;"]
+    },
+    {
+      id: "c1x5", type: "query",
+      prompt: "Phân trang danh sách đơn: mỗi trang 20 dòng, lấy trang thứ 3, mới nhất lên đầu, thứ tự phải ổn định giữa các lần chạy.",
+      want: "Kết quả mong đợi: bỏ 40 dòng đầu, lấy 20 dòng tiếp.",
+      hint: "OFFSET = (số trang - 1) × cỡ trang. Thứ tự ổn định thì cần thêm một cột chốt đằng sau createdAt.",
+      must: [
+        { re: "select", label: "SELECT" },
+        { re: "from\\s+orders", label: "FROM orders" },
+        { re: "order\\s+by\\s+\"?createdat\"?", label: "ORDER BY \"createdAt\"" },
+        { re: ",\\s*\"?(o\\.)?id\"?", label: "thêm , id để chốt thứ tự" },
+        { re: "limit\\s+20", label: "LIMIT 20" },
+        { re: "offset\\s+40", label: "OFFSET 40" }
+      ],
+      answers: ["SELECT * FROM orders ORDER BY \"createdAt\" DESC, id LIMIT 20 OFFSET 40;"]
+    }
+  ],
+
+  sqlc2: [
+    {
+      id: "c2x1", type: "query",
+      prompt: "Trên một dòng, trả về: tổng số đơn, số đơn có gắn đại lý, và số đại lý khác nhau đã đặt đơn.",
+      want: "Kết quả mong đợi: 4, 3, 2.",
+      hint: "Ba kiểu COUNT khác nhau. Cột có NULL thì COUNT(cột) bỏ qua nó.",
+      must: [
+        { re: "select", label: "SELECT" },
+        { re: "from\\s+orders", label: "FROM orders" },
+        { re: "count\\s*\\(\\s*\\*\\s*\\)", label: "COUNT(*)" },
+        { re: "count\\s*\\(\\s*\"?partnerid\"?\\s*\\)", label: "COUNT(\"partnerId\")" },
+        { re: "count\\s*\\(\\s*distinct", label: "COUNT(DISTINCT ...)" }
+      ],
+      answers: ["SELECT COUNT(*), COUNT(\"partnerId\"), COUNT(DISTINCT \"partnerId\") FROM orders;"]
+    },
+    {
+      id: "c2x2", type: "query",
+      prompt: "Tổng total của các đơn status = 'CANCELLED'. Bảng không có đơn nào như vậy, nhưng API phải nhận được số 0 chứ không phải null.",
+      want: "Kết quả mong đợi: 0.",
+      hint: "SUM của tập rỗng trả về NULL. Cần một hàm đổi NULL thành giá trị mặc định.",
+      must: [
+        { re: "select", label: "SELECT" },
+        { re: "from\\s+orders", label: "FROM orders" },
+        { re: "coalesce\\s*\\(", label: "COALESCE(...)" },
+        { re: "sum\\s*\\(\\s*total", label: "SUM(total)" },
+        { re: ",\\s*0\\s*\\)", label: ", 0)" },
+        { re: "where\\s+status", label: "WHERE status = 'CANCELLED'" }
+      ],
+      answers: ["SELECT COALESCE(SUM(total), 0) AS tong FROM orders WHERE status = 'CANCELLED';"]
+    },
+    {
+      id: "c2x3", type: "query",
+      prompt: "Liệt kê các đơn chưa gắn đại lý nào.",
+      want: "Kết quả mong đợi: O4.",
+      hint: "Không so sánh bằng với NULL được.",
+      must: [
+        { re: "select", label: "SELECT" },
+        { re: "from\\s+orders", label: "FROM orders" },
+        { re: "where\\s+\"?partnerid\"?\\s+is\\s+null", label: "WHERE \"partnerId\" IS NULL" }
+      ],
+      answers: ["SELECT * FROM orders WHERE \"partnerId\" IS NULL;"]
+    },
+    {
+      id: "c2x4", type: "query",
+      prompt: "Mỗi đại lý một dòng, gồm: tổng tiền các đơn CONFIRMED và tổng tiền các đơn DRAFT. Chỉ chạy MỘT câu, không UNION.",
+      want: "Kết quả mong đợi: P1 → 1200000 và 800000; P2 → 500000 và 0.",
+      hint: "Đưa điều kiện vào bên trong hàm gộp: CASE WHEN ... THEN total ELSE 0 END, hoặc FILTER (WHERE ...).",
+      must: [
+        { re: "select", label: "SELECT" },
+        { re: "from\\s+orders", label: "FROM orders" },
+        { re: "sum\\s*\\(", label: "SUM(...)" },
+        { re: "(case\\s+when|filter\\s*\\(\\s*where)", label: "CASE WHEN hoặc FILTER (WHERE ...)" },
+        { re: "confirmed", label: "điều kiện 'CONFIRMED'" },
+        { re: "draft", label: "điều kiện 'DRAFT'" },
+        { re: "group\\s+by\\s+\"?partnerid\"?", label: "GROUP BY \"partnerId\"" }
+      ],
+      answers: ["SELECT \"partnerId\", SUM(CASE WHEN status = 'CONFIRMED' THEN total ELSE 0 END) AS da_chot, SUM(CASE WHEN status = 'DRAFT' THEN total ELSE 0 END) AS con_nhap FROM orders GROUP BY \"partnerId\";"]
+    },
+    {
+      id: "c2x5", type: "query",
+      prompt: "Giá trị trung bình mỗi đơn, làm tròn 0 chữ số thập phân, và trả 0 nếu bảng rỗng.",
+      want: "Kết quả mong đợi: 700000.",
+      hint: "AVG cũng bỏ qua NULL và cũng trả NULL khi không có dòng nào. ROUND trong PostgreSQL cần kiểu numeric.",
+      must: [
+        { re: "select", label: "SELECT" },
+        { re: "from\\s+orders", label: "FROM orders" },
+        { re: "avg\\s*\\(\\s*total", label: "AVG(total)" },
+        { re: "coalesce\\s*\\(", label: "COALESCE(...)" },
+        { re: "round\\s*\\(", label: "ROUND(...)" }
+      ],
+      answers: ["SELECT COALESCE(ROUND(AVG(total)::numeric, 0), 0) AS trung_binh FROM orders;"]
+    }
+  ]
+};
+
+</script>
+<script>
+// JOIN (ON khac WHERE), UNION va index. Bang mau theo schema that cua b2b.kamito.vn.
+window.SQL_JOIN_UNION = [
+  {
+    id: "sqlc3",
+    title: "JOIN: đặt điều kiện ở ON hay ở WHERE",
+    subtitle: "Cái bẫy làm LEFT JOIN âm thầm thành INNER JOIN",
+    intro: "Cùng một điều kiện, đặt ở ON thì ra kết quả này, đặt ở WHERE thì ra kết quả khác. Đây là chỗ sai nhiều nhất khi làm báo cáo có đại lý chưa phát sinh đơn.",
+    blocks: [
+      { t: "h", text: "Bốn kiểu JOIN" },
+      { t: "table", head: ["Kiểu", "Giữ dòng nào"],
+        rows: [
+          ["<code>INNER JOIN</code>", "Chỉ dòng khớp được ở <b>cả hai</b> bảng"],
+          ["<code>LEFT JOIN</code>", "Giữ <b>hết</b> bảng trái; bên phải không khớp thì điền NULL"],
+          ["<code>RIGHT JOIN</code>", "Ngược lại — ít dùng, đổi chỗ hai bảng rồi LEFT JOIN cho dễ đọc"],
+          ["<code>FULL JOIN</code>", "Giữ hết cả hai bên, chỗ nào thiếu thì NULL"]
+        ] },
+      { t: "p", html: "<code>JOIN</code> viết trống không = <code>INNER JOIN</code>. Nhớ: <b>LEFT</b> nghĩa là bảng viết ở <code>FROM</code>." },
+
+      { t: "h", text: "Hai câu chỉ khác chỗ đặt điều kiện" },
+      { t: "code", text: "-- A: dieu kien nam trong ON\nSELECT p.name, o.id\nFROM partners p\nLEFT JOIN orders o ON o.\"partnerId\" = p.id AND o.status = 'CONFIRMED';\n\n-- B: dieu kien nam trong WHERE\nSELECT p.name, o.id\nFROM partners p\nLEFT JOIN orders o ON o.\"partnerId\" = p.id\nWHERE o.status = 'CONFIRMED';" },
+      { t: "table", head: ["", "A — điều kiện ở ON", "B — điều kiện ở WHERE"],
+        rows: [
+          ["Đại lý Hà Nội", "O1", "O1"],
+          ["Đại lý Đà Nẵng", "O3", "O3"],
+          ["Đại lý Cần Thơ", "<i>NULL</i> — vẫn có mặt", "<b>bị mất</b>"],
+          ["Số dòng", "<b>3</b>", "<b>2</b>"]
+        ] },
+      { t: "p", html: "Vì sao? Nhớ thứ tự chạy: <code>JOIN</code> (bước 2) xong mới tới <code>WHERE</code> (bước 3). Câu B ghép xong thì Cần Thơ có <code>o.status = NULL</code>; tới <code>WHERE</code>, phép so <code>NULL = 'CONFIRMED'</code> ra <i>unknown</i> nên dòng đó bị vứt. <code>LEFT JOIN</code> coi như thành <code>INNER JOIN</code>." },
+      { t: "hint", html: "Quy tắc gọn: điều kiện áp lên <b>bảng phải</b> của LEFT JOIN thì đặt trong <code>ON</code>. Điều kiện áp lên <b>bảng trái</b> thì đặt ở <code>WHERE</code>. Với <code>INNER JOIN</code> thì đặt đâu cũng như nhau." },
+
+      { t: "h", text: "Anti-join: tìm đại lý chưa đặt đơn nào" },
+      { t: "code", text: "-- Cach 1: LEFT JOIN roi giu dong khong khop\nSELECT p.id, p.name\nFROM partners p\nLEFT JOIN orders o ON o.\"partnerId\" = p.id\nWHERE o.id IS NULL;          -- day la truong hop DUY NHAT nen loc NULL o WHERE\n\n-- Cach 2: NOT EXISTS — thuong nhanh hon va khong so NULL\nSELECT p.id, p.name\nFROM partners p\nWHERE NOT EXISTS (\n  SELECT 1 FROM orders o WHERE o.\"partnerId\" = p.id\n);" },
+      { t: "p", html: "Đây chính là bộ lọc \"đại lý chưa đặt đơn\" trong dự án — lý do bảng <code>orders</code> có <code>@@index([userId])</code>." },
+
+      { t: "h", text: "Cột camelCase của Prisma phải bọc nháy kép" },
+      { t: "code", text: "SELECT partnerId  FROM orders;    -- loi: column \"partnerid\" does not exist\nSELECT \"partnerId\" FROM orders;   -- dung" },
+      { t: "hint", html: "PostgreSQL tự hạ mọi tên không bọc nháy về chữ thường. Prisma tạo cột tên <code>partnerId</code> có hoa, nên viết SQL thô (<code>$queryRaw</code>) là phải bọc <code>\"</code>. Nháy đơn <code>'</code> dành cho <b>giá trị</b>, nháy kép <code>\"</code> dành cho <b>tên cột</b>." }
+    ],
+    dataset: [
+      { name: "partners", head: ["id", "name", "isActive"],
+        rows: [["P1", "Đại lý Hà Nội", "true"], ["P2", "Đại lý Đà Nẵng", "true"],
+               ["P3", "Đại lý Cần Thơ", "false"]] },
+      { name: "orders", head: ["id", "partnerId", "total", "status", "createdAt"],
+        rows: [["O1", "P1", "1200000", "CONFIRMED", "2026-01-05"],
+               ["O2", "P1", "800000", "DRAFT", "2026-02-11"],
+               ["O3", "P2", "500000", "CONFIRMED", "2026-02-20"],
+               ["O4", "NULL", "300000", "CONFIRMED", "2026-03-02"]] }
+    ]
+  },
+
+  {
+    id: "sqlc4",
+    title: "UNION: nối kết quả theo chiều dọc",
+    subtitle: "UNION, UNION ALL, INTERSECT, EXCEPT",
+    intro: "JOIN nối theo chiều NGANG — thêm cột. UNION nối theo chiều DỌC — thêm dòng. Nhầm hai cái này là chọn sai công cụ ngay từ đầu.",
+    blocks: [
+      { t: "h", text: "Ngang và dọc" },
+      { t: "code", text: "JOIN:   bang A |  bang B      ->  mot dong dai hon (nhieu cot hon)\nUNION:  bang A\n        -----\n        bang B                ->  nhieu dong hon (van bay nhieu cot)" },
+
+      { t: "h", text: "Ví dụ: gom đơn của hai nguồn vào một danh sách" },
+      { t: "code", text: "SELECT id, total, 'b2b' AS nguon FROM orders\nUNION ALL\nSELECT id, amount, '1c'  AS nguon FROM one_c_sales_orders\nORDER BY total DESC\nLIMIT 20;" },
+      { t: "p", html: "Cột thứ nhất ghép với cột thứ nhất, thứ hai với thứ hai — ghép <b>theo vị trí</b>, không theo tên. Tên cột kết quả lấy theo câu đầu tiên." },
+
+      { t: "h", text: "Bốn phép, khác nhau ở chỗ xử lý dòng trùng" },
+      { t: "table", head: ["Phép", "Trả về", "Ghi chú"],
+        rows: [
+          ["<code>UNION ALL</code>", "Toàn bộ dòng của A rồi tới B", "<b>Nhanh nhất</b> — không phải đi khử trùng"],
+          ["<code>UNION</code>", "Như trên nhưng <b>bỏ dòng trùng</b>", "Phải sắp xếp lại toàn bộ để dò trùng nên chậm hơn"],
+          ["<code>INTERSECT</code>", "Chỉ dòng có ở <b>cả hai</b>", "Giống phần giao"],
+          ["<code>EXCEPT</code>", "Dòng có ở A mà không có ở B", "MySQL/Oracle gọi là <code>MINUS</code>"]
+        ] },
+      { t: "hint", html: "Mặc định nên dùng <code>UNION ALL</code>. Chỉ dùng <code>UNION</code> khi thật sự cần khử trùng lặp — nó âm thầm tốn công sắp xếp cả tập kết quả." },
+
+      { t: "h", text: "Ba luật bắt buộc" },
+      { t: "table", head: ["Luật", "Sai thì bị gì"],
+        rows: [
+          ["Số cột hai bên phải <b>bằng nhau</b>", "<code>each UNION query must have the same number of columns</code>"],
+          ["Kiểu dữ liệu từng cột phải tương thích", "<code>UNION types text and integer cannot be matched</code>"],
+          ["<code>ORDER BY</code> chỉ được đặt <b>một lần ở cuối</b>", "Đặt giữa chừng là lỗi cú pháp"]
+        ] },
+      { t: "code", text: "-- Muon sap xep rieng tung phan thi phai boc ngoac\n( SELECT id, total FROM orders WHERE status = 'CONFIRMED' ORDER BY total DESC LIMIT 5 )\nUNION ALL\n( SELECT id, total FROM orders WHERE status = 'DRAFT'     ORDER BY total DESC LIMIT 5 );" },
+
+      { t: "h", text: "Khi nào UNION, khi nào không" },
+      { t: "table", head: ["Tình huống", "Dùng gì"],
+        rows: [
+          ["Hai bảng khác nhau, cùng ý nghĩa dòng (đơn b2b + đơn 1C)", "<code>UNION ALL</code>"],
+          ["Cùng một bảng, chỉ khác điều kiện lọc", "<b>Không</b> UNION — dùng <code>WHERE ... IN (...)</code>"],
+          ["Cần hai con số theo hai điều kiện trên cùng một dòng", "<b>Không</b> UNION — dùng gộp có điều kiện (chương NULL và hàm gộp)"],
+          ["Cần thêm cột từ bảng liên quan", "<code>JOIN</code>, không phải UNION"]
+        ] }
+    ],
+    dataset: [
+      { name: "orders", head: ["id", "partnerId", "total", "status"],
+        rows: [["O1", "P1", "1200000", "CONFIRMED"], ["O2", "P1", "800000", "DRAFT"],
+               ["O3", "P2", "500000", "CONFIRMED"], ["O4", "NULL", "300000", "CONFIRMED"]] }
+    ]
+  },
+
+  {
+    id: "sqlc5",
+    title: "Index và chuyện làm mất index",
+    subtitle: "Vì sao YEAR(created_at) = 2026 lại chậm",
+    intro: "Index là mục lục của bảng. Nhưng mục lục chỉ tra được khi điều kiện áp lên ĐÚNG cái cột đã đánh mục lục, chưa bị bóp méo đi.",
+    blocks: [
+      { t: "h", text: "Index hoạt động thế nào" },
+      { t: "p", html: "Index B-tree giữ sẵn <b>giá trị của cột đã sắp xếp</b>, kèm con trỏ tới dòng. Tra nó giống tra từ điển: nhảy vài bước là tới nơi, thay vì đọc cả triệu dòng (gọi là <i>seq scan</i> — quét tuần tự)." },
+      { t: "p", html: "Mấu chốt: index lưu giá trị <b>gốc</b> của cột, ví dụ <code>2026-01-05</code>. Nó không lưu <code>YEAR(created_at)</code>." },
+
+      { t: "h", text: "Bọc cột trong hàm là index thành vô dụng" },
+      { t: "code", text: "-- CHAM: phai lay tung dong ra, chay YEAR() roi moi so sanh -> quet ca bang\nWHERE YEAR(\"createdAt\") = 2026\n\n-- NHANH: cot dung mot minh, may doi nguoc lai thanh mot khoang tren index\nWHERE \"createdAt\" >= '2026-01-01'\n  AND \"createdAt\" <  '2027-01-01'" },
+      { t: "p", html: "Điều kiện dùng được index gọi là <b>sargable</b>. Quy tắc một câu: <i>đừng đụng vào cột, hãy biến đổi phía giá trị đem so sánh</i>." },
+
+      { t: "h", text: "Những cách làm mất index hay gặp" },
+      { t: "table", head: ["Viết như này thì mất index", "Viết lại"],
+        rows: [
+          ["<code>WHERE LOWER(name) = 'abc'</code>", "Tạo index trên biểu thức, hoặc dùng <code>ILIKE</code>"],
+          ["<code>WHERE name LIKE '%kamito'</code>", "<code>LIKE 'kamito%'</code> dùng được; bắt đầu bằng <code>%</code> thì không"],
+          ["<code>WHERE id::text = '123'</code>", "<code>WHERE id = 123</code> — ép kiểu phía giá trị"],
+          ["<code>WHERE total + 0 &gt; 100</code>", "<code>WHERE total &gt; 100</code>"],
+          ["<code>WHERE a = 1 OR b = 2</code>", "Hai index rời khó dùng chung; cân nhắc <code>UNION ALL</code> hai câu"]
+        ] },
+
+      { t: "h", text: "Index nhiều cột: đi từ trái sang" },
+      { t: "code", text: "-- Trong schema du an\n@@index([partnerId, createdAt])\n\nWHERE \"partnerId\" = 'P1'                            -- dung duoc (cot trai)\nWHERE \"partnerId\" = 'P1' AND \"createdAt\" > '...'    -- dung duoc ca hai\nWHERE \"createdAt\" > '...'                           -- KHONG dung duoc, thieu cot trai" },
+      { t: "hint", html: "Giống danh bạ sắp theo (họ, tên): biết họ thì tra nhanh, chỉ biết tên thì vẫn phải lật từng trang. Thứ tự cột trong index là một quyết định thiết kế, không phải viết bừa." },
+
+      { t: "h", text: "Muốn biết thật sự nhanh chậm thì hỏi máy" },
+      { t: "code", text: "EXPLAIN ANALYZE\nSELECT ... ;\n\n-- Doc dong dau:\n-- Index Scan using orders_partnerId_createdAt_idx   -> dung index, tot\n-- Seq Scan on orders                                -> quet ca bang" },
+      { t: "hint", html: "Index không miễn phí: mỗi <code>INSERT</code>/<code>UPDATE</code> đều phải cập nhật index, và nó chiếm ổ đĩa. Đánh index cho cột hay lọc, hay join, hay sắp xếp — chứ không đánh cho tất cả." }
+    ],
+    dataset: [
+      { name: "orders", head: ["id", "partnerId", "total", "status", "createdAt"],
+        rows: [["O1", "P1", "1200000", "CONFIRMED", "2026-01-05"],
+               ["O2", "P1", "800000", "DRAFT", "2026-02-11"],
+               ["O3", "P2", "500000", "CONFIRMED", "2026-02-20"],
+               ["O4", "NULL", "300000", "CONFIRMED", "2026-03-02"]] }
+    ]
+  }
+];
+
+</script>
+<script>
+// Bai tap cho sqlc3 (JOIN), sqlc4 (UNION), sqlc5 (index).
+window.SQL_JOIN_UNION_EXERCISES = {
+  sqlc3: [
+    {
+      id: "c3x1", type: "query",
+      prompt: "Liệt kê tên mọi đại lý kèm id đơn CONFIRMED của họ. Đại lý chưa có đơn CONFIRMED nào vẫn phải xuất hiện, cột đơn để trống.",
+      want: "Kết quả mong đợi: 3 dòng — Hà Nội/O1, Đà Nẵng/O3, Cần Thơ/NULL.",
+      hint: "Điều kiện lọc áp lên bảng PHẢI của LEFT JOIN. Đặt nó ở WHERE là mất dòng Cần Thơ.",
+      must: [
+        { re: "select", label: "SELECT" },
+        { re: "from\\s+partners", label: "FROM partners (bảng trái)" },
+        { re: "left\\s+join\\s+orders", label: "LEFT JOIN orders" },
+        { re: "on\\s+.*\"?partnerid\"?\\s*=", label: "ON o.\"partnerId\" = p.id" },
+        { re: "and\\s+.*status", label: "AND ... status = 'CONFIRMED' nằm TRONG ON" }
+      ],
+      answers: ["SELECT p.name, o.id FROM partners p LEFT JOIN orders o ON o.\"partnerId\" = p.id AND o.status = 'CONFIRMED';"]
+    },
+    {
+      id: "c3x2", type: "query",
+      prompt: "Tìm những đại lý chưa đặt đơn nào, dùng LEFT JOIN.",
+      want: "Kết quả mong đợi: Đại lý Cần Thơ.",
+      hint: "Ghép xong thì dòng không khớp có phía bảng phải toàn NULL. Giữ lại đúng những dòng đó.",
+      must: [
+        { re: "select", label: "SELECT" },
+        { re: "from\\s+partners", label: "FROM partners" },
+        { re: "left\\s+join\\s+orders", label: "LEFT JOIN orders" },
+        { re: "where\\s+o?\\.?\"?id\"?\\s+is\\s+null", label: "WHERE o.id IS NULL" }
+      ],
+      answers: ["SELECT p.id, p.name FROM partners p LEFT JOIN orders o ON o.\"partnerId\" = p.id WHERE o.id IS NULL;"]
+    },
+    {
+      id: "c3x3", type: "query",
+      prompt: "Vẫn là đại lý chưa đặt đơn nào, nhưng viết theo cách thứ hai — không dùng JOIN.",
+      want: "Kết quả mong đợi: Đại lý Cần Thơ.",
+      hint: "Hỏi ngược: với mỗi đại lý, có tồn tại đơn nào trỏ về nó không?",
+      must: [
+        { re: "not\\s+exists", label: "NOT EXISTS" },
+        { re: "select\\s+1\\s+from\\s+orders", label: "SELECT 1 FROM orders (truy vấn con)" },
+        { re: "\"?partnerid\"?\\s*=", label: "điều kiện nối o.\"partnerId\" = p.id" }
+      ],
+      answers: ["SELECT p.id, p.name FROM partners p WHERE NOT EXISTS (SELECT 1 FROM orders o WHERE o.\"partnerId\" = p.id);"]
+    },
+    {
+      id: "c3x4", type: "query",
+      prompt: "Doanh thu theo TÊN đại lý: tổng total các đơn CONFIRMED. Đại lý chưa có đơn phải hiện số 0, sắp xếp giảm dần.",
+      want: "Kết quả mong đợi: Hà Nội = 1200000, Đà Nẵng = 500000, Cần Thơ = 0.",
+      hint: "Ba thứ ghép lại: LEFT JOIN với điều kiện status nằm trong ON, COALESCE để NULL thành 0, GROUP BY theo tên.",
+      must: [
+        { re: "select", label: "SELECT" },
+        { re: "from\\s+partners", label: "FROM partners" },
+        { re: "left\\s+join\\s+orders", label: "LEFT JOIN orders" },
+        { re: "and\\s+.*status", label: "AND status = 'CONFIRMED' nằm trong ON" },
+        { re: "coalesce\\s*\\(\\s*sum", label: "COALESCE(SUM(...), 0)" },
+        { re: "group\\s+by\\s+p?\\.?name", label: "GROUP BY p.name" },
+        { re: "order\\s+by", label: "ORDER BY" }
+      ],
+      answers: ["SELECT p.name, COALESCE(SUM(o.total), 0) AS doanh_thu FROM partners p LEFT JOIN orders o ON o.\"partnerId\" = p.id AND o.status = 'CONFIRMED' GROUP BY p.name ORDER BY doanh_thu DESC;"]
+    }
+  ],
+
+  sqlc4: [
+    {
+      id: "c4x1", type: "query",
+      prompt: "Gộp đơn của hai hệ vào một danh sách: bảng orders (cột id, total) và bảng one_c_sales_orders (cột id, amount). Thêm một cột cho biết dòng đó đến từ hệ nào, giữ nguyên cả dòng trùng.",
+      want: "Kết quả mong đợi: mọi dòng của cả hai bảng, cột nguồn ghi 'b2b' hoặc '1c'.",
+      hint: "Giữ nguyên dòng trùng thì không dùng phép có khử trùng lặp. Cột hằng đặt bí danh như cột thường.",
+      must: [
+        { re: "select", label: "SELECT" },
+        { re: "union\\s+all", label: "UNION ALL" },
+        { re: "from\\s+orders", label: "FROM orders" },
+        { re: "from\\s+one_c_sales_orders", label: "FROM one_c_sales_orders" },
+        { re: "'b2b'", label: "'b2b' AS nguon" },
+        { re: "'1c'", label: "'1c' AS nguon" }
+      ],
+      answers: ["SELECT id, total, 'b2b' AS nguon FROM orders UNION ALL SELECT id, amount, '1c' AS nguon FROM one_c_sales_orders;"]
+    },
+    {
+      id: "c4x2", type: "query",
+      prompt: "Lấy danh sách partnerId xuất hiện ở CẢ hai bảng orders và one_c_sales_orders.",
+      want: "Kết quả mong đợi: phần giao của hai danh sách.",
+      hint: "Có một phép chuyên làm việc này, không cần JOIN.",
+      must: [
+        { re: "select", label: "SELECT" },
+        { re: "intersect", label: "INTERSECT" },
+        { re: "from\\s+orders", label: "FROM orders" },
+        { re: "from\\s+one_c_sales_orders", label: "FROM one_c_sales_orders" }
+      ],
+      answers: ["SELECT \"partnerId\" FROM orders INTERSECT SELECT \"partnerId\" FROM one_c_sales_orders;"]
+    },
+    {
+      id: "c4x3", type: "query",
+      prompt: "Lấy partnerId có đơn trên b2b nhưng CHƯA có đơn nào bên 1C.",
+      want: "Kết quả mong đợi: phần của bảng orders trừ đi phần của one_c_sales_orders.",
+      hint: "Phép hiệu của hai tập. MySQL không có phép này, nó gọi tên khác.",
+      must: [
+        { re: "select", label: "SELECT" },
+        { re: "except", label: "EXCEPT" },
+        { re: "from\\s+orders", label: "FROM orders" },
+        { re: "from\\s+one_c_sales_orders", label: "FROM one_c_sales_orders" }
+      ],
+      answers: ["SELECT \"partnerId\" FROM orders EXCEPT SELECT \"partnerId\" FROM one_c_sales_orders;"]
+    }
+  ],
+
+  sqlc5: [
+    {
+      id: "c5x1", type: "query",
+      prompt: "Cột \"createdAt\" đã có index nhưng câu WHERE EXTRACT(YEAR FROM \"createdAt\") = 2026 vẫn quét cả bảng. Viết lại điều kiện cho dùng được index.",
+      want: "Kết quả mong đợi: mọi đơn trong năm 2026.",
+      hint: "Đừng đụng vào cột. Đổi một điểm so sánh thành một khoảng, chặn dưới lấy bằng, chặn trên lấy nhỏ hơn thật sự.",
+      must: [
+        { re: "select", label: "SELECT" },
+        { re: "from\\s+orders", label: "FROM orders" },
+        { re: "\"?createdat\"?\\s*>=", label: "\"createdAt\" >= '2026-01-01'" },
+        { re: "\"?createdat\"?\\s*<", label: "\"createdAt\" < '2027-01-01'" },
+        { re: "2026-01-01", label: "'2026-01-01'" },
+        { re: "2027-01-01", label: "'2027-01-01'" }
+      ],
+      answers: ["SELECT * FROM orders WHERE \"createdAt\" >= '2026-01-01' AND \"createdAt\" < '2027-01-01';"]
+    },
+    {
+      id: "c5x2", type: "query",
+      prompt: "Câu WHERE total::text LIKE '12%' đang làm mất index trên total. Viết lại điều kiện \"tổng đơn từ 1200000 trở lên\" cho đúng cách.",
+      want: "Kết quả mong đợi: O1.",
+      hint: "Ép kiểu ở phía cột là hỏng. So sánh số với số.",
+      must: [
+        { re: "select", label: "SELECT" },
+        { re: "from\\s+orders", label: "FROM orders" },
+        { re: "where\\s+total\\s*>=", label: "WHERE total >= ..." },
+        { re: "1200000", label: "1200000" }
+      ],
+      answers: ["SELECT * FROM orders WHERE total >= 1200000;"]
+    },
+    {
+      id: "c5x3", type: "query",
+      prompt: "Viết câu lệnh để xem kế hoạch thực thi kèm thời gian chạy thật của một truy vấn đếm đơn theo đại lý.",
+      want: "Kết quả mong đợi: dòng đầu cho biết Index Scan hay Seq Scan.",
+      hint: "Hai từ khóa đứng trước truy vấn. Chỉ một từ thì mới là ước lượng, chưa chạy thật.",
+      must: [
+        { re: "select", label: "SELECT" },
+        { re: "from\\s+orders", label: "FROM orders" },
+        { re: "explain", label: "EXPLAIN" },
+        { re: "analyze", label: "ANALYZE" },
+        { re: "select", label: "truy vấn đặt ngay sau" }
+      ],
+      answers: ["EXPLAIN ANALYZE SELECT \"partnerId\", COUNT(*) FROM orders GROUP BY \"partnerId\";"]
+    }
+  ]
+};
+
+</script>
+<script>
+// Truy van con. Vi du lay tu chinh cau cong no 1C.
+window.SQL_SUBQUERY = [
+  {
+    id: "sqlc6",
+    title: "Truy vấn con: subquery, derived table, CTE",
+    subtitle: "Ba tên gọi của cùng một ý tưởng",
+    intro: "Cùng một ý: lấy kết quả của truy vấn này làm đầu vào cho truy vấn kia. Khác nhau chỉ ở chỗ đặt nó ở đâu. Chương này mổ đúng câu công nợ 1C.",
+    blocks: [
+      { t: "h", text: "Ba chỗ đặt, ba tên gọi" },
+      { t: "table", head: ["Tên", "Đặt ở đâu", "Trả về", "Bắt buộc"],
+        rows: [
+          ["Subquery", "Trong <code>SELECT</code> / <code>WHERE</code>", "Một giá trị, hoặc một danh sách", "—"],
+          ["<b>Derived table</b>", "Trong <code>FROM</code>", "Một <b>bảng tạm</b>", "<b>Phải có bí danh</b>"],
+          ["CTE", "Trong <code>WITH</code> đặt trước <code>SELECT</code>", "Một bảng tạm có tên", "MySQL 8+ mới có"]
+        ] },
+
+      { t: "h", text: "Derived table là cái gì" },
+      { t: "p", html: "Là một câu <code>SELECT</code> đặt trong ngoặc, nằm ở vị trí của một cái bảng. Máy chạy nó trước, ra một <b>bảng tạm trong bộ nhớ</b>, rồi câu ngoài dùng bảng tạm đó y như một bảng thật." },
+      { t: "code", text: "SELECT ... FROM ( SELECT ... ) x\n                ^^^^^^^^^^^^^^^^ ^\n                bang tam         bi danh — thieu la loi cu phap" },
+      { t: "hint", html: "Trong câu công nợ 1C, chữ <code>x</code> đứng ngay sau dấu ngoặc đóng chính là bí danh đó. <code>JOIN ... ON d.Ref_Key = x.AccountingDimension...</code> — <code>x</code> được dùng như tên bảng." },
+
+      { t: "h", text: "Vì sao câu công nợ phải bọc derived table" },
+      { t: "code", text: "-- Bang tam x: loc dong hop le + doi dau mot lan\nSELECT\n  CASE WHEN RecordType = 'Receipt' THEN Debt ELSE -Debt END AS sign_debt,\n  PlannedRepaymentDate,\n  AccountingDimensionByPartners_Key\nFROM CustomersARAPAccountingByDueDates_RecordType\nWHERE IFNULL(ReversingEntry, 0) = 0\n  AND IFNULL(Active, 0) = 1" },
+      { t: "p", html: "Lý do là <b>đặt tên cho một biểu thức để dùng lại</b>. Cột <code>sign_debt</code> bị dùng <b>hai lần</b> ở câu ngoài: một lần trong <code>SUM(x.sign_debt)</code>, một lần trong <code>SUM(CASE WHEN ... THEN x.sign_debt ...)</code>." },
+      { t: "code", text: "-- Neu KHONG boc derived table, phai chep nguyen cuc CASE hai lan:\nSUM(CASE WHEN RecordType = 'Receipt' THEN Debt ELSE -Debt END)\nSUM(CASE WHEN LEFT(PlannedRepaymentDate,10) < ...\n         THEN CASE WHEN RecordType = 'Receipt' THEN Debt ELSE -Debt END\n         ELSE 0 END)\n-- CASE long CASE, sua mot cho quen sua cho kia -> sai so am tham" },
+      { t: "hint", html: "Nhớ thứ tự chạy: bí danh <code>sign_debt</code> chỉ ra đời ở bước <code>SELECT</code>, nên <b>không</b> dùng lại được ngay trong cùng câu đó. Muốn dùng lại thì phải đẩy nó xuống một tầng — đó chính là derived table." },
+
+      { t: "h", text: "Ba lý do dùng derived table" },
+      { t: "table", head: ["Lý do", "Ví dụ"],
+        rows: [
+          ["Đặt tên biểu thức để dùng lại", "<code>sign_debt</code> ở câu công nợ"],
+          ["Gộp hai tầng: gộp xong rồi gộp tiếp", "Tổng theo đơn, rồi lấy trung bình các tổng đó"],
+          ["Lọc bớt sớm cho nhẹ phần sau", "Vứt dòng đảo bút toán trước khi JOIN 2 bảng"]
+        ] },
+
+      { t: "h", text: "CTE: cùng một thứ, dễ đọc hơn" },
+      { t: "code", text: "WITH x AS (\n  SELECT CASE WHEN RecordType = 'Receipt' THEN Debt ELSE -Debt END AS sign_debt,\n         PlannedRepaymentDate, AccountingDimensionByPartners_Key\n  FROM CustomersARAPAccountingByDueDates_RecordType\n  WHERE IFNULL(ReversingEntry, 0) = 0 AND IFNULL(Active, 0) = 1\n)\nSELECT ... FROM x JOIN ... ;" },
+      { t: "p", html: "Đọc từ trên xuống thay vì từ trong ngoặc ra. Khai báo được <b>nhiều</b> bảng tạm nối tiếp nhau, và bảng sau dùng được bảng trước — derived table không làm được." },
+
+      { t: "h", text: "Đặt điều kiện lọc ở tầng nào" },
+      { t: "p", html: "Lọc một đại lý cụ thể: điều kiện nằm trên bảng <code>Partners</code>, mà bảng đó chỉ được JOIN vào ở <b>câu ngoài</b>. Nên điều kiện phải đặt ở câu ngoài — bảng tạm <code>x</code> chưa biết gì về đại lý, nó chỉ có cột <code>AccountingDimensionByPartners_Key</code>." },
+      { t: "code", text: "-- Dung: loc o cau ngoai, sau khi da JOIN toi Partners\n...\nJOIN Partners p ON p.Ref_Key = d.Partner_Key\nWHERE p.Ref_Key = ?          -- hoac IN (?, ?, ?) cho nhieu dai ly\nGROUP BY p.Ref_Key, p.Code, p.Description" },
+      { t: "hint", html: "Quy tắc chung: lọc <b>càng sớm càng tốt</b> để tầng sau nhẹ đi — nhưng chỉ sớm được tới chỗ mà cột cần lọc đã tồn tại. Cột chưa có ở tầng đó thì đành lọc ở tầng ngoài." }
+    ],
+    dataset: [
+      { name: "x (bảng tạm sau khi chạy derived table)",
+        head: ["sign_debt", "PlannedRepaymentDate", "AccountingDimensionByPartners_Key"],
+        rows: [["5000000", "2026-08-01T00:00:00", "D1"],
+               ["-2000000", "2026-08-01T00:00:00", "D1"],
+               ["3000000", "2026-12-31T00:00:00", "D2"]] },
+      { name: "Partners", head: ["Ref_Key", "Code", "Description"],
+        rows: [["PK1", "DL001", "Đại lý Hà Nội"], ["PK2", "DL002", "Đại lý Đà Nẵng"]] }
+    ]
+  }
+];
+
+</script>
+<script>
+// Bai tap chuong truy van con.
+window.SQL_SUBQUERY_EXERCISES = {
+  sqlc6: [
+    {
+      id: "c6x1", type: "query",
+      prompt: "Viết derived table tên x: lấy từ bảng CustomersARAPAccountingByDueDates_RecordType, đổi dấu Debt (RecordType = 'Receipt' thì dương, còn lại âm) thành cột sign_debt, chỉ giữ dòng ReversingEntry = 0 và Active = 1. Bọc nó trong FROM của một câu SELECT đếm số dòng.",
+      want: "Kết quả mong đợi: một bảng tạm có cột sign_debt, câu ngoài đếm được số dòng của nó.",
+      hint: "Derived table bắt buộc phải có bí danh đứng ngay sau dấu ngoặc đóng. Cột có thể NULL thì bọc IFNULL trước khi so sánh.",
+      must: [
+        { re: "select", label: "SELECT" },
+        { re: "from\\s*\\(", label: "FROM ( — mở derived table" },
+        { re: "case\\s+when\\s+recordtype", label: "CASE WHEN RecordType = 'Receipt'" },
+        { re: "as\\s+sign_debt", label: "AS sign_debt" },
+        { re: "\\)\\s*x", label: ") x — bí danh của derived table" },
+        { re: "count\\s*\\(", label: "COUNT(...) ở câu ngoài" }
+      ],
+      answers: ["SELECT COUNT(*) FROM (SELECT CASE WHEN RecordType = 'Receipt' THEN Debt ELSE -Debt END AS sign_debt FROM CustomersARAPAccountingByDueDates_RecordType WHERE IFNULL(ReversingEntry,0) = 0 AND IFNULL(Active,0) = 1) x;"]
+    },
+    {
+      id: "c6x2", type: "query",
+      prompt: "Viết lại chính derived table đó dưới dạng CTE, câu ngoài vẫn đếm số dòng.",
+      want: "Kết quả mong đợi: giống hệt bài trên, chỉ khác cách viết.",
+      hint: "Từ khóa đặt trước SELECT, khai báo tên bảng tạm rồi mới tới câu chính.",
+      must: [
+        { re: "select", label: "SELECT" },
+        { re: "with\\s+x\\s+as\\s*\\(", label: "WITH x AS (" },
+        { re: "as\\s+sign_debt", label: "AS sign_debt" },
+        { re: "from\\s+x", label: "FROM x ở câu ngoài" }
+      ],
+      answers: ["WITH x AS (SELECT CASE WHEN RecordType = 'Receipt' THEN Debt ELSE -Debt END AS sign_debt FROM CustomersARAPAccountingByDueDates_RecordType WHERE IFNULL(ReversingEntry,0) = 0 AND IFNULL(Active,0) = 1) SELECT COUNT(*) FROM x;"]
+    },
+    {
+      id: "c6x3", type: "query",
+      prompt: "Câu công nợ đang trả top 20 đại lý. Sửa lại thành: lọc theo MỘT DANH SÁCH đại lý truyền vào theo Ref_Key, trả thêm cột Ref_Key để ghép về bảng partners bên Postgres, bỏ LIMIT. Chỉ cần viết phần từ JOIN trở xuống.",
+      want: "Kết quả mong đợi: mỗi đại lý trong danh sách một dòng, có refKey, code, tổng AR.",
+      hint: "Điều kiện lọc nằm trên bảng Partners nên phải đặt ở câu ngoài. Cột nào có trong SELECT mà không nằm trong hàm gộp thì phải có mặt ở GROUP BY. Giá trị truyền vào dùng dấu chỗ trống, đừng nối chuỗi.",
+      must: [
+        { re: "join\\s+partners\\s+p", label: "JOIN Partners p" },
+        { re: "p\\.ref_key\\s+in\\s*\\(", label: "WHERE p.Ref_Key IN (...)" },
+        { re: "\\?", label: "dấu ? thay cho giá trị" },
+        { re: "group\\s+by\\s+p\\.ref_key", label: "GROUP BY p.Ref_Key" },
+        { re: "sum\\s*\\(\\s*x\\.sign_debt", label: "SUM(x.sign_debt)" }
+      ],
+      answers: ["JOIN DimensionKeysOfAccountingByPartners d ON d.Ref_Key = x.AccountingDimensionByPartners_Key JOIN Partners p ON p.Ref_Key = d.Partner_Key WHERE p.Ref_Key IN (?, ?) GROUP BY p.Ref_Key, p.Code, p.Description HAVING SUM(x.sign_debt) <> 0 ORDER BY SUM(x.sign_debt) DESC;"]
+    },
+    {
+      id: "c6x4", type: "query",
+      prompt: "HAVING tong_ar <> 0 chạy được trên MySQL nhưng lỗi trên PostgreSQL. Viết lại mệnh đề HAVING đó cho chạy được ở cả hai hệ.",
+      want: "Kết quả mong đợi: chỉ giữ đại lý có tổng AR khác 0.",
+      hint: "PostgreSQL VẪN CÓ HAVING. Vấn đề nằm ở chỗ khác: HAVING chạy trước SELECT nên chưa nhìn thấy thứ được đặt tên trong SELECT.",
+      must: [
+        { re: "having\\s+sum\\s*\\(", label: "HAVING SUM(...) — viết lại cả hàm gộp" },
+        { re: "<>|!=", label: "<> 0" }
+      ],
+      answers: ["HAVING SUM(x.sign_debt) <> 0"]
+    }
+  ]
+};
+
+</script>
+<script>
+// Tuoi no (AR aging) - khai niem ke toan + ky thuat SQL hai tang.
+window.SQL_AGING = [
+  {
+    id: "sqlc7",
+    title: "Tuổi nợ (AR aging)",
+    subtitle: "Nợ quá hạn bao lâu rồi, và tính bằng SQL kiểu gì",
+    intro: "AR = Accounts Receivable, khoản phải thu. Tuổi nợ là số ngày một khoản đã quá hạn. Chương này vừa là khái niệm kế toán, vừa là bài gộp hai tầng trên đúng dữ liệu 1C.",
+    blocks: [
+      { t: "h", text: "Vì sao một con số tổng là không đủ" },
+      { t: "p", html: "Báo cáo ghi <i>\"Đại lý A quá hạn 50 triệu\"</i> — nghe thì rõ, nhưng thiếu mất thông tin quan trọng nhất: <b>quá hạn từ bao giờ</b>." },
+      { t: "table", head: ["Tình huống", "Tổng quá hạn", "Ý nghĩa thật"],
+        rows: [
+          ["50tr quá hạn 10 ngày", "50.000.000", "Bình thường, gọi nhắc là thu được"],
+          ["50tr quá hạn 200 ngày", "50.000.000", "Gần như mất trắng, phải trích lập dự phòng"],
+          ["25tr quá 10 ngày + 25tr quá 200 ngày", "50.000.000", "Một nửa lành, một nửa hỏng"]
+        ] },
+      { t: "p", html: "Ba trường hợp ra <b>cùng một con số</b> nhưng phải xử lý hoàn toàn khác nhau. Nên báo cáo công nợ chuẩn luôn kèm bảng chia mốc." },
+
+      { t: "h", text: "Chia mốc — quy ước thường dùng" },
+      { t: "table", head: ["Mốc", "Nghĩa", "Việc cần làm"],
+        rows: [
+          ["Chưa tới hạn", "Ngày đến hạn còn ở tương lai", "Không phải nợ xấu, chỉ theo dõi"],
+          ["1–30 ngày", "Vừa quá hạn", "Gọi nhắc"],
+          ["31–60 ngày", "Chậm rõ rệt", "Sale phải vào cuộc"],
+          ["61–90 ngày", "Đáng lo", "Cân nhắc khóa đơn mới"],
+          ["Trên 90 ngày", "Nợ khó đòi", "Trích lập dự phòng, có thể chuyển pháp lý"]
+        ] },
+      { t: "hint", html: "Mốc 30/60/90 là thông lệ chứ không phải luật. Công ty đặt mốc khác cũng được, miễn thống nhất — nhưng đã chốt rồi thì đừng đổi giữa chừng, số liệu sẽ không so sánh được với kỳ trước." },
+
+      { t: "h", text: "Điểm mấu chốt: tuổi nợ thuộc về TỪNG LÔ, không phải về tổng" },
+      { t: "p", html: "Trong 1C, mỗi dòng AR gắn một <code>PlannedRepaymentDate</code> — ngày đến hạn. Tiền thu về cũng ghi vào đúng ngày đến hạn của lô mà nó trả. Nên phải <b>gom theo cặp (đại lý, ngày đến hạn)</b> trước, mới biết lô nào còn dư." },
+      { t: "code", text: "Dai ly A, hom nay 2026-09-11:\n\n  ngay den han   phat sinh   da thu    du no    so ngay qua han\n  2026-02-01     30.000.000  30.000.000       0    -- da thu du, BO QUA\n  2026-06-15     20.000.000   5.000.000  15.000.000        88\n  2026-08-20     10.000.000           0  10.000.000        22\n  2026-12-31     50.000.000           0  50.000.000   chua toi han\n\n  => qua han 1-30  : 10.000.000\n     qua han 61-90 : 15.000.000\n     tong qua han  : 25.000.000\n     qua han lau nhat: 88 ngay" },
+      { t: "hint", html: "Lô 2026-02-01 đã thu đủ nên dư bằng 0 — <b>không</b> được tính là quá hạn dù ngày đến hạn đã trôi qua rất lâu. Gộp thẳng một tầng là dính lỗi này." },
+
+      { t: "h", text: "Tầng 1: dư nợ và số ngày của từng lô" },
+      { t: "code", text: "SELECT\n  d.Partner_Key AS partnerKey,\n  SUM(x.sign_debt) AS du_no,\n  DATEDIFF(CURDATE(), STR_TO_DATE(LEFT(x.PlannedRepaymentDate, 10), '%Y-%m-%d')) AS so_ngay\nFROM ( ... ) x\nJOIN DimensionKeysOfAccountingByPartners d\n  ON d.Ref_Key = x.AccountingDimensionByPartners_Key\nGROUP BY d.Partner_Key, x.PlannedRepaymentDate\nHAVING SUM(x.sign_debt) > 0          -- chi giu lo con du" },
+      { t: "p", html: "<code>PlannedRepaymentDate</code> trong 1C là kiểu <b>text</b>, nên <code>DATEDIFF</code> không nhận thẳng. Phải cắt 10 ký tự đầu rồi <code>STR_TO_DATE</code> đổi về kiểu ngày. Chỗ này bọc hàm vào cột là chấp nhận được vì nó nằm trong <code>SELECT</code>, không phải điều kiện lọc." },
+
+      { t: "h", text: "Tầng 2: chia mốc bằng gộp có điều kiện" },
+      { t: "code", text: "SELECT\n  partnerKey,\n  SUM(du_no)                                                  AS tong_ar,\n  SUM(CASE WHEN so_ngay > 0                  THEN du_no ELSE 0 END) AS qua_han,\n  SUM(CASE WHEN so_ngay BETWEEN  1 AND 30    THEN du_no ELSE 0 END) AS qh_1_30,\n  SUM(CASE WHEN so_ngay BETWEEN 31 AND 60    THEN du_no ELSE 0 END) AS qh_31_60,\n  SUM(CASE WHEN so_ngay BETWEEN 61 AND 90    THEN du_no ELSE 0 END) AS qh_61_90,\n  SUM(CASE WHEN so_ngay > 90                 THEN du_no ELSE 0 END) AS qh_tren_90,\n  MAX(CASE WHEN so_ngay > 0 THEN so_ngay ELSE 0 END)                AS so_ngay_max\nFROM ( tang_1 ) t\nGROUP BY partnerKey;" },
+      { t: "hint", html: "<b>Một</b> lần quét ra đủ sáu con số. Đừng chạy bốn câu riêng cho bốn mốc rồi ghép ở tầng code — vừa chậm gấp bốn, vừa có nguy cơ bốn câu đọc phải bốn ảnh chụp dữ liệu khác nhau." },
+
+      { t: "h", text: "Lưu kết quả thế nào cho dễ dùng" },
+      { t: "p", html: "Lưu một dòng mỗi đại lý với các cột mốc sẵn. Mọi câu hỏi nghiệp vụ sau đó đều thành một điều kiện đơn giản:" },
+      { t: "code", text: "WHERE \"qhTren90\" > 0                     -- dai ly co no kho doi\nWHERE \"quaHan\" > 0 AND \"soNgayMax\" > 60   -- can sale vao cuoc\nORDER BY \"qhTren90\" DESC                  -- xep theo muc do nguy hiem" },
+
+      { t: "h", text: "Bốn cái bẫy" },
+      { t: "table", head: ["Bẫy", "Hậu quả"],
+        rows: [
+          ["Gộp một tầng, không gom theo ngày đến hạn", "Lô đã thu đủ vẫn bị tính quá hạn"],
+          ["Quên <code>HAVING SUM(...) &gt; 0</code>", "Lô dư âm (thu thừa) kéo tụt số quá hạn"],
+          ["Tính ngày đến hạn hôm nay là quá hạn", "Lệch một ngày trên toàn bộ báo cáo"],
+          ["Mốc viết <code>&gt; 30</code> và <code>&gt; 60</code> chồng nhau", "Cộng bốn mốc lại lớn hơn tổng quá hạn"]
+        ] }
+    ],
+    dataset: [
+      { name: "Lô nợ của đại lý A (hôm nay 2026-09-11)",
+        head: ["PlannedRepaymentDate", "du_no", "so_ngay"],
+        rows: [["2026-02-01", "0", "222"], ["2026-06-15", "15000000", "88"],
+               ["2026-08-20", "10000000", "22"], ["2026-12-31", "50000000", "-111"]] }
+    ]
+  }
+];
+
+</script>
+<script>
+// Bai tap chuong tuoi no.
+window.SQL_AGING_EXERCISES = {
+  sqlc7: [
+    { id: "c7x1", type: "guess",
+      prompt: "Lô nợ đến hạn 2026-02-01 đã thu đủ nên dư nợ bằng 0. Hôm nay là 2026-09-11. Lô này có được tính vào phần quá hạn không?",
+      hint: "Quá hạn nghĩa là tới hạn rồi mà VẪN CÒN nợ.",
+      answers: ["không", "khong", "no"] },
+
+    { id: "c7x2", type: "query",
+      prompt: "Viết tầng 1: gom theo (Partner_Key, PlannedRepaymentDate), tính dư nợ của từng lô và số ngày quá hạn, chỉ giữ lô còn dư lớn hơn 0. Bảng nguồn là derived table x đã có sẵn cột sign_debt.",
+      want: "Kết quả mong đợi: mỗi lô còn nợ một dòng, kèm số ngày.",
+      hint: "PlannedRepaymentDate là text nên phải đổi về kiểu ngày mới trừ được. Lọc theo kết quả hàm gộp thì dùng mệnh đề nào?",
+      must: [
+        { re: "select", label: "SELECT" },
+        { re: "from\\s+x", label: "FROM x" },
+        { re: "datediff\\s*\\(", label: "DATEDIFF(...)" },
+        { re: "str_to_date\\s*\\(", label: "STR_TO_DATE(...) — cột đang là text" },
+        { re: "group\\s+by\\s+d?\\.?partner_key\\s*,", label: "GROUP BY Partner_Key, PlannedRepaymentDate" },
+        { re: "plannedrepaymentdate", label: "gom theo PlannedRepaymentDate" },
+        { re: "having\\s+sum\\s*\\(", label: "HAVING SUM(...) > 0" }
+      ],
+      answers: ["SELECT d.Partner_Key AS partnerKey, SUM(x.sign_debt) AS du_no, DATEDIFF(CURDATE(), STR_TO_DATE(LEFT(x.PlannedRepaymentDate,10), '%Y-%m-%d')) AS so_ngay FROM x JOIN DimensionKeysOfAccountingByPartners d ON d.Ref_Key = x.AccountingDimensionByPartners_Key GROUP BY d.Partner_Key, x.PlannedRepaymentDate HAVING SUM(x.sign_debt) > 0;"] },
+
+    { id: "c7x3", type: "query",
+      prompt: "Viết tầng 2: từ kết quả tầng 1 (các cột partnerKey, du_no, so_ngay), tính cho mỗi đại lý: tổng AR, tổng quá hạn, bốn mốc 1-30 / 31-60 / 61-90 / trên 90, và số ngày quá hạn lâu nhất. Chỉ MỘT câu.",
+      want: "Kết quả mong đợi: mỗi đại lý một dòng, bảy con số.",
+      hint: "Gộp có điều kiện: mỗi mốc là một cột SUM(CASE WHEN ... THEN du_no ELSE 0 END). Các mốc không được chồng lấn nhau.",
+      must: [
+        { re: "select", label: "SELECT" },
+        { re: "from\\s+t", label: "FROM t" },
+        { re: "sum\\s*\\(\\s*du_no\\s*\\)", label: "SUM(du_no) AS tong_ar" },
+        { re: "between\\s+1\\s+and\\s+30", label: "BETWEEN 1 AND 30" },
+        { re: "between\\s+31\\s+and\\s+60", label: "BETWEEN 31 AND 60" },
+        { re: "between\\s+61\\s+and\\s+90", label: "BETWEEN 61 AND 90" },
+        { re: "so_ngay\\s*>\\s*90", label: "so_ngay > 90" },
+        { re: "max\\s*\\(", label: "MAX(...) cho số ngày lâu nhất" },
+        { re: "group\\s+by\\s+partnerkey", label: "GROUP BY partnerKey" }
+      ],
+      answers: ["SELECT partnerKey, SUM(du_no) AS tong_ar, SUM(CASE WHEN so_ngay > 0 THEN du_no ELSE 0 END) AS qua_han, SUM(CASE WHEN so_ngay BETWEEN 1 AND 30 THEN du_no ELSE 0 END) AS qh_1_30, SUM(CASE WHEN so_ngay BETWEEN 31 AND 60 THEN du_no ELSE 0 END) AS qh_31_60, SUM(CASE WHEN so_ngay BETWEEN 61 AND 90 THEN du_no ELSE 0 END) AS qh_61_90, SUM(CASE WHEN so_ngay > 90 THEN du_no ELSE 0 END) AS qh_tren_90, MAX(CASE WHEN so_ngay > 0 THEN so_ngay ELSE 0 END) AS so_ngay_max FROM t GROUP BY partnerKey;"] },
+
+    { id: "c7x4", type: "guess",
+      prompt: "Bạn viết bốn mốc là so_ngay > 0, so_ngay > 30, so_ngay > 60, so_ngay > 90. Cộng bốn cột đó lại thì so với tổng quá hạn sẽ thế nào?",
+      hint: "Một khoản quá hạn 100 ngày thỏa mãn mấy điều kiện trong bốn cái đó?",
+      answers: ["lớn hơn", "lon hon", "lớn hơn tổng", "bị cộng trùng", "trùng", "nhiều hơn"] },
+
+    { id: "c7x5", type: "fill",
+      prompt: "Khoản nợ đến hạn đúng hôm nay thì số ngày quá hạn bằng ___, và KHÔNG được tính vào phần quá hạn.",
+      hint: "Hôm nay trừ hôm nay.",
+      answers: ["0", "không", "khong"] }
   ]
 };
 
@@ -872,6 +1866,7 @@ window.SQL_EXERCISES = {
       want: "Kết quả mong đợi: 1 dòng, OI1 với size M.",
       hint: "JOIN không kèm gì thì là INNER JOIN, chỉ giữ cặp khớp cả hai bên.",
       must: [
+        { re: "select", label: "SELECT" },
         { re: "from\\s+order_items", label: "FROM order_items" },
         { re: "join\\s+skus", label: "JOIN skus" },
         { re: "\\bon\\b", label: "ON điều kiện ghép" }
@@ -884,6 +1879,7 @@ window.SQL_EXERCISES = {
       want: "Kết quả mong đợi: OI1 với size M, và OI2 với size NULL.",
       hint: "Giữ hết bảng bên trái thì dùng loại JOIN nào?",
       must: [
+        { re: "select", label: "SELECT" },
         { re: "from\\s+order_items", label: "FROM order_items" },
         { re: "left\\s+join\\s+skus", label: "LEFT JOIN skus" },
         { re: "\\bon\\b", label: "ON điều kiện ghép" }
@@ -896,6 +1892,7 @@ window.SQL_EXERCISES = {
       want: "Kết quả mong đợi: S1 khớp OI1, S2 không khớp gì nên phía dòng hàng là NULL.",
       hint: "Đổi bảng đứng đầu FROM rồi vẫn dùng LEFT JOIN, không cần RIGHT JOIN.",
       must: [
+        { re: "select", label: "SELECT" },
         { re: "from\\s+skus", label: "FROM skus" },
         { re: "left\\s+join\\s+order_items", label: "LEFT JOIN order_items" },
         { re: "\\bon\\b", label: "ON điều kiện ghép" }
@@ -908,6 +1905,7 @@ window.SQL_EXERCISES = {
       want: "Kết quả mong đợi: M = 1, L = 0.",
       hint: "LEFT JOIN từ skus, rồi đếm cột bên bảng order_items chứ đừng đếm COUNT(*), vì COUNT(*) đếm cả dòng NULL thành 1.",
       must: [
+        { re: "select", label: "SELECT" },
         { re: "from\\s+skus", label: "FROM skus" },
         { re: "left\\s+join\\s+order_items", label: "LEFT JOIN order_items" },
         { re: "count\\s*\\(", label: "COUNT(...)" },
@@ -924,6 +1922,7 @@ window.SQL_EXERCISES = {
       want: "Kết quả mong đợi: 10.",
       hint: "Không cần GROUP BY khi gộp cả bảng thành một con số.",
       must: [
+        { re: "select", label: "SELECT" },
         { re: "sum\\s*\\(\\s*(oi\\.)?qty", label: "SUM(qty)" },
         { re: "from\\s+order_items", label: "FROM order_items" }
       ],
@@ -935,6 +1934,7 @@ window.SQL_EXERCISES = {
       want: "Kết quả mong đợi: 3, khác hẳn con số 10 ở câu trên.",
       hint: "Đếm dòng chứ không cộng giá trị.",
       must: [
+        { re: "select", label: "SELECT" },
         { re: "count\\s*\\(", label: "COUNT(...)" },
         { re: "from\\s+order_items", label: "FROM order_items" }
       ],
@@ -946,6 +1946,8 @@ window.SQL_EXERCISES = {
       want: "Kết quả mong đợi: M = 8, L = 2.",
       hint: "size nằm ở bảng skus nên phải ghép bảng trước rồi mới gom nhóm.",
       must: [
+        { re: "select", label: "SELECT" },
+        { re: "from\\s+order_items", label: "FROM order_items" },
         { re: "sum\\s*\\(\\s*(oi\\.)?qty", label: "SUM(qty)" },
         { re: "join\\s+skus", label: "JOIN skus" },
         { re: "group\\s+by", label: "GROUP BY size" }
@@ -954,10 +1956,12 @@ window.SQL_EXERCISES = {
     },
     {
       id: "c2q4", type: "query",
-      prompt: "Vẫn tổng qty theo size, nhưng chỉ giữ size bán được từ 5 trở lên.",
+      prompt: "Viết lại cả truy vấn, chỉ giữ size bán được từ 5 trở lên.",
       want: "Kết quả mong đợi: chỉ còn M = 8.",
       hint: "Điều kiện đặt trên kết quả của SUM nên không thể để trong WHERE.",
       must: [
+        { re: "select", label: "SELECT" },
+        { re: "from\\s+order_items", label: "FROM order_items" },
         { re: "sum\\s*\\(\\s*(oi\\.)?qty", label: "SUM(qty)" },
         { re: "group\\s+by", label: "GROUP BY size" },
         { re: "having", label: "HAVING" }
@@ -970,6 +1974,8 @@ window.SQL_EXERCISES = {
       want: "Kết quả mong đợi: M = 8, L = 2, kiểu integer thay vì bigint.",
       hint: "Hai dấu hai chấm rồi tới tên kiểu, hoặc dùng CAST.",
       must: [
+        { re: "select", label: "SELECT" },
+        { re: "from\\s+order_items", label: "FROM order_items" },
         { re: "sum\\s*\\(\\s*(oi\\.)?qty", label: "SUM(qty)" },
         { re: "::\\s*int|cast\\s*\\(", label: "::int hoặc CAST" },
         { re: "group\\s+by", label: "GROUP BY size" }
@@ -985,6 +1991,8 @@ window.SQL_EXERCISES = {
       want: "Đây là bộ khung của truy vấn thống kê size trong b2b.",
       hint: "Tên cột có chữ hoa trong PostgreSQL thì bọc trong nháy kép: oi.\"skuId\".",
       must: [
+        { re: "select", label: "SELECT" },
+        { re: "from\\s+order_items", label: "FROM order_items" },
         { re: "sum\\s*\\(", label: "SUM(...)" },
         { re: "join\\s+skus", label: "JOIN skus" },
         { re: "group\\s+by", label: "GROUP BY" },
@@ -994,10 +2002,12 @@ window.SQL_EXERCISES = {
     },
     {
       id: "c3q2", type: "query",
-      prompt: "Thêm điều kiện chỉ tính những đơn có status là CONFIRMED hoặc EXPORTED.",
+      prompt: "Viết lại cả truy vấn, thêm điều kiện chỉ tính những đơn có status là CONFIRMED hoặc EXPORTED.",
       want: "Phải ghép thêm bảng orders mới có cột status để lọc.",
       hint: "Ghép thêm orders rồi lọc bằng IN, vì đây là điều kiện trên từng dòng nên đặt ở WHERE.",
       must: [
+        { re: "select", label: "SELECT" },
+        { re: "from\\s+order_items", label: "FROM order_items" },
         { re: "join\\s+orders", label: "JOIN orders" },
         { re: "where", label: "WHERE" },
         { re: "status", label: "điều kiện trên status" },
@@ -1008,10 +2018,11 @@ window.SQL_EXERCISES = {
     },
     {
       id: "c3q3", type: "query",
-      prompt: "Sửa lại để size chưa bán được cái nào vẫn xuất hiện trong báo cáo.",
+      prompt: "Viết lại cả truy vấn sao cho size chưa bán được cái nào vẫn xuất hiện trong báo cáo.",
       want: "Đổi chiều: đi từ bảng skus và dùng LEFT JOIN.",
       hint: "INNER JOIN làm biến mất size không có dòng hàng. Đặt skus lên đầu FROM rồi LEFT JOIN sang order_items.",
       must: [
+        { re: "select", label: "SELECT" },
         { re: "from\\s+skus", label: "FROM skus" },
         { re: "left\\s+join\\s+order_items", label: "LEFT JOIN order_items" },
         { re: "group\\s+by", label: "GROUP BY" }
@@ -1111,10 +2122,12 @@ window.MYSQL_EXERCISES = {
     },
     {
       id: "m1q2", type: "query",
-      prompt: "Tính tổng công nợ của từng đại lý, dùng cột sign_debt vừa tạo.",
+      prompt: "Viết truy vấn hoàn chỉnh tính tổng công nợ của từng đại lý trên bảng ar_entries, coi sign_debt là cột đã có sẵn.",
       want: "Kết quả mong đợi: An = 60, Bình = 60.",
       hint: "Gom nhóm theo Partner rồi cộng sign_debt.",
       must: [
+        { re: "select", label: "SELECT" },
+        { re: "from\\s+ar_entries", label: "FROM ar_entries" },
         { re: "sum\\s*\\(", label: "SUM(...)" },
         { re: "group\\s+by\\s+partner", label: "GROUP BY Partner" }
       ],
@@ -1122,10 +2135,12 @@ window.MYSQL_EXERCISES = {
     },
     {
       id: "m1q3", type: "query",
-      prompt: "Thêm một cột nữa chỉ cộng phần đã quá hạn, tính trong cùng một lần quét bảng.",
+      prompt: "Viết lại cả truy vấn, thêm một cột nữa chỉ cộng phần đã quá hạn, tính trong cùng một lần quét bảng.",
       want: "Cột thứ hai chỉ cộng những dòng có ngày hẹn trả nhỏ hơn hôm nay.",
       hint: "Đặt CASE WHEN vào bên trong SUM, nhánh không thỏa thì cộng 0.",
       must: [
+        { re: "select", label: "SELECT" },
+        { re: "from\\s+ar_entries", label: "FROM ar_entries" },
         { re: "sum\\s*\\(\\s*case\\s+when", label: "SUM(CASE WHEN ...)" },
         { re: "group\\s+by\\s+partner", label: "GROUP BY Partner" }
       ],
@@ -1220,6 +2235,174 @@ window.SECURITY_EXERCISES = {
     { id: "s1e6", type: "fill", prompt: "Đuôi file trong storage key được lấy từ ___ đã sniff, không lấy từ tên file người dùng gửi lên.",
       hint: "Ba chữ cái, viết tắt của Multipurpose Internet Mail Extensions.",
       answers: ["mime", "mime type"] }
+  ]
+};
+
+</script>
+<script>
+// Hai chuong bao mat tang API, rut tu code that cua b2b.kamito.vn.
+window.API_SECURITY_CHAPTERS = [
+  {
+    id: "sec2",
+    title: "Tham số hóa truy vấn (NestJS + TypeORM)",
+    subtitle: "Vì sao không được nối chuỗi vào câu SQL",
+    intro: "Ghép giá trị của người dùng vào câu SQL bằng dấu cộng hay template string là lỗ hổng SQL injection. Chương này dùng đúng file one-c-sales-order.query.ts của dự án.",
+    blocks: [
+      { t: "h", text: "Chuyện gì xảy ra khi nối chuỗi" },
+      { t: "code", text: "// SAI\nconst sql = `SELECT * FROM Partners WHERE Code = '${code}'`;\n\n// Nguoi dung gui code = x' OR '1'='1\n// Cau SQL thanh:\nSELECT * FROM Partners WHERE Code = 'x' OR '1'='1'\n// -> tra ve TOAN BO dai ly\n\n// Gui code = x'; DROP TABLE Partners; --\n// -> mat bang" },
+      { t: "p", html: "Gốc rễ: máy chủ CSDL nhận về <b>một chuỗi văn bản</b> rồi mới phân tích. Nó không phân biệt được đâu là câu lệnh lập trình viên viết, đâu là dữ liệu người dùng nhập — tất cả đã trộn thành một." },
+
+      { t: "h", text: "Tham số hóa: gửi câu lệnh và dữ liệu tách rời" },
+      { t: "code", text: "// DUNG — dung khuon mau cua du an\nconst SQL = `\n  SELECT p.Ref_Key AS refKey, p.Code AS code, ROUND(SUM(x.sign_debt)) AS tongAr\n  FROM ( ... ) x\n  JOIN Partners p ON p.Ref_Key = d.Partner_Key\n  WHERE p.Ref_Key = ?\n  GROUP BY p.Ref_Key, p.Code`;\n\nconst rows = await dataSource.query(SQL, [refKey]);" },
+      { t: "p", html: "Dấu <code>?</code> là một <b>chỗ trống</b>. Driver gửi câu lệnh đi trước để máy chủ phân tích xong cấu trúc, rồi mới gửi giá trị vào chỗ trống. Lúc đó giá trị <b>chỉ có thể là dữ liệu</b>, không còn đường nào thành câu lệnh nữa." },
+      { t: "hint", html: "Đây không phải chuyện \"lọc dấu nháy cho sạch\". Escape thủ công luôn sót. Tham số hóa là cắt đứt hẳn con đường, không phải bịt bớt." },
+
+      { t: "h", text: "Ba hệ, ba kiểu chỗ trống" },
+      { t: "table", head: ["Nơi dùng", "Viết", "Ví dụ"],
+        rows: [
+          ["TypeORM + MySQL (1C)", "<code>?</code> theo thứ tự", "<code>dataSource.query(SQL, [from, to])</code>"],
+          ["TypeORM + PostgreSQL", "<code>$1</code>, <code>$2</code>", "<code>query(SQL, [id])</code>"],
+          ["Prisma", "<code>$queryRaw</code> với template", "<code>Prisma.$queryRaw`... WHERE id = ${id}`</code>"]
+        ] },
+      { t: "hint", html: "Prisma lừa mắt: <code>$queryRaw</code> trông y như template string nhưng Prisma chặn lại và biến <code>${id}</code> thành tham số thật. Còn <code>$queryRawUnsafe</code> thì <b>không</b> — đúng như tên nó, chỉ dùng khi tự ghép câu lệnh và đã chắc chắn." },
+
+      { t: "h", text: "Danh sách nhiều giá trị" },
+      { t: "code", text: "// Loc nhieu dai ly: so dau ? phai khop so phan tu\nconst holes = refKeys.map(() => '?').join(', ');\nconst SQL = `... WHERE p.Ref_Key IN (${holes}) ...`;\nawait dataSource.query(SQL, refKeys);" },
+      { t: "p", html: "Chỗ này <b>có</b> nối chuỗi, nhưng chỉ nối mấy dấu <code>?</code> do chính mình sinh ra — không có byte nào của người dùng lọt vào câu lệnh. Giá trị vẫn đi đường tham số." },
+
+      { t: "h", text: "Cái tham số hóa KHÔNG làm được" },
+      { t: "table", head: ["Chỗ", "Tham số được?"],
+        rows: [
+          ["Giá trị so sánh <code>WHERE col = ?</code>", "Được"],
+          ["<code>LIMIT ?</code> / <code>OFFSET ?</code>", "Được"],
+          ["<b>Tên bảng</b>, <b>tên cột</b>", "<b>Không</b> — phải đối chiếu với danh sách trắng tự viết"],
+          ["<code>ORDER BY ?</code>", "<b>Không</b> — người dùng chọn cột sắp xếp thì map qua whitelist"]
+        ] },
+      { t: "code", text: "// Nguoi dung chon cot sap xep\nconst ALLOWED = { ar: 'tongAr', code: 'p.Code' };\nconst col = ALLOWED[sortBy] ?? 'tongAr';       // khong khop thi lay mac dinh\nconst dir = dir === 'asc' ? 'ASC' : 'DESC';    // chi hai gia tri, khong co duong khac\nconst SQL = `... ORDER BY ${col} ${dir}`;" }
+    ]
+  },
+
+  {
+    id: "sec3",
+    title: "Đừng tin client: lấy danh tính từ token",
+    subtitle: "Lỗi IDOR và chỗ đặt phân quyền",
+    intro: "Câu hỏi quyết định: id đại lý dùng để lọc dữ liệu đến từ đâu? Từ request của người dùng, hay từ token đã được máy chủ xác thực? Trả lời sai là rò dữ liệu của đại lý khác.",
+    blocks: [
+      { t: "h", text: "Lỗ hổng IDOR" },
+      { t: "code", text: "// SAI: id lay tu URL\n@Get('debt/:partnerId')\ngetDebt(@Param('partnerId') partnerId: string) {\n  return this.service.getDebt(partnerId);   // ai doi so cung xem duoc\n}" },
+      { t: "p", html: "<b>IDOR</b> — Insecure Direct Object Reference. Máy chủ dùng thẳng id do người dùng gửi lên để lấy dữ liệu, mà không kiểm tra người này có quyền với id đó không." },
+      { t: "hint", html: "Lập luận \"đại lý không biết id của đại lý khác\" <b>không phải là bảo mật</b> — nó gọi là <i>security by obscurity</i>. Id lộ ra ở rất nhiều chỗ: tab Network của trình duyệt, log, file Excel xuất ra, một cái id cũ chép lại. Và kể cả không biết thì vẫn đoán được." },
+
+      { t: "h", text: "Nguồn sự thật: req.user" },
+      { t: "code", text: "// jwt.strategy.ts — validate() nap User tu DB roi gan vao request\nasync validate(payload: JwtPayload) {\n  const user = await this.prisma.user.findUnique({ where: { id: payload.sub } });\n  if (!user || !user.isActive) throw new UnauthorizedException();\n  return user;                 // -> req.user, day du ca partnerId\n}" },
+      { t: "code", text: "// DUNG: id den tu token, khong phai tu URL\n@Get('debt/me')\ngetMyDebt(@CurrentUser() user: User) {\n  return this.service.getDebt(user);\n}" },
+      { t: "p", html: "Token được ký bằng <code>JWT_SECRET</code>. Người dùng sửa một ký tự trong đó là chữ ký hỏng, request bị chặn ngay ở guard. Nên <code>user.partnerId</code> là thứ <b>duy nhất</b> đáng tin." },
+
+      { t: "h", text: "Ba tầng chặn, mỗi tầng một việc" },
+      { t: "table", head: ["Tầng", "Trả lời câu hỏi", "Trong dự án"],
+        rows: [
+          ["<code>JwtAuthGuard</code>", "Anh là ai? Token còn hạn không?", "<code>common/guards/jwt-auth.guard.ts</code>"],
+          ["<code>RolesGuard</code> + <code>@Roles()</code>", "Vai trò này có được vào cửa này không?", "<code>common/guards/roles.guard.ts</code>"],
+          ["<b>Service</b> — lọc theo dữ liệu", "Trong cửa rồi thì được thấy <b>những dòng nào</b>?", "<code>orders.service.ts</code> → <code>getSubordinateQuery()</code>"]
+        ] },
+      { t: "hint", html: "Guard chỉ trả lời được câu <i>vào được hay không</i>. Nó không biết dòng nào của ai, nên <b>không</b> thay được việc lọc ở service. Hai thứ khác nhau, cần cả hai." },
+
+      { t: "h", text: "Khuôn mẫu lọc theo vai trò đang dùng trong dự án" },
+      { t: "code", text: "// orders.service.ts:35 — rut gon\nif (canViewAllData(role)) return {};              // ADMIN, DIRECTOR: thay het\n\nif (role === 'AGENT' || role === 'AGENT_STAFF') { // dai ly: chi partner cua minh\n  const me = await this.prisma.user.findUnique({\n    where: { id: userId }, select: { partnerId: true },\n  });\n  if (me?.partnerId) return { OR: [{ userId }, { partnerId: me.partnerId }] };\n  return { userId };\n}\n// MANAGER / LEADER: thay cap duoi cua minh..." },
+      { t: "p", html: "Hai hàm trợ giúp có sẵn ở <code>common/utils/role.util.ts</code>: <code>canViewAllData(role)</code> và <code>isDealerRole(role)</code>. Viết tính năng mới thì dùng lại, đừng so chuỗi <code>'ADMIN'</code> rải rác khắp nơi." },
+
+      { t: "h", text: "Lọc trong câu SQL là đúng — nhưng giá trị phải sạch nguồn" },
+      { t: "code", text: "// Dung: service tu quyet dinh loc cai gi, dua tren req.user\nasync getDebt(user: User, partnerId?: string) {\n  let target = partnerId;\n\n  if (isDealerRole(user.role)) {\n    if (!user.partnerId) throw new ForbiddenException('Tài khoản chưa gắn đại lý');\n    target = user.partnerId;          // DE len tren, bo qua thu client gui\n  } else if (!canViewAllData(user.role)) {\n    throw new ForbiddenException();\n  }\n\n  const partner = await this.prisma.partner.findUnique({ where: { id: target } });\n  if (!partner?.ref1C) return { rows: [] };\n  return this.oneC.fetchDebt(partner.ref1C);   // ref1C moi la khoa ben 1C\n}" },
+      { t: "hint", html: "Mấu chốt là dòng <code>target = user.partnerId</code>: với đại lý thì tham số client gửi lên bị <b>ghi đè</b>, không phải bị \"kiểm tra rồi cho qua\". Không có nhánh nào để client tự chọn id." },
+
+      { t: "h", text: "Bốn cái bẫy" },
+      { t: "table", head: ["Bẫy", "Hậu quả"],
+        rows: [
+          ["Lấy id từ <code>@Param</code> / <code>@Body</code> rồi dùng thẳng", "IDOR — xem được dữ liệu đại lý khác"],
+          ["Chỉ ẩn nút bên web", "API vẫn gọi được bằng Postman"],
+          ["Chỉ đặt <code>@Roles()</code>, quên lọc ở service", "Vào đúng cửa nhưng thấy dữ liệu của tất cả"],
+          ["Quên trường hợp <code>partnerId</code> là null", "Điều kiện lọc rỗng → trả về toàn bộ"]
+        ] }
+    ]
+  }
+];
+
+</script>
+<script>
+// Bai tap hai chuong bao mat tang API.
+window.API_SECURITY_EXERCISES = {
+  sec2: [
+    { id: "s2e1", type: "guess",
+      prompt: "Câu `SELECT * FROM Partners WHERE Code = '${code}'` với code người dùng gửi lên là: x' OR '1'='1 — truy vấn trả về gì?",
+      hint: "Thay chuỗi đó vào rồi đọc lại điều kiện WHERE thành tiếng Việt.",
+      answers: ["toàn bộ", "toan bo", "tất cả", "tat ca", "all", "toàn bộ đại lý", "mọi dòng"] },
+    { id: "s2e2", type: "fill",
+      prompt: "Driver gửi câu lệnh đi trước cho máy chủ phân tích cấu trúc, sau đó mới gửi giá trị vào chỗ trống. Nhờ vậy giá trị người dùng không bao giờ trở thành ___.",
+      hint: "Thứ đối lập với dữ liệu trong một câu SQL.",
+      answers: ["câu lệnh", "cau lenh", "lệnh", "code", "sql"] },
+    { id: "s2e3", type: "code",
+      prompt: "Viết lại cho an toàn: const sql = `SELECT * FROM Partners WHERE Ref_Key = '${refKey}'`; const rows = await dataSource.query(sql);",
+      want: "Kết quả mong đợi: câu lệnh không còn chứa giá trị nào của người dùng.",
+      hint: "MySQL dùng dấu chỗ trống theo thứ tự, giá trị đi ở tham số thứ hai của query().",
+      must: [
+        { re: "ref_key\\s*=\\s*\\?", label: "Ref_Key = ?" },
+        { re: "query\\s*\\(.*,\\s*\\[", label: "query(sql, [ ... ]) — giá trị đi đường tham số" },
+        { re: "refkey", label: "refKey nằm trong mảng tham số" }
+      ],
+      answers: ["const sql = `SELECT * FROM Partners WHERE Ref_Key = ?`; const rows = await dataSource.query(sql, [refKey]);"] },
+    { id: "s2e4", type: "code",
+      prompt: "Lọc nhiều đại lý: viết đoạn sinh chuỗi dấu chỗ trống khớp với số phần tử của mảng refKeys rồi gọi query.",
+      want: "Kết quả mong đợi: mảng 3 phần tử thì câu lệnh có IN (?, ?, ?).",
+      hint: "map ra dấu ?, nối bằng dấu phẩy, rồi nhét vào IN (...). Mảng truyền nguyên vào tham số.",
+      must: [
+        { re: "map\\s*\\(", label: "refKeys.map(...)" },
+        { re: "join\\s*\\(", label: ".join(', ')" },
+        { re: "in\\s*\\(", label: "IN (...)" },
+        { re: "query\\s*\\(.*,\\s*refkeys", label: "query(sql, refKeys)" }
+      ],
+      answers: ["const holes = refKeys.map(() => '?').join(', '); const sql = `SELECT * FROM Partners WHERE Ref_Key IN (${holes})`; const rows = await dataSource.query(sql, refKeys);"] },
+    { id: "s2e5", type: "guess",
+      prompt: "Người dùng chọn cột sắp xếp, bạn viết ORDER BY ? rồi truyền tên cột vào tham số. Có chạy không?",
+      hint: "Tham số hóa chỉ thay được chỗ đứng của một GIÁ TRỊ, không thay được tên cột hay tên bảng.",
+      answers: ["không", "khong", "no"] },
+    { id: "s2e6", type: "fill",
+      prompt: "Prisma: `$queryRaw` chặn được injection, còn hàm ___ thì không — đúng như tên gọi của nó.",
+      hint: "Cùng tên, thêm hậu tố cảnh báo.",
+      answers: ["$queryRawUnsafe", "queryRawUnsafe"] }
+  ],
+
+  sec3: [
+    { id: "s3e1", type: "fill",
+      prompt: "Máy chủ dùng thẳng id do người dùng gửi lên để lấy dữ liệu mà không kiểm tra quyền. Lỗ hổng này tên viết tắt là ___.",
+      hint: "Bốn chữ cái, Insecure Direct Object Reference.",
+      answers: ["IDOR", "idor"] },
+    { id: "s3e2", type: "guess",
+      prompt: "Lập luận \"đại lý không xem được công nợ đại lý khác vì họ không biết id của nhau\" thuộc kiểu bảo mật nào?",
+      hint: "Che giấu thay vì chặn thật. Cụm từ tiếng Anh có chữ obscurity.",
+      answers: ["security by obscurity", "obscurity", "che giấu", "che giau"] },
+    { id: "s3e3", type: "fill",
+      prompt: "Trong controller NestJS của dự án, thứ DUY NHẤT đáng tin để biết người gọi là ai: decorator ___.",
+      hint: "Nó lấy request.user do JwtStrategy gán vào.",
+      answers: ["@CurrentUser", "CurrentUser", "@CurrentUser()", "currentuser"] },
+    { id: "s3e4", type: "guess",
+      prompt: "Endpoint đã có @Roles(Role.AGENT) rồi thì còn cần lọc theo partnerId ở service nữa không?",
+      hint: "Guard trả lời câu 'vào được cửa này không'. Nó có biết dòng dữ liệu nào thuộc về ai không?",
+      answers: ["có", "co", "vẫn cần", "van can", "yes"] },
+    { id: "s3e5", type: "code",
+      prompt: "Viết thân hàm getDebt(user, partnerId?) : với đại lý thì GHI ĐÈ partnerId bằng partnerId lấy từ user, tài khoản chưa gắn đại lý thì ném ForbiddenException; vai trò không xem được toàn bộ dữ liệu thì cũng ném ForbiddenException.",
+      want: "Kết quả mong đợi: không có nhánh nào để client tự chọn id đại lý.",
+      hint: "Dùng hai hàm sẵn có trong common/utils/role.util.ts: isDealerRole và canViewAllData.",
+      must: [
+        { re: "isdealerrole\\s*\\(", label: "isDealerRole(user.role)" },
+        { re: "=\\s*user\\.partnerid", label: "target = user.partnerId — ghi đè" },
+        { re: "canviewalldata\\s*\\(", label: "canViewAllData(user.role)" },
+        { re: "throw\\s+new\\s+forbiddenexception", label: "throw new ForbiddenException(...)" }
+      ],
+      answers: ["let target = partnerId; if (isDealerRole(user.role)) { if (!user.partnerId) throw new ForbiddenException('Tài khoản chưa gắn đại lý'); target = user.partnerId; } else if (!canViewAllData(user.role)) { throw new ForbiddenException(); }"] },
+    { id: "s3e6", type: "fill",
+      prompt: "Khóa để ghép một Partner bên Postgres sang bảng Partners của 1C là cột ___ (khớp với Ref_Key).",
+      hint: "Tên cột trong prisma/schema.prisma, có chữ số 1 và chữ C.",
+      answers: ["ref1C", "ref1c"] }
   ]
 };
 
@@ -1665,10 +2848,12 @@ window.SUBJECTS = [
     title: "SQL",
     tagline: "PostgreSQL và MySQL, rút từ truy vấn thật trong dự án",
     tocIntro: "Bắt đầu bằng chương căn bản: từng mệnh đề là gì và chạy lúc nào. " +
-      "Sau đó tới PostgreSQL của b2b, cuối cùng là MySQL trên hệ ERP. " +
+      "Kế tiếp là bốn chương đào sâu mệnh đề, NULL, JOIN, UNION và index — dùng đúng bảng " +
+      "orders / partners của dự án. Sau đó tới PostgreSQL của b2b, cuối cùng là MySQL trên hệ ERP. " +
       "Bài tập đều là cho sẵn bảng dữ liệu rồi bạn tự viết truy vấn.",
     kind: "blocks",
-    chapters: chapterGroups(window.SQL_BASICS, window.SQL_CHAPTERS, window.MYSQL_CHAPTERS)
+    chapters: chapterGroups(window.SQL_BASICS, window.SQL_CLAUSES, window.SQL_JOIN_UNION, window.SQL_SUBQUERY, window.SQL_AGING,
+      window.SQL_CHAPTERS, window.MYSQL_CHAPTERS)
   },
   {
     id: "code",
@@ -1677,15 +2862,16 @@ window.SUBJECTS = [
     tocIntro: "Những đoạn code đáng nhớ trong dự án, kèm lý do vì sao nó được viết như vậy " +
       "và những chỗ nếu làm khác đi thì hỏng.",
     kind: "blocks",
-    chapters: chapterGroups(window.SECURITY_CHAPTERS, window.TRANSACTION_CHAPTERS,
+    chapters: chapterGroups(window.SECURITY_CHAPTERS, window.API_SECURITY_CHAPTERS, window.TRANSACTION_CHAPTERS,
       window.ALGO_CHAPTERS, window.JS_CHAPTERS)
   }
 ];
 
 // Gop bai tap cua moi mon vao mot bang tra cuu chung theo id chuong.
 window.ALL_EXERCISES = Object.assign(
-  {}, window.EXERCISES, window.SQL_BASICS_EXERCISES, window.SQL_EXERCISES,
-  window.MYSQL_EXERCISES, window.SECURITY_EXERCISES, window.TRANSACTION_EXERCISES, window.ALGO_EXERCISES, window.JS_EXERCISES
+  {}, window.EXERCISES, window.SQL_BASICS_EXERCISES,
+  window.SQL_CLAUSES_EXERCISES, window.SQL_JOIN_UNION_EXERCISES, window.SQL_SUBQUERY_EXERCISES, window.SQL_AGING_EXERCISES, window.SQL_EXERCISES,
+  window.MYSQL_EXERCISES, window.SECURITY_EXERCISES, window.API_SECURITY_EXERCISES, window.TRANSACTION_EXERCISES, window.ALGO_EXERCISES, window.JS_EXERCISES
 );
 
 </script>
@@ -1751,11 +2937,32 @@ window.NB = (function () {
   var MUST_TYPES = { query: 1, code: 1 };
   function isMustType(ex) { return MUST_TYPES[ex.type] === 1; }
 
+  // Menh de SQL co thu tu co dinh. Du du tu khoa ma dat sai cho thi cau van sai.
+  var SQL_ORDER = [
+    /\bselect\b/, /\bfrom\b/, /\bjoin\b/, /\bwhere\b/,
+    /\bgroup\s+by\b/, /\bhaving\b/, /\border\s+by\b/, /\blimit\b/
+  ];
+  var ORDER_LABEL = "đúng thứ tự SELECT → FROM → JOIN → WHERE → GROUP BY → HAVING → ORDER BY → LIMIT";
+
+  function clauseOrderOk(s) {
+    var last = -1;
+    for (var i = 0; i < SQL_ORDER.length; i++) {
+      var at = s.search(SQL_ORDER[i]);
+      if (at < 0) continue;
+      if (at < last) return false;
+      last = at;
+    }
+    return true;
+  }
+
   function missingParts(ex, input) {
     var s = String(input).toLowerCase().replace(/[`]/g, "").replace(/\s+/g, " ").trim();
-    return (ex.must || []).filter(function (m) {
+    var miss = (ex.must || []).filter(function (m) {
       return !new RegExp(m.re, "i").test(s);
     }).map(function (m) { return m.label; });
+    // Chi soi thu tu khi da du tu khoa, de khong bao mot luc qua nhieu thu.
+    if (ex.type === "query" && miss.length === 0 && !clauseOrderOk(s)) miss.push(ORDER_LABEL);
+    return miss;
   }
 
   function grade(ex, input) {
@@ -2356,6 +3563,11 @@ window.NBRender = (function () {
     if (chp) chp.textContent = R.chapterScore(chp.dataset.ch);
   }
 
+  // Dap an nao da co dau cau o cuoi thi khong cong them dau cham nua.
+  function answerText(s) {
+    return NB.esc(s) + (/[.;!?]$/.test(String(s).trim()) ? " " : ". ");
+  }
+
   // Danh dau tung tu sai trong cau nguoi hoc vua viet, kem danh sach loi cu the.
   function diffBlock(ex, id) {
     var val = NB.get().answers[id] || "";
@@ -2381,11 +3593,11 @@ window.NBRender = (function () {
       box.classList.add("close");
       fb.innerHTML = '<span class="fb-warn">⚠ Gần đúng.</span> Từ ngữ đúng rồi, chỉ vướng mấy chỗ này:' +
         diffBlock(ex, id) +
-        '<div class="solution">Đáp án: ' + NB.esc(ex.answers[0]) + ". " +
+        '<div class="solution">Đáp án: ' + answerText(ex.answers[0]) +
         (readable ? say(ex.answers[0]) : "") + "</div>";
     } else if (kind === "reveal") {
       box.classList.add("close");
-      fb.innerHTML = '<span class="fb-warn">Đáp án:</span> ' + NB.esc(ex.answers[0]) + ". " +
+      fb.innerHTML = '<span class="fb-warn">Đáp án:</span> ' + answerText(ex.answers[0]) +
         (readable ? say(ex.answers[0]) : "") +
         (ex.answers.length > 1 ? '<div class="solution">Cách khác: ' + NB.esc(ex.answers[1]) + ".</div>" : "");
     } else if (kind === "hint") {

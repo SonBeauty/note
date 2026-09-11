@@ -96,5 +96,75 @@ window.CHAPTERS = [
       { wrong: "delecious", right: "delicious", note: "Nhớ chữ i ở giữa. Phát âm: đi-LI-shợs." },
       { wrong: "is delicious like ramen", right: "is delicious, especially ramen", note: "Dùng especially để nêu ví dụ nổi bật, không dùng like." }
     ]
+  },
+  {
+    id: "ch6",
+    title: "Nhờ người nước ngoài luyện tiếng Anh",
+    subtitle: "Asking for a language partner",
+    intro: "Bạn gặp một người nước ngoài và muốn nhờ họ nói chuyện để luyện tiếng Anh. Ba việc phải làm đúng: bắt chuyện lịch sự, đề nghị đổi lại thứ gì đó, và xin họ sửa lỗi cho mình.",
+    samples: [
+      {
+        wrong: "Hello, can you teach English for me? I very want to speak English fluent.",
+        right: "Hi, sorry to bother you. Would you mind helping me practice my English? I really want to speak English fluently.",
+        native: "Hey, sorry to bother you — do you have a minute? I'm trying to practice my English, and I'd love to chat if you're up for it."
+      },
+      {
+        wrong: "I hope you can talk with me every week. I will teach you Vietnamese for exchange, do you agree?",
+        right: "I hope we can talk every week. I can teach you Vietnamese in exchange. Would that work for you?",
+        native: "Maybe we could do a language exchange — an hour of English, an hour of Vietnamese. Would that work for you?"
+      },
+      {
+        wrong: "Please correct me if I say wrong. Don't mind about my mistake, I am not good English.",
+        right: "Please correct me if I say something wrong. Don't worry about my mistakes — my English isn't good yet.",
+        native: "Feel free to jump in and correct me. I'd rather hear it than keep making the same mistake."
+      }
+    ],
+    rules: [
+      { wrong: "teach English for me", right: "teach me English", note: "teach + người + môn học, không có for. Với người lạ nên nói nhẹ hơn: help me practice English." },
+      { wrong: "Can you teach me?", right: "Would you mind helping me?", note: "Can you nghe như sai khiến. Với người mới quen dùng Could you hoặc Would you mind + V-ing." },
+      { wrong: "I very want", right: "I really want", note: "very không bao giờ đứng trước động từ. Bổ nghĩa cho động từ dùng really." },
+      { wrong: "speak English fluent", right: "speak English fluently", note: "fluent là tính từ, fluently là trạng từ. Sau động từ speak phải dùng trạng từ." },
+      { wrong: "for exchange", right: "in exchange", note: "Cụm cố định: in exchange, hoặc in exchange for something." },
+      { wrong: "if I say wrong", right: "if I say something wrong", note: "say là ngoại động từ, luôn cần tân ngữ đứng sau." },
+      { wrong: "Don't mind about my mistake", right: "Don't worry about my mistakes", note: "worry about mới là lo lắng về. mistake đếm được nên thêm -s." },
+      { wrong: "I am not good English", right: "My English isn't good yet", note: "Không nói I am not good + danh từ. Nói My English isn't good, hoặc I'm not good at English." },
+      { wrong: "Where are you come from?", right: "Where are you from?", note: "Một câu chỉ có một động từ chính. Hoặc Where do you come from, không dùng cả are lẫn come." },
+      { wrong: "Can you repeat again?", right: "Could you say that again?", note: "repeat đã có nghĩa lặp lại rồi, thêm again là thừa." }
+    ]
+  },
+  {
+    id: "ch7",
+    title: "Đọc tên cột bảng tài chính",
+    subtitle: "Reading finance table columns",
+    intro: "Tên cột trong bảng kế toán ERP viết tắt rất nhiều. Thuộc 5 quy ước đặt tên là đoán được gần hết bảng: hậu tố _Key, _Type, Local, Man và tiền tố Cor.",
+    samples: [
+      {
+        wrong: "This column is prepayment of man, I don't know what is it mean.",
+        right: "I'm not sure what this column means. Does PrepaymentMan stand for the prepayment amount in the management currency?",
+        native: "Quick question about PrepaymentMan — is that the prepayment amount in management currency? The naming isn't obvious to me."
+      },
+      {
+        wrong: "Debt is money customer must pay to we, DebtLocal is same but local money.",
+        right: "Debt is the amount the customer owes us in the document currency, and DebtLocal is the same amount converted into our local currency.",
+        native: "Debt holds the balance in the original document currency; DebtLocal is that same balance converted to our local currency."
+      },
+      {
+        wrong: "ReversingEntry mean the record is cancel, right? I want confirm with you.",
+        right: "Does ReversingEntry mean the row cancels an earlier entry? I'd like to confirm with you.",
+        native: "Just to confirm — a row flagged ReversingEntry reverses an earlier posting, right?"
+      }
+    ],
+    rules: [
+      { wrong: "PrepaymentMan = trả trước cho một người", right: "PrepaymentMan = prepayment in the management currency", note: "Man viết tắt của Management (kế toán quản trị), không phải man là người. Cùng bộ: Prepayment (nguyên tệ) → PrepaymentLocal (bản tệ) → PrepaymentMan (tiền tệ quản trị)." },
+      { wrong: "Local nghĩa là ở địa phương", right: "local currency = bản tệ, đồng tiền hạch toán của công ty", note: "Cột kết thúc bằng Local luôn là số tiền đã quy đổi sang bản tệ, ví dụ VND. Cột không có đuôi là nguyên tệ trên chứng từ." },
+      { wrong: "Cor... nghĩa là correct", right: "Cor = corresponding, nghĩa là đối ứng", note: "CorARAPObject_Key là đối tượng công nợ ĐỐI ỨNG. Trong kế toán, corresponding account = tài khoản đối ứng." },
+      { wrong: "_Key là chìa khóa", right: "_Key = foreign key, trỏ sang bảng danh mục khác", note: "Currency_Key không chứa chữ USD, nó chứa id của dòng bên bảng tiền tệ. Phải JOIN mới ra tên thật." },
+      { wrong: "Recorder = người ghi sổ", right: "recorder = chứng từ đã sinh ra dòng này", note: "Trong ERP, Recorder là chứng từ ghi sổ chứ không phải người. Recorder_Type cho biết đó là loại chứng từ nào, vì mỗi loại nằm ở một bảng khác nhau." },
+      { wrong: "ARAP là một tên riêng", right: "AR + AP = Accounts Receivable + Accounts Payable", note: "AR = phải thu (khách nợ mình). AP = phải trả (mình nợ nhà cung cấp). Ghép lại thành công nợ nói chung." },
+      { wrong: "Debt nghĩa là nợ xấu", right: "debt = số dư công nợ còn lại", note: "Debt chỉ là số tiền còn nợ theo chứng từ, không mang nghĩa xấu. Nợ khó đòi tiếng Anh là bad debt hoặc doubtful debt." },
+      { wrong: "Active = đang hoạt động", right: "active = dòng này có được tính vào số dư hay không", note: "Active bằng false thì bản ghi vẫn nằm trong bảng nhưng bị bỏ qua khi cộng số dư. Luôn lọc WHERE Active = true." },
+      { wrong: "OccurrenceDate = ngày tạo bản ghi", right: "occurrence date = ngày nghiệp vụ thực sự phát sinh", note: "Khác PlannedRepaymentDate là ngày DỰ KIẾN thanh toán. Thời điểm ghi sổ nằm ở cột Period." },
+      { wrong: "ReversingEntry = xóa dòng cũ", right: "reversing entry = bút toán đảo", note: "Kế toán không xóa. Họ ghi thêm một dòng ngược dấu để hủy dòng cũ. Tiếng Việt gọi là bút toán đảo hoặc storno." }
+    ]
   }
 ];

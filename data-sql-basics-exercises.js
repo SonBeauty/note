@@ -34,6 +34,7 @@ window.SQL_BASICS_EXERCISES = {
       want: "Kết quả mong đợi: An = 130, Bình = 50, Chi = 200.",
       hint: "Gom nhóm theo customer rồi cộng amount trong mỗi nhóm.",
       must: [
+        { re: "select", label: "SELECT" },
         { re: "sum\\s*\\(\\s*amount", label: "SUM(amount)" },
         { re: "from\\s+orders", label: "FROM orders" },
         { re: "group\\s+by\\s+customer", label: "GROUP BY customer" }
@@ -42,10 +43,12 @@ window.SQL_BASICS_EXERCISES = {
     },
     {
       id: "b1e4", type: "query",
-      prompt: "Vẫn tính tổng amount theo từng khách, nhưng chỉ giữ khách có tổng lớn hơn 100.",
+      prompt: "Viết lại cả truy vấn, chỉ giữ khách có tổng amount lớn hơn 100.",
       want: "Kết quả mong đợi: An = 130, Chi = 200.",
       hint: "Điều kiện dựa trên kết quả hàm gộp thì phải đặt sau khi đã gom nhóm.",
       must: [
+        { re: "select", label: "SELECT" },
+        { re: "from\\s+orders", label: "FROM orders" },
         { re: "sum\\s*\\(\\s*amount", label: "SUM(amount)" },
         { re: "group\\s+by\\s+customer", label: "GROUP BY customer" },
         { re: "having", label: "HAVING" }
@@ -58,6 +61,8 @@ window.SQL_BASICS_EXERCISES = {
       want: "Kết quả mong đợi: Chi = 200 rồi tới An = 130.",
       hint: "Sắp xếp giảm dần rồi cắt lấy 2 dòng đầu.",
       must: [
+        { re: "select", label: "SELECT" },
+        { re: "from\\s+orders", label: "FROM orders" },
         { re: "sum\\s*\\(\\s*amount", label: "SUM(amount)" },
         { re: "group\\s+by\\s+customer", label: "GROUP BY customer" },
         { re: "order\\s+by", label: "ORDER BY" },
