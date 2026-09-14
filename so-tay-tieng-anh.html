@@ -2736,6 +2736,45 @@ window.JS_CHAPTERS = [
       { t: "hint", html: "<b>TypeScript làm mất kiểu của key.</b> <code>Object.entries(status)</code> trả về <code>[string, T][]</code> chứ không giữ literal. Tự bọc một hàm ép kiểu thì được, nhưng phải hiểu TS cố tình làm vậy vì lúc chạy object có thể mang thêm thuộc tính ngoài <code>keyof T</code>." },
       { t: "hint", html: "<b>Prototype pollution.</b> Deep merge JSON từ client mà không chặn key thì <code>{ \"__proto__\": { \"isAdmin\": true } }</code> làm mọi object trong tiến trình đột nhiên có <code>isAdmin</code>. Chặn ba key <code>__proto__</code>, <code>constructor</code>, <code>prototype</code>, hoặc merge vào <code>Object.create(null)</code>, hoặc dùng <code>Map</code>." }
     ]
+  },
+  {
+    id: "js2",
+    title: "Tối ưu duyệt mảng: tính tiền và đếm đơn (JavaScript)",
+    subtitle: "Rút gọn 2 vòng lặp về 1, tránh filter().length và bẫy NaN",
+    intro: "Đoạn code tính monthlyRevenue và sentCount rút từ b2b.kamito.vn. Bài toán kinh điển khi xử lý dữ liệu: làm sao chỉ duyệt mảng một lần (single-pass), không cấp phát bộ nhớ thừa và chặn đứng lỗi số học.",
+    blocks: [
+      { t: "h", text: "Đoạn code ban đầu từ b2b.kamito.vn" },
+      { t: "p", html: "Trong màn hình thống kê doanh thu, ta cần tính tổng tiền các đơn hoàn thành trong tháng và đếm số lượng đơn đó:" },
+      { t: "code", text: "const monthlyRevenue = orderList.reduce((total, order) => {\n  const createdAt = new Date(order.createdAt);\n  const isSameMonth = createdAt.getMonth() === now.getMonth() && createdAt.getFullYear() === now.getFullYear();\n  if (!isSameMonth || !REVENUE_STATUSES.includes(order.status)) return total;\n  return total + order.total;\n}, 0);\n\nconst sentCount = orderList.filter((order) => {\n  const createdAt = new Date(order.createdAt);\n  const isSameMonth = createdAt.getMonth() === now.getMonth() && createdAt.getFullYear() === now.getFullYear();\n  return isSameMonth && REVENUE_STATUSES.includes(order.status);\n}).length;" },
+      { t: "p", html: "Code chạy ra kết quả đúng, nhưng tồn tại <b>4 điểm nghẽn hiệu năng</b> và <b>1 bẫy dữ liệu</b> âm thầm." },
+
+      { t: "h", text: "1. Hai vòng lặp duyệt mảng O(2N) và mảng rác từ filter" },
+      { t: "p", html: "<code>reduce</code> duyệt hết danh sách một lần. Ngay sau đó <code>filter</code> lại duyệt lại từ đầu thêm một lần nữa. Với 10.000 đơn hàng, chương trình phải chạy 20.000 lượt kiểm tra." },
+      { t: "p", html: "Tệ hơn, <code>filter().length</code> buộc JavaScript cấp phát bộ nhớ tạo một <b>mảng mới hoàn toàn</b> trong heap chỉ để đọc thuộc tính <code>.length</code>, rồi lập tức vứt đi cho Garbage Collector dọn dẹp." },
+
+      { t: "h", text: "2. Khởi tạo Date và gọi now.getMonth() lặp vô ích" },
+      { t: "p", html: "Trong cả hai vòng lặp, <code>now.getMonth()</code> và <code>now.getFullYear()</code> bị gọi đi gọi lại hàng ngàn lần dù <code>now</code> không hề đổi. Mỗi phần tử lại bị <code>new Date(order.createdAt)</code> tới 2 lần." },
+      { t: "hint", html: "<b>Hoisting hằng số ra ngoài vòng lặp:</b> Tính trước <code>const currentMonth = now.getMonth(); const currentYear = now.getFullYear();</code> trước khi bắt đầu duyệt mảng." },
+
+      { t: "h", text: "3. Array.includes là O(K) — Set.has là O(1)" },
+      { t: "p", html: "<code>REVENUE_STATUSES.includes(order.status)</code> phải so sánh tuyến tính qua từng phần tử trong mảng trạng thái. Đưa vào <code>Set</code> giúp tra cứu trong thời gian hằng số <code>O(1)</code> bằng bảng băm." },
+
+      { t: "h", text: "4. Bẫy NaN phá hủy toàn bộ kết quả doanh thu" },
+      { t: "p", html: "Trong JavaScript: <code>1000000 + undefined = NaN</code>. Nếu một đơn hàng bất kỳ bị thiếu trường <code>total</code> (hoặc bằng <code>null</code>), toàn bộ <code>monthlyRevenue</code> tích lũy sẽ lập tức biến thành <code>NaN</code>!" },
+      { t: "hint", html: "Luôn phòng vệ khi cộng dồn số liệu tiền tệ: <code>acc.monthlyRevenue += Number(order.total) || 0;</code>" },
+
+      { t: "h", text: "Cách 1: Gộp vào 1 lần reduce duy nhất (Single-pass)" },
+      { t: "p", html: "Duyệt đúng một lượt, gom cả Doanh thu và Số lượng đơn vào một object tích lũy:" },
+      { t: "code", text: "const revenueStatusSet = new Set(REVENUE_STATUSES);\nconst currentMonth = now.getMonth();\nconst currentYear = now.getFullYear();\n\nconst { monthlyRevenue, sentCount } = orderList.reduce(\n  (acc, order) => {\n    if (!order.createdAt) return acc;\n    const createdAt = new Date(order.createdAt);\n    const isSameMonth =\n      createdAt.getMonth() === currentMonth &&\n      createdAt.getFullYear() === currentYear;\n\n    if (isSameMonth && revenueStatusSet.has(order.status)) {\n      acc.monthlyRevenue += Number(order.total) || 0;\n      acc.sentCount += 1;\n    }\n    return acc;\n  },\n  { monthlyRevenue: 0, sentCount: 0 }\n);" },
+
+      { t: "h", text: "Cách 2: Vòng lặp for...of (Hiệu năng cao nhất & dễ debug)" },
+      { t: "p", html: "Trong V8 Engine, vòng lặp <code>for...of</code> không tốn chi phí gọi callback function qua mỗi phần tử và không tạo object gom tạm:" },
+      { t: "code", text: "const revenueStatusSet = new Set(REVENUE_STATUSES);\nconst currentMonth = now.getMonth();\nconst currentYear = now.getFullYear();\n\nlet monthlyRevenue = 0;\nlet sentCount = 0;\n\nfor (const order of orderList) {\n  if (!order.createdAt || !revenueStatusSet.has(order.status)) continue;\n  const createdAt = new Date(order.createdAt);\n  if (\n    createdAt.getMonth() === currentMonth &&\n    createdAt.getFullYear() === currentYear\n  ) {\n    monthlyRevenue += Number(order.total) || 0;\n    sentCount++;\n  }\n}" },
+
+      { t: "h", text: "Bài học kiến trúc: Đừng tính việc này ở Frontend!" },
+      { t: "p", html: "Nếu danh sách có 50.000 đơn hàng, việc kéo toàn bộ dữ liệu qua mạng về trình duyệt rồi mới filter/reduce là lãng phí tài nguyên. Trong hệ thống B2B/ERP thực tế, bài toán này nên để Database giải quyết trong vài mili-giây bằng SQL gộp:" },
+      { t: "code", text: "SELECT \n  COALESCE(SUM(total), 0) AS monthly_revenue,\n  COUNT(*) AS sent_count\nFROM orders\nWHERE \"createdAt\" >= date_trunc('month', NOW())\n  AND \"createdAt\" <  date_trunc('month', NOW()) + INTERVAL '1 month'\n  AND status = ANY($1);" }
+    ]
   }
 ];
 
@@ -2814,6 +2853,66 @@ window.JS_EXERCISES = {
         { re: "null", label: "null" }
       ],
       answers: ["const dict = Object.create(null);"]
+    }
+  ],
+  js2: [
+    {
+      id: "j2e1", type: "code",
+      prompt: "Tạo một Set từ mảng REVENUE_STATUSES để tra cứu trạng thái đơn hàng O(1).",
+      want: "Dùng new Set thay cho Array.includes.",
+      hint: "const statusSet = new Set(REVENUE_STATUSES);",
+      must: [
+        { re: "new\\s+set", label: "new Set" },
+        { re: "revenue_statuses", label: "REVENUE_STATUSES" }
+      ],
+      answers: [
+        "const statusSet = new Set(REVENUE_STATUSES);",
+        "const revenueStatusSet = new Set(REVENUE_STATUSES);"
+      ]
+    },
+    {
+      id: "j2e2", type: "code",
+      prompt: "Trích xuất trước tháng và năm hiện tại từ đối tượng now ra biến hằng trước khi duyệt mảng.",
+      want: "Lấy getMonth() và getFullYear() gán vào hằng số để không gọi lại trong vòng lặp.",
+      hint: "const currentMonth = now.getMonth(); const currentYear = now.getFullYear();",
+      must: [
+        { re: "now\\.getmonth\\(\\)", label: "now.getMonth()" },
+        { re: "now\\.getfullyear\\(\\)", label: "now.getFullYear()" }
+      ],
+      answers: [
+        "const currentMonth = now.getMonth(); const currentYear = now.getFullYear();",
+        "const currentMonth = now.getMonth(), currentYear = now.getFullYear();"
+      ]
+    },
+    {
+      id: "j2e3", type: "code",
+      prompt: "Cộng dồn doanh thu an toàn vào biến monthlyRevenue, phòng ngừa order.total bị undefined hoặc null.",
+      want: "Cộng dồn an toàn với Number(...) || 0 để tránh kết quả bị biến thành NaN.",
+      hint: "monthlyRevenue += Number(order.total) || 0;",
+      must: [
+        { re: "monthlyrevenue\\s*\\+=", label: "monthlyRevenue +=" },
+        { re: "order\\.total", label: "order.total" },
+        { re: "\\|\\|\\s*0", label: "|| 0" }
+      ],
+      answers: [
+        "monthlyRevenue += Number(order.total) || 0;",
+        "monthlyRevenue += (order.total || 0);"
+      ]
+    },
+    {
+      id: "j2e4", type: "code",
+      prompt: "Khởi tạo hàm reduce cho orderList để gom cả monthlyRevenue và sentCount trong một lượt duyệt duy nhất.",
+      want: "orderList.reduce((acc, order) => { ... return acc; }, { monthlyRevenue: 0, sentCount: 0 })",
+      hint: "orderList.reduce((acc, order) => { return acc; }, { monthlyRevenue: 0, sentCount: 0 });",
+      must: [
+        { re: "orderlist\\.reduce", label: "orderList.reduce" },
+        { re: "monthlyrevenue:\\s*0", label: "monthlyRevenue: 0" },
+        { re: "sentcount:\\s*0", label: "sentCount: 0" }
+      ],
+      answers: [
+        "const { monthlyRevenue, sentCount } = orderList.reduce((acc, order) => { return acc; }, { monthlyRevenue: 0, sentCount: 0 });",
+        "orderList.reduce((acc, order) => { return acc; }, { monthlyRevenue: 0, sentCount: 0 });"
+      ]
     }
   ]
 };

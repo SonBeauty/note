@@ -16,7 +16,7 @@ công nghệ để nhìn là biết đang nói về hệ nào:
 |---|---|---|
 | Tiếng Anh | 7 chương: giới thiệu bản thân, kinh nghiệm, dự án, công việc hằng ngày, du lịch, nhờ người nước ngoài luyện nói, đọc tên cột bảng tài chính | 41 |
 | SQL | SQL căn bản + 7 chương đào sâu (mệnh đề, NULL, JOIN, UNION, index, truy vấn con, tuổi nợ) + 3 chương PostgreSQL + 1 chương MySQL | 50 |
-| Lập trình | Upload validation, Tham số hóa truy vấn, Phân quyền theo token, Transaction (Prisma), Thuật toán LCS, Object và prototype | 36 |
+| Lập trình | Upload validation, Tham số hóa truy vấn, Phân quyền theo token, Transaction (Prisma), Thuật toán LCS, Object và prototype, Tối ưu duyệt mảng | 40 |
 
 Chương **SQL căn bản** đi trước, giải thích từng mệnh đề là gì và dùng làm gì, thứ tự chạy
 thật của một câu SELECT, WHERE khác HAVING chỗ nào, hàm gộp, subquery và index. Các chương
@@ -40,6 +40,7 @@ Các chương còn lại đi vào code thật của dự án:
 - **Đừng tin client** — lỗi IDOR, lấy `partnerId` từ token chứ không từ URL, ba tầng chặn Guard / Roles / lọc ở service
 - **Thuật toán LCS** — nền tảng của mọi công cụ diff, và cũng là thứ đang chấm bài tiếng Anh trong chính cuốn sổ này
 - **JavaScript** — Object.entries và prototype, nối nhau ở câu hỏi thuộc tính là của chính object hay đi mượn
+- **Tối ưu duyệt mảng (JavaScript)** — rút gọn 2 vòng lặp về 1 (single-pass), tránh filter().length, Set tra cứu O(1), bẫy NaN khi tính tiền
 
 ## Lật sổ
 
@@ -54,10 +55,10 @@ Các chương còn lại đi vào code thật của dự án:
 
 - **7 chương theo chủ đề**: giới thiệu bản thân, kinh nghiệm & kỹ năng, nói về dự án, công việc hằng ngày, du lịch & sở thích, nhờ người nước ngoài luyện tiếng Anh, đọc tên cột bảng tài chính
 - Mỗi chương gồm: câu mẫu (sai → đúng → cách nói tự nhiên), bảng quy tắc, từ vựng, bài tập, ô ghi chú
-- **127 bài tập**. Phần tiếng Anh là dịch câu, sửa câu sai và điền chỗ trống.
+- **131 bài tập**. Phần tiếng Anh là dịch câu, sửa câu sai và điền chỗ trống.
   Phần SQL là **50 bài viết truy vấn**: mỗi chương cho sẵn bảng dữ liệu mẫu kèm kết quả mong đợi,
   bạn tự viết câu lệnh vào ô nhiều dòng rồi bấm Kiểm tra (hoặc Ctrl+Enter).
-  Phần Lập trình là **36 bài viết code**, chấm theo cùng cơ chế.
+  Phần Lập trình là **40 bài viết code**, chấm theo cùng cơ chế.
 - **Chấm điểm tự động**: gõ đáp án rồi bấm Kiểm tra (hoặc nhấn Enter)
   - ✓ Chính xác
   - ⚠ Gần đúng — đúng từ nhưng sai viết hoa hoặc dấu câu

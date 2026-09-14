@@ -72,5 +72,65 @@ window.JS_EXERCISES = {
       ],
       answers: ["const dict = Object.create(null);"]
     }
+  ],
+  js2: [
+    {
+      id: "j2e1", type: "code",
+      prompt: "Tạo một Set từ mảng REVENUE_STATUSES để tra cứu trạng thái đơn hàng O(1).",
+      want: "Dùng new Set thay cho Array.includes.",
+      hint: "const statusSet = new Set(REVENUE_STATUSES);",
+      must: [
+        { re: "new\\s+set", label: "new Set" },
+        { re: "revenue_statuses", label: "REVENUE_STATUSES" }
+      ],
+      answers: [
+        "const statusSet = new Set(REVENUE_STATUSES);",
+        "const revenueStatusSet = new Set(REVENUE_STATUSES);"
+      ]
+    },
+    {
+      id: "j2e2", type: "code",
+      prompt: "Trích xuất trước tháng và năm hiện tại từ đối tượng now ra biến hằng trước khi duyệt mảng.",
+      want: "Lấy getMonth() và getFullYear() gán vào hằng số để không gọi lại trong vòng lặp.",
+      hint: "const currentMonth = now.getMonth(); const currentYear = now.getFullYear();",
+      must: [
+        { re: "now\\.getmonth\\(\\)", label: "now.getMonth()" },
+        { re: "now\\.getfullyear\\(\\)", label: "now.getFullYear()" }
+      ],
+      answers: [
+        "const currentMonth = now.getMonth(); const currentYear = now.getFullYear();",
+        "const currentMonth = now.getMonth(), currentYear = now.getFullYear();"
+      ]
+    },
+    {
+      id: "j2e3", type: "code",
+      prompt: "Cộng dồn doanh thu an toàn vào biến monthlyRevenue, phòng ngừa order.total bị undefined hoặc null.",
+      want: "Cộng dồn an toàn với Number(...) || 0 để tránh kết quả bị biến thành NaN.",
+      hint: "monthlyRevenue += Number(order.total) || 0;",
+      must: [
+        { re: "monthlyrevenue\\s*\\+=", label: "monthlyRevenue +=" },
+        { re: "order\\.total", label: "order.total" },
+        { re: "\\|\\|\\s*0", label: "|| 0" }
+      ],
+      answers: [
+        "monthlyRevenue += Number(order.total) || 0;",
+        "monthlyRevenue += (order.total || 0);"
+      ]
+    },
+    {
+      id: "j2e4", type: "code",
+      prompt: "Khởi tạo hàm reduce cho orderList để gom cả monthlyRevenue và sentCount trong một lượt duyệt duy nhất.",
+      want: "orderList.reduce((acc, order) => { ... return acc; }, { monthlyRevenue: 0, sentCount: 0 })",
+      hint: "orderList.reduce((acc, order) => { return acc; }, { monthlyRevenue: 0, sentCount: 0 });",
+      must: [
+        { re: "orderlist\\.reduce", label: "orderList.reduce" },
+        { re: "monthlyrevenue:\\s*0", label: "monthlyRevenue: 0" },
+        { re: "sentcount:\\s*0", label: "sentCount: 0" }
+      ],
+      answers: [
+        "const { monthlyRevenue, sentCount } = orderList.reduce((acc, order) => { return acc; }, { monthlyRevenue: 0, sentCount: 0 });",
+        "orderList.reduce((acc, order) => { return acc; }, { monthlyRevenue: 0, sentCount: 0 });"
+      ]
+    }
   ]
 };
