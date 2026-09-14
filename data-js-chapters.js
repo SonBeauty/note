@@ -74,8 +74,18 @@ window.JS_CHAPTERS = [
       { t: "p", html: "Trong cả hai vòng lặp, <code>now.getMonth()</code> và <code>now.getFullYear()</code> bị gọi đi gọi lại hàng ngàn lần dù <code>now</code> không hề đổi. Mỗi phần tử lại bị <code>new Date(order.createdAt)</code> tới 2 lần." },
       { t: "hint", html: "<b>Hoisting hằng số ra ngoài vòng lặp:</b> Tính trước <code>const currentMonth = now.getMonth(); const currentYear = now.getFullYear();</code> trước khi bắt đầu duyệt mảng." },
 
-      { t: "h", text: "3. Array.includes là O(K) — Set.has là O(1)" },
-      { t: "p", html: "<code>REVENUE_STATUSES.includes(order.status)</code> phải so sánh tuyến tính qua từng phần tử trong mảng trạng thái. Đưa vào <code>Set</code> giúp tra cứu trong thời gian hằng số <code>O(1)</code> bằng bảng băm." },
+      { t: "h", text: "3. Dùng Set có thực sự nhanh hơn Array không? Vì sao?" },
+      { t: "p", html: "<b>Câu trả lời:</b> Đúng! Với mảng nhiều đơn hàng và duyệt lặp đi lặp lại, <code>Set.has()</code> nhanh hơn vượt trội so với <code>Array.includes()</code> nhờ sự khác biệt về cấu trúc dữ liệu bên dưới V8 Engine:" },
+      { t: "table", head: ["Tiêu chí", "Array.includes()", "Set.has()"],
+        rows: [
+          ["<b>Cấu trúc dữ liệu</b>", "Mảng tuần tự (Array/Vector)", "Bảng băm (Hash Table)"],
+          ["<b>Cách tìm kiếm</b>", "Duyệt tuyến tính: so từng phần tử từ đầu đến cuối", "Băm giá trị (Hash) rồi nhảy thẳng vào ô nhớ (Bucket)"],
+          ["<b>Độ phức tạp tra cứu</b>", "<code>O(K)</code> — tập trạng thái càng dài tìm càng chậm", "<code>O(1)</code> — thời gian hằng số, không đổi"],
+          ["<b>Số phép tính với N đơn</b>", "<code>N × K</code> phép so sánh chuỗi", "<code>K</code> (băm tạo Set) + <code>N × 1</code> (tra cứu)"]
+        ] },
+      { t: "p", html: "<b>Thử làm một phép tính:</b> Danh sách có <code>N = 10.000</code> đơn hàng, tập trạng thái có <code>K = 5</code> phần tử:" },
+      { t: "code", text: "// Dùng Array.includes:\n// 10.000 đơn × 5 trạng thái = 50.000 phép so sánh chuỗi tuần tự\n\n// Dùng Set.has (tạo Set ngoài loop):\n// 5 phép băm khởi tạo + 10.000 lần nhảy ô nhớ = 10.005 thao tác (nhanh gấp ~5 lần)" },
+      { t: "hint", html: "<b>CÁI BẪY NGUY HIỂM:</b> Set chỉ nhanh khi bạn <b>khởi tạo nó NGOÀI vòng lặp</b> (hoặc ở cấp module)! Nếu bạn viết <code>new Set(REVENUE_STATUSES).has(...)</code> ở BÊN TRONG vòng lặp, mỗi phần tử lại cấp phát 1 bảng băm mới, code sẽ chậm hơn dùng mảng gấp nhiều lần và gây rác bộ nhớ." },
 
       { t: "h", text: "4. Bẫy NaN phá hủy toàn bộ kết quả doanh thu" },
       { t: "p", html: "Trong JavaScript: <code>1000000 + undefined = NaN</code>. Nếu một đơn hàng bất kỳ bị thiếu trường <code>total</code> (hoặc bằng <code>null</code>), toàn bộ <code>monthlyRevenue</code> tích lũy sẽ lập tức biến thành <code>NaN</code>!" },
