@@ -15,7 +15,7 @@ công nghệ để nhìn là biết đang nói về hệ nào:
 | Mục | Nội dung | Số bài tập |
 |---|---|---|
 | Tiếng Anh | 7 chương: giới thiệu bản thân, kinh nghiệm, dự án, công việc hằng ngày, du lịch, nhờ người nước ngoài luyện nói, đọc tên cột bảng tài chính | 41 |
-| SQL | SQL căn bản + 7 chương đào sâu (mệnh đề, NULL, JOIN, UNION, index, truy vấn con, tuổi nợ) + 3 chương PostgreSQL + 1 chương MySQL | 50 |
+| SQL | SQL căn bản + 8 chương đào sâu (mệnh đề, NULL, JOIN, UNION, index, truy vấn con, tuổi nợ, soi lỗi câu công nợ 1C) + 3 chương PostgreSQL + 1 chương MySQL | 57 |
 | Lập trình | Upload validation, Tham số hóa truy vấn, Phân quyền theo token, Transaction (Prisma), Thuật toán LCS, Object và prototype, Tối ưu duyệt mảng | 40 |
 
 Chương **SQL căn bản** đi trước, giải thích từng mệnh đề là gì và dùng làm gì, thứ tự chạy
@@ -28,6 +28,7 @@ sau đào sâu từng chỗ hay sai, dùng đúng bảng `orders` / `partners` c
 - **UNION: nối kết quả theo chiều dọc** — `UNION` / `UNION ALL` / `INTERSECT` / `EXCEPT`, ba luật bắt buộc, khi nào đừng dùng UNION
 - **Truy vấn con** — subquery / derived table / CTE, mổ đúng câu công nợ 1C: vì sao phải bọc bảng tạm để đặt tên cho `sign_debt`
 - **Tuổi nợ (AR aging)** — nợ quá hạn bao lâu, vì sao một con số tổng là không đủ, chia mốc 1-30/31-60/61-90/>90 bằng gộp hai tầng
+- **Soi lỗi câu công nợ 1C** — số ngày quá hạn bị thổi phồng vì MIN chạy trên từng dòng phát sinh, luật cột gom khác cột cộng, HAVING ở tầng giữa làm đổi tổng dư nợ
 - **Index và chuyện làm mất index** — vì sao `YEAR(createdAt) = 2026` quét cả bảng, sargable, index nhiều cột đi từ trái sang, `EXPLAIN ANALYZE`
 
 Các chương còn lại đi vào code thật của dự án:
@@ -55,8 +56,8 @@ Các chương còn lại đi vào code thật của dự án:
 
 - **7 chương theo chủ đề**: giới thiệu bản thân, kinh nghiệm & kỹ năng, nói về dự án, công việc hằng ngày, du lịch & sở thích, nhờ người nước ngoài luyện tiếng Anh, đọc tên cột bảng tài chính
 - Mỗi chương gồm: câu mẫu (sai → đúng → cách nói tự nhiên), bảng quy tắc, từ vựng, bài tập, ô ghi chú
-- **131 bài tập**. Phần tiếng Anh là dịch câu, sửa câu sai và điền chỗ trống.
-  Phần SQL là **50 bài viết truy vấn**: mỗi chương cho sẵn bảng dữ liệu mẫu kèm kết quả mong đợi,
+- **138 bài tập**. Phần tiếng Anh là dịch câu, sửa câu sai và điền chỗ trống.
+  Phần SQL là **57 bài viết truy vấn**: mỗi chương cho sẵn bảng dữ liệu mẫu kèm kết quả mong đợi,
   bạn tự viết câu lệnh vào ô nhiều dòng rồi bấm Kiểm tra (hoặc Ctrl+Enter).
   Phần Lập trình là **40 bài viết code**, chấm theo cùng cơ chế.
 - **Chấm điểm tự động**: gõ đáp án rồi bấm Kiểm tra (hoặc nhấn Enter)
