@@ -84,12 +84,22 @@
     } else if (kind === "empty") {
       fb.innerHTML = '<span class="fb-bad">Bạn chưa viết gì cả.</span>';
     } else if (NB.isMustType(ex)) {
-      // Chi ra thanh phan con thieu thay vi chi bao sai.
+      // Chi ra thanh phan con thieu, hoac loi cau truc khien cau khong chay duoc.
       box.classList.add("wrong");
-      var miss = NB.missingParts(ex, document.querySelector('.answer[data-id="' + id + '"]').value);
-      fb.innerHTML = '<span class="fb-bad">✗ Còn thiếu:</span> ' +
-        miss.map(function (m) { return "<code>" + NB.esc(m) + "</code>"; }).join(", ") +
-        '<div class="solution-hint">Gợi ý: ' + NB.esc(ex.hint) + "</div>";
+      var val = NB.get().answers[id] || "";
+      var miss = NB.missingParts(ex, val);
+      var bad = NB.structureProblems(ex, val);
+      var msg = "";
+      if (miss.length) {
+        msg += '<span class="fb-bad">✗ Còn thiếu:</span> ' +
+          miss.map(function (m) { return "<code>" + NB.esc(m) + "</code>"; }).join(", ");
+      }
+      if (bad.length) {
+        msg += (msg ? "<br>" : "") +
+          '<span class="fb-bad">✗ Câu này chạy sẽ lỗi:</span> ' +
+          bad.map(function (m) { return NB.esc(m); }).join("; ");
+      }
+      fb.innerHTML = msg + '<div class="solution-hint">Gợi ý: ' + NB.esc(ex.hint) + "</div>";
     } else {
       box.classList.add("wrong");
       fb.innerHTML = '<span class="fb-bad">✗ Chưa đúng.</span> Soi lại mấy chỗ được đánh dấu:' +

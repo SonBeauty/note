@@ -287,6 +287,8 @@ textarea.sqlbox::placeholder { color: var(--code-ink); opacity: .4; }
   .demo-tabs { display: none; }
 }
 
+.use-db { font-size: 14.5px; color: var(--ink-soft); margin: 0 0 10px; }
+
 </style>
 </head>
 <body>
@@ -939,6 +941,135 @@ window.SQL_BASICS_EXERCISES = {
         { re: "limit\\s*2", label: "LIMIT 2" }
       ],
       answers: ["SELECT customer, SUM(amount) AS tong FROM orders GROUP BY customer ORDER BY tong DESC LIMIT 2;"]
+    }
+  ]
+};
+
+</script>
+<script>
+// Chuong sinh ra tu dung cho mac ket: vi sao SUM phai nam trong SELECT.
+window.SQL_AGGREGATE_CHAPTERS = [
+  {
+    id: "sqla1",
+    title: "Vì sao SUM phải nằm trong SELECT",
+    subtitle: "Thứ tự viết, thứ tự chạy, và chỗ đặt hàm gộp",
+    intro: "Lỗi 1064 kinh điển khi mới học gom nhóm. Gốc rễ là hiểu nhầm SQL thành danh sách các bước làm, trong khi nó là bản mô tả bảng kết quả.",
+    blocks: [
+      { t: "h", text: "Câu sai và lỗi nhận được" },
+      { t: "code", text: "SELECT CASE WHEN RecordType='Receipt' THEN Debt ELSE -Debt END AS sign_debt\nFROM ar_entries\nGROUP BY Partner\nSUM(sign_debt)          -- ← lỗi ở đây" },
+      { t: "code", text: "SQL Error [1064]: You have an error in your SQL syntax ...\nnear 'SUM(sign_debt)' at line 3" },
+      { t: "p", html: "Suy nghĩ dẫn tới câu này rất tự nhiên: <i>gom nhóm xong rồi cộng</i>. Máy chạy đúng như vậy thật. Nhưng SQL không cho bạn viết theo kiểu liệt kê các bước." },
+
+      { t: "h", text: "SQL là tờ đơn đặt hàng, không phải công thức nấu ăn" },
+      { t: "p", html: "Bạn không ra lệnh <i>làm cái này rồi làm cái kia</i>. Bạn <b>mô tả bảng kết quả</b> muốn nhận, máy tự lo các bước. Nên trước khi viết, hãy vẽ bảng kết quả ra:" },
+      { t: "table", head: ["Partner", "tong_ar"], rows: [["An", "60"], ["Bình", "60"]] },
+      { t: "p", html: "Rồi điền vào tờ đơn bằng ba câu hỏi:" },
+      { t: "table", head: ["Câu hỏi", "Trả lời", "Mệnh đề"],
+        rows: [
+          ["Kết quả có những cột nào?", "Partner và tong_ar", "<code>SELECT</code>"],
+          ["Dữ liệu lấy từ đâu?", "bảng ar_entries", "<code>FROM</code>"],
+          ["Mỗi dòng kết quả ứng với một gì?", "một đại lý", "<code>GROUP BY</code>"]
+        ] },
+      { t: "p", html: "<code>SUM</code> nằm ở đâu trong tờ đơn này? Nó là <b>cách tính ra cột <code>tong_ar</code></b>. Nó không phải một bước, nó là <b>định nghĩa của một cột</b>. Mà cột thì khai ở <code>SELECT</code>." },
+      { t: "code", text: "SELECT Partner,                                      -- cột 1\n       SUM(CASE WHEN RecordType='Receipt'\n                THEN Debt ELSE -Debt END) AS tong_ar  -- cột 2, tính bằng SUM\nFROM ar_entries\nGROUP BY Partner;                                    -- mỗi dòng = một đại lý" },
+      { t: "hint", html: "<b>Câu chốt:</b> <code>GROUP BY</code> không tạo ra cột nào cả, nó chỉ trả lời <i>mỗi dòng kết quả là một gì</i>. Nên viết <code>SUM</code> sau nó là nhét định nghĩa cột vào chỗ không phải để khai cột." },
+
+      { t: "h", text: "Chạy tay với ba dòng dữ liệu" },
+      { t: "code", text: "Bước 1  FROM ar_entries        lấy cả 3 dòng ra\n\nBước 3  GROUP BY Partner       chia thành từng đống, CHƯA tính gì\n        nhóm \"An\"   →  { Receipt 100 }, { Payment 40 }\n        nhóm \"Bình\" →  { Receipt 60 }\n\nBước 5  SELECT                 với MỖI nhóm, tính từng cột\n        nhóm \"An\"   →  Partner = \"An\"\n                       SUM(...) = (+100) + (-40) = 60\n        nhóm \"Bình\" →  Partner = \"Bình\"\n                       SUM(...) = (+60)          = 60" },
+      { t: "p", html: "<code>SUM</code> biết cộng cho ai vì lúc nó chạy, nó đang đứng <b>bên trong một nhóm cụ thể</b> và chỉ nhìn thấy các dòng của nhóm đó." },
+
+      { t: "h", text: "Hai tầng lồng nhau" },
+      { t: "code", text: "SUM( CASE WHEN RecordType = 'Receipt' THEN Debt ELSE -Debt END )\n │    └────────── tầng trong: chạy trên TỪNG DÒNG ──────────┘\n └─── tầng ngoài: gom kết quả của CẢ NHÓM thành một số" },
+      { t: "table", head: ["", "Chạy trên", "Trả về"],
+        rows: [
+          ["<code>CASE</code>", "từng dòng một", "một số cho mỗi dòng"],
+          ["<code>SUM</code>", "cả nhóm", "một số cho cả nhóm"]
+        ] },
+      { t: "p", html: "Nói theo JavaScript: <code>CASE</code> là hàm truyền vào <code>map</code>, <code>SUM</code> là <code>reduce</code>." },
+      { t: "code", text: "const groups = groupBy(rows, r => r.Partner);          // GROUP BY Partner\n\nObject.entries(groups).map(([partner, g]) => ({\n  Partner: partner,                                   // SELECT Partner\n  tong_ar: g.reduce((s, r) =>                         // SELECT SUM(...) AS tong_ar\n    s + (r.RecordType === 'Receipt' ? r.Debt : -r.Debt), 0)\n}));" },
+      { t: "hint", html: "Để ý <code>reduce</code> nằm <b>bên trong object đang dựng cho mỗi dòng kết quả</b>, không đứng riêng một dòng sau <code>groupBy</code>. Bạn sẽ không bao giờ viết <code>groupBy(...); reduce(...);</code> vì cộng xong chẳng biết gán vào đâu. Câu SQL sai lúc nãy chính là phiên bản SQL của đoạn vô nghĩa đó." },
+
+      { t: "h", text: "Vì sao viết sau mà lại chạy trước" },
+      { t: "table", head: ["", "Thứ tự"],
+        rows: [
+          ["<b>Viết</b>", "SELECT → FROM → WHERE → GROUP BY → HAVING → ORDER BY → LIMIT"],
+          ["<b>Chạy</b>", "FROM → WHERE → GROUP BY → HAVING → <b>SELECT</b> → ORDER BY → LIMIT"]
+        ] },
+      { t: "p", html: "Hai thứ tự này phục vụ hai việc khác nhau. Thứ tự <b>viết</b> là luật chính tả để máy <i>đọc hiểu</i> câu lệnh. Thứ tự <b>chạy</b> là cơ chế bên trong sau khi đã đọc hiểu xong. Học thứ tự viết để viết cho đúng, học thứ tự chạy để hiểu vì sao có chỗ được có chỗ không." },
+      { t: "code", text: "SELECT Partner, SUM(Debt) AS tong\nFROM ar_entries\nWHERE tong > 100      -- ✗ lỗi: WHERE chạy TRƯỚC SELECT, lúc đó chưa có tong\nGROUP BY Partner\nORDER BY tong DESC;   -- ✓ được: ORDER BY chạy SAU SELECT nên tong đã tồn tại" },
+      { t: "hint", html: "Vẫn thắc mắc <i>sao không cho viết tự do khi mỗi mệnh đề đã có từ khóa riêng</i>? Về kỹ thuật thì làm được, SQL chỉ chọn không làm vậy. Lý do chính: truy vấn lồng nhau sẽ hóa mơ hồ, có hai <code>FROM</code> thì không biết cái nào thuộc truy vấn nào. Các ngôn ngữ sinh sau như LINQ hay PRQL đặt <code>from</code> lên đầu cho khớp thứ tự chạy, nhưng SQL đã phổ biến 50 năm nên không đổi được nữa." }
+    ],
+    dataset: [
+      { name: "ar_entries", head: ["RecordType", "Debt", "PlannedRepaymentDate", "Partner"],
+        rows: [
+          ["Receipt", "100", "2026-08-01", "An"],
+          ["Payment", "40", "2026-12-31", "An"],
+          ["Receipt", "60", "2026-09-01", "Bình"]
+        ] }
+    ]
+  }
+];
+
+</script>
+<script>
+// Bai tap chuong "Vi sao SUM phai nam trong SELECT", chay duoc tren nb_sqla1.
+window.SQL_AGGREGATE_EXERCISES = {
+  sqla1: [
+    {
+      id: "g1e1", type: "query",
+      prompt: "Tính tổng công nợ của từng đại lý. Receipt cộng vào, loại khác trừ ra.",
+      want: "Kết quả mong đợi: An = 60, Bình = 60.",
+      hint: "Đặt cả CASE vào bên trong SUM, rồi gom nhóm theo Partner.",
+      must: [
+        { re: "select", label: "SELECT" },
+        { re: "from\\s+ar_entries", label: "FROM ar_entries" },
+        { re: "sum\\s*\\(\\s*case", label: "SUM(CASE ...)" },
+        { re: "group\\s+by\\s+partner", label: "GROUP BY Partner" }
+      ],
+      answers: ["SELECT Partner, SUM(CASE WHEN RecordType = 'Receipt' THEN Debt ELSE -Debt END) AS tong_ar FROM ar_entries GROUP BY Partner;"]
+    },
+    {
+      id: "g1e2", type: "query",
+      prompt: "Đếm xem mỗi đại lý có bao nhiêu dòng bút toán.",
+      want: "Kết quả mong đợi: An = 2, Bình = 1.",
+      hint: "Đếm dòng thì dùng COUNT, vẫn gom nhóm theo Partner.",
+      must: [
+        { re: "select", label: "SELECT" },
+        { re: "from\\s+ar_entries", label: "FROM ar_entries" },
+        { re: "count\\s*\\(", label: "COUNT(...)" },
+        { re: "group\\s+by\\s+partner", label: "GROUP BY Partner" }
+      ],
+      answers: ["SELECT Partner, COUNT(*) AS so_dong FROM ar_entries GROUP BY Partner;"]
+    },
+    {
+      id: "g1e3", type: "query",
+      prompt: "Tính tổng công nợ theo đại lý, nhưng chỉ giữ đại lý có tổng lớn hơn 50.",
+      want: "Điều kiện đặt trên kết quả của SUM nên không thể để ở WHERE.",
+      hint: "Lọc nhóm thì dùng HAVING, và nó viết sau GROUP BY.",
+      must: [
+        { re: "select", label: "SELECT" },
+        { re: "from\\s+ar_entries", label: "FROM ar_entries" },
+        { re: "sum\\s*\\(", label: "SUM(...)" },
+        { re: "group\\s+by\\s+partner", label: "GROUP BY Partner" },
+        { re: "having", label: "HAVING" }
+      ],
+      answers: ["SELECT Partner, SUM(Debt) AS tong FROM ar_entries GROUP BY Partner HAVING SUM(Debt) > 50;"]
+    },
+    {
+      id: "g1e4", type: "query",
+      prompt: "Lấy đại lý nợ nhiều nhất, sắp xếp giảm dần và chỉ lấy một dòng.",
+      want: "Dùng được bí danh ở ORDER BY vì nó chạy sau SELECT.",
+      hint: "Thêm ORDER BY ... DESC rồi LIMIT 1 vào cuối câu.",
+      must: [
+        { re: "select", label: "SELECT" },
+        { re: "from\\s+ar_entries", label: "FROM ar_entries" },
+        { re: "sum\\s*\\(", label: "SUM(...)" },
+        { re: "group\\s+by\\s+partner", label: "GROUP BY Partner" },
+        { re: "order\\s+by", label: "ORDER BY" },
+        { re: "desc", label: "DESC" },
+        { re: "limit\\s*1", label: "LIMIT 1" }
+      ],
+      answers: ["SELECT Partner, SUM(Debt) AS tong FROM ar_entries GROUP BY Partner ORDER BY tong DESC LIMIT 1;"]
     }
   ]
 };
@@ -3075,6 +3206,81 @@ window.JS_EXERCISES = {
 
 </script>
 <script>
+// Bo sung bang mau cho nhung chuong co bai tap dung bang chua duoc khai bao.
+// Nho vay moi cau tra loi mau deu co du bang de chay that, va build-sample-data.js
+// sinh ra database tuong ung. Khong sua vao file chuong goc.
+(function () {
+  var EXTRA = {
+    // UNION giua hai he: can bang thu hai de noi vao
+    sqlc4: [
+      { name: "one_c_sales_orders", head: ["id", "partnerId", "amount"],
+        rows: [["501", "P01", "700"], ["502", "P03", "250"]] }
+    ],
+
+    // Truy van con tren schema ERP that
+    sqlc6: [
+      { name: "CustomersARAPAccountingByDueDates_RecordType",
+        head: ["RecordType", "Debt", "PlannedRepaymentDate", "AccountingDimensionByPartners_Key", "ReversingEntry", "Active"],
+        rows: [
+          ["Receipt", "100", "2026-08-01", "D1", "0", "1"],
+          ["Payment", "40", "2026-12-31", "D1", "0", "1"],
+          ["Receipt", "60", "2026-09-01", "D2", "0", "1"]
+        ] },
+      { name: "DimensionKeysOfAccountingByPartners", head: ["Ref_Key", "Partner_Key"],
+        rows: [["D1", "P01"], ["D2", "P02"]] }
+    ],
+
+    // Tuoi no: tang 1 doc tu x, tang 2 doc tu t.
+    // Tao san hai bang do de moi tang deu chay duoc rieng le.
+    sqlc7: [
+      { name: "x", head: ["sign_debt", "PlannedRepaymentDate", "AccountingDimensionByPartners_Key"],
+        rows: [
+          ["100", "2026-08-01", "D1"],
+          ["-40", "2026-12-31", "D1"],
+          ["60", "2026-09-01", "D2"]
+        ] },
+      { name: "DimensionKeysOfAccountingByPartners", head: ["Ref_Key", "Partner_Key"],
+        rows: [["D1", "P01"], ["D2", "P02"]] },
+      { name: "t", head: ["partnerKey", "du_no", "so_ngay"],
+        rows: [["P01", "100", "46"], ["P01", "40", "-106"], ["P02", "60", "15"]] }
+    ],
+
+    sqlc8: [
+      { name: "x", head: ["sign_debt", "PlannedRepaymentDate", "AccountingDimensionByPartners_Key"],
+        rows: [
+          ["100", "2026-08-01", "D1"],
+          ["-40", "2026-12-31", "D1"],
+          ["60", "2026-09-01", "D2"]
+        ] },
+      { name: "DimensionKeysOfAccountingByPartners", head: ["Ref_Key", "Partner_Key"],
+        rows: [["D1", "P01"], ["D2", "P02"]] },
+      { name: "t", head: ["partnerKey", "ngay_hen", "du_no"],
+        rows: [["P01", "2026-08-01", "100"], ["P01", "2026-12-31", "-40"], ["P02", "2026-09-01", "60"]] }
+    ]
+  };
+
+  var groups = [
+    window.SQL_BASICS, window.SQL_AGGREGATE_CHAPTERS, window.SQL_CLAUSES,
+    window.SQL_JOIN_UNION, window.SQL_SUBQUERY, window.SQL_AGING,
+    window.SQL_CHAPTERS, window.MYSQL_CHAPTERS
+  ];
+
+  Object.keys(EXTRA).forEach(function (chapterId) {
+    var chapter = null;
+    groups.forEach(function (g) {
+      (g || []).forEach(function (c) { if (c.id === chapterId) chapter = c; });
+    });
+    if (!chapter) { console.warn("Khong tim thay chuong", chapterId); return; }
+    if (!chapter.dataset) chapter.dataset = [];
+    EXTRA[chapterId].forEach(function (t) {
+      var has = chapter.dataset.some(function (d) { return d.name === t.name; });
+      if (!has) chapter.dataset.push(t);
+    });
+  });
+})();
+
+</script>
+<script>
 // Ba muc chinh cua so tay. Phai nap sau cac file du lieu kia.
 
 // Gop nhieu nhom chuong lai, bo qua nhom nao chua nap duoc.
@@ -3107,7 +3313,7 @@ window.SUBJECTS = [
       "orders / partners của dự án. Sau đó tới PostgreSQL của b2b, cuối cùng là MySQL trên hệ ERP. " +
       "Bài tập đều là cho sẵn bảng dữ liệu rồi bạn tự viết truy vấn.",
     kind: "blocks",
-    chapters: chapterGroups(window.SQL_BASICS, window.SQL_CLAUSES, window.SQL_JOIN_UNION, window.SQL_SUBQUERY, window.SQL_AGING,
+    chapters: chapterGroups(window.SQL_BASICS, window.SQL_AGGREGATE_CHAPTERS, window.SQL_CLAUSES, window.SQL_JOIN_UNION, window.SQL_SUBQUERY, window.SQL_AGING,
       window.SQL_CHAPTERS, window.MYSQL_CHAPTERS)
   },
   {
@@ -3124,10 +3330,148 @@ window.SUBJECTS = [
 
 // Gop bai tap cua moi mon vao mot bang tra cuu chung theo id chuong.
 window.ALL_EXERCISES = Object.assign(
-  {}, window.EXERCISES, window.SQL_BASICS_EXERCISES,
+  {}, window.EXERCISES, window.SQL_BASICS_EXERCISES, window.SQL_AGGREGATE_EXERCISES,
   window.SQL_CLAUSES_EXERCISES, window.SQL_JOIN_UNION_EXERCISES, window.SQL_SUBQUERY_EXERCISES, window.SQL_AGING_EXERCISES, window.SQL_EXERCISES,
   window.MYSQL_EXERCISES, window.SECURITY_EXERCISES, window.API_SECURITY_EXERCISES, window.TRANSACTION_EXERCISES, window.ALGO_EXERCISES, window.JS_EXERCISES
 );
+
+</script>
+<script>
+// Soi cau truc cau SQL de bat nhung loi ma viec do tu khoa khong bat duoc.
+// Muc tieu: cham "dung" thi cop vao MySQL phai chay duoc.
+window.NBSqlCheck = (function () {
+  var CLAUSES = [
+    { re: /^select\b/, name: "SELECT", rank: 1 },
+    { re: /^from\b/, name: "FROM", rank: 2 },
+    { re: /^(inner|left|right|cross|full)?\s*join\b/, name: "JOIN", rank: 3 },
+    { re: /^where\b/, name: "WHERE", rank: 4 },
+    { re: /^group\s+by\b/, name: "GROUP BY", rank: 5 },
+    { re: /^having\b/, name: "HAVING", rank: 6 },
+    { re: /^order\s+by\b/, name: "ORDER BY", rank: 7 },
+    { re: /^limit\b/, name: "LIMIT", rank: 8 }
+  ];
+  var AGG = /\b(sum|count|avg|min|max)\s*\(/;
+
+  // Cat cau thanh tung manh theo menh de, chi cat o ngoai cung.
+  // Menh de nam trong ngoac la cua truy van con nen bo qua.
+  function split(s) {
+    var parts = [], depth = 0, quote = null, cur = { name: "?", text: "" }, i = 0;
+    while (i < s.length) {
+      var c = s[i];
+      if (quote) {
+        cur.text += c;
+        if (c === quote) quote = null;
+        i++; continue;
+      }
+      if (c === "'" || c === '"' || c === "`") { quote = c; cur.text += c; i++; continue; }
+      if (c === "(") depth++;
+      if (c === ")") depth--;
+
+      if (depth === 0) {
+        var rest = s.slice(i);
+        var hit = null;
+        for (var k = 0; k < CLAUSES.length; k++) {
+          if (CLAUSES[k].re.test(rest)) { hit = CLAUSES[k]; break; }
+        }
+        if (hit) {
+          if (cur.text.trim()) parts.push(cur);
+          var m = rest.match(hit.re)[0];
+          cur = { name: hit.name, rank: hit.rank, text: "" };
+          i += m.length;
+          continue;
+        }
+      }
+      cur.text += c;
+      i++;
+    }
+    if (cur.text.trim() || cur.name !== "?") parts.push(cur);
+    return { parts: parts, depth: depth, quote: quote };
+  }
+
+  // Xoa ruot cac cap ngoac nhung giu lai chinh dau ngoac.
+  // "sum(total) > 100" thanh "sum() > 100" nen van nhan ra ham gop,
+  // con "in (select ... sum(x) ...)" thanh "in ()" nen truy van con khong bi tinh nham.
+  function maskParens(text) {
+    var out = "", depth = 0;
+    for (var i = 0; i < text.length; i++) {
+      var c = text[i];
+      if (c === "(") { depth++; if (depth === 1) out += "("; continue; }
+      if (c === ")") { depth--; if (depth === 0) out += ")"; continue; }
+      if (depth === 0) out += c;
+    }
+    return out;
+  }
+
+  // UNION noi nhieu cau SELECT doc lap lai voi nhau, moi ve co bo menh de rieng.
+  // Cat o ngoai cung roi soi tung ve, khong thi ve sau bi cham la "sai thu tu".
+  function splitUnions(s) {
+    var parts = [], depth = 0, quote = null, cur = "", i = 0;
+    var UNION = /^(union\s+all|union|except|intersect)\b/;
+    while (i < s.length) {
+      var c = s[i];
+      if (quote) { cur += c; if (c === quote) quote = null; i++; continue; }
+      if (c === "'" || c === '"' || c === "`") { quote = c; cur += c; i++; continue; }
+      if (c === "(") depth++;
+      if (c === ")") depth--;
+      if (depth === 0) {
+        var m = s.slice(i).match(UNION);
+        if (m) { parts.push(cur); cur = ""; i += m[0].length; continue; }
+      }
+      cur += c;
+      i++;
+    }
+    parts.push(cur);
+    return parts;
+  }
+
+  // Tra ve danh sach loi cau truc, rong nghia la khong thay van de gi.
+  function problems(input) {
+    var s = String(input).toLowerCase().replace(/\s+/g, " ").trim();
+    if (!s) return [];
+    var branches = splitUnions(s);
+    if (branches.length > 1) {
+      var all = [];
+      branches.forEach(function (b) {
+        problems(b).forEach(function (p) { if (all.indexOf(p) < 0) all.push(p); });
+      });
+      return all;
+    }
+
+    var out = [];
+    var r = split(s);
+
+    if (r.depth > 0) out.push("thiếu dấu ngoặc đóng");
+    if (r.depth < 0) out.push("thừa dấu ngoặc đóng");
+    if (r.quote) out.push("dấu nháy chưa đóng");
+
+    var named = r.parts.filter(function (p) { return p.rank; });
+
+    // Thu tu menh de la co dinh, sai thu tu la loi cu phap
+    for (var i = 1; i < named.length; i++) {
+      if (named[i].rank < named[i - 1].rank) {
+        out.push(named[i].name + " phải viết trước " + named[i - 1].name);
+        break;
+      }
+    }
+
+    named.forEach(function (p) {
+      // Ham gop chi duoc nam o SELECT, HAVING va ORDER BY.
+      // Chi xet phan ngoai ngoac, vi ham gop trong truy van con la hop le.
+      if (p.name !== "GROUP BY" && p.name !== "WHERE") return;
+      if (!AGG.test(maskParens(p.text))) return;
+      out.push(p.name === "GROUP BY"
+        ? "hàm gộp không được nằm trong GROUP BY, phải đưa vào SELECT"
+        : "hàm gộp không được nằm trong WHERE, phải dùng HAVING");
+    });
+
+    if (named.length && named[0].name !== "SELECT" && /\bselect\b/.test(s)) {
+      out.push("SELECT phải đứng đầu câu");
+    }
+    return out;
+  }
+
+  return { problems: problems };
+})();
 
 </script>
 <script>
@@ -3192,38 +3536,26 @@ window.NB = (function () {
   var MUST_TYPES = { query: 1, code: 1 };
   function isMustType(ex) { return MUST_TYPES[ex.type] === 1; }
 
-  // Menh de SQL co thu tu co dinh. Du du tu khoa ma dat sai cho thi cau van sai.
-  var SQL_ORDER = [
-    /\bselect\b/, /\bfrom\b/, /\bjoin\b/, /\bwhere\b/,
-    /\bgroup\s+by\b/, /\bhaving\b/, /\border\s+by\b/, /\blimit\b/
-  ];
-  var ORDER_LABEL = "đúng thứ tự SELECT → FROM → JOIN → WHERE → GROUP BY → HAVING → ORDER BY → LIMIT";
-
-  function clauseOrderOk(s) {
-    var last = -1;
-    for (var i = 0; i < SQL_ORDER.length; i++) {
-      var at = s.search(SQL_ORDER[i]);
-      if (at < 0) continue;
-      if (at < last) return false;
-      last = at;
-    }
-    return true;
-  }
-
   function missingParts(ex, input) {
     var s = String(input).toLowerCase().replace(/[`]/g, "").replace(/\s+/g, " ").trim();
-    var miss = (ex.must || []).filter(function (m) {
+    return (ex.must || []).filter(function (m) {
       return !new RegExp(m.re, "i").test(s);
     }).map(function (m) { return m.label; });
-    // Chi soi thu tu khi da du tu khoa, de khong bao mot luc qua nhieu thu.
-    if (ex.type === "query" && miss.length === 0 && !clauseOrderOk(s)) miss.push(ORDER_LABEL);
-    return miss;
+  }
+
+  // Loi cau truc khien cau khong chay duoc du da du tu khoa.
+  // Chi soi khi da du thanh phan, de khong bao mot luc qua nhieu thu.
+  function structureProblems(ex, input) {
+    if (ex.type !== "query") return [];
+    if (missingParts(ex, input).length) return [];
+    return window.NBSqlCheck.problems(input);
   }
 
   function grade(ex, input) {
     if (!norm(input)) return "empty";
     if (isMustType(ex)) {
-      return missingParts(ex, input).length === 0 ? "correct" : "wrong";
+      var ok = missingParts(ex, input).length === 0 && structureProblems(ex, input).length === 0;
+      return ok ? "correct" : "wrong";
     }
     var caseFree = CASE_FREE[ex.type] === 1;
     var u = norm(input);
@@ -3287,6 +3619,7 @@ window.NB = (function () {
     save: save,
     grade: grade,
     missingParts: missingParts,
+    structureProblems: structureProblems,
     isMustType: isMustType,
     findEx: findEx,
     correctCount: correctCount,
@@ -3703,7 +4036,14 @@ window.NBRender = (function () {
   // Bang du lieu mau dung chung cho ca trang bai tap.
   function datasetHtml(ch) {
     if (!ch.dataset) return "";
-    var h = '<h3 class="sub">Dữ liệu dùng cho bài tập</h3><div class="dataset">';
+    // Bang nao co ten hop le thi da duoc tao san trong MySQL boi sample-data.sql
+    var runnable = ch.dataset.every(function (t) { return /^[A-Za-z_][A-Za-z0-9_]*$/.test(t.name); });
+    var h = '<h3 class="sub">Dữ liệu dùng cho bài tập</h3>';
+    if (runnable) {
+      h += '<p class="use-db">Muốn chạy thật trên MySQL: nạp <code>sample-data.sql</code> rồi gõ ' +
+        '<code>USE nb_' + ch.id + ';</code></p>';
+    }
+    h += '<div class="dataset">';
     ch.dataset.forEach(function (t) {
       h += '<div><p class="demo-cap"><b>' + esc(t.name) + "</b></p>" +
         window.NBBlocks.table(t.head, t.rows) + "</div>";
@@ -3860,12 +4200,22 @@ window.NBRender = (function () {
     } else if (kind === "empty") {
       fb.innerHTML = '<span class="fb-bad">Bạn chưa viết gì cả.</span>';
     } else if (NB.isMustType(ex)) {
-      // Chi ra thanh phan con thieu thay vi chi bao sai.
+      // Chi ra thanh phan con thieu, hoac loi cau truc khien cau khong chay duoc.
       box.classList.add("wrong");
-      var miss = NB.missingParts(ex, document.querySelector('.answer[data-id="' + id + '"]').value);
-      fb.innerHTML = '<span class="fb-bad">✗ Còn thiếu:</span> ' +
-        miss.map(function (m) { return "<code>" + NB.esc(m) + "</code>"; }).join(", ") +
-        '<div class="solution-hint">Gợi ý: ' + NB.esc(ex.hint) + "</div>";
+      var val = NB.get().answers[id] || "";
+      var miss = NB.missingParts(ex, val);
+      var bad = NB.structureProblems(ex, val);
+      var msg = "";
+      if (miss.length) {
+        msg += '<span class="fb-bad">✗ Còn thiếu:</span> ' +
+          miss.map(function (m) { return "<code>" + NB.esc(m) + "</code>"; }).join(", ");
+      }
+      if (bad.length) {
+        msg += (msg ? "<br>" : "") +
+          '<span class="fb-bad">✗ Câu này chạy sẽ lỗi:</span> ' +
+          bad.map(function (m) { return NB.esc(m); }).join("; ");
+      }
+      fb.innerHTML = msg + '<div class="solution-hint">Gợi ý: ' + NB.esc(ex.hint) + "</div>";
     } else {
       box.classList.add("wrong");
       fb.innerHTML = '<span class="fb-bad">✗ Chưa đúng.</span> Soi lại mấy chỗ được đánh dấu:' +

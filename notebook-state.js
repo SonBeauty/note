@@ -59,38 +59,26 @@ window.NB = (function () {
   var MUST_TYPES = { query: 1, code: 1 };
   function isMustType(ex) { return MUST_TYPES[ex.type] === 1; }
 
-  // Menh de SQL co thu tu co dinh. Du du tu khoa ma dat sai cho thi cau van sai.
-  var SQL_ORDER = [
-    /\bselect\b/, /\bfrom\b/, /\bjoin\b/, /\bwhere\b/,
-    /\bgroup\s+by\b/, /\bhaving\b/, /\border\s+by\b/, /\blimit\b/
-  ];
-  var ORDER_LABEL = "đúng thứ tự SELECT → FROM → JOIN → WHERE → GROUP BY → HAVING → ORDER BY → LIMIT";
-
-  function clauseOrderOk(s) {
-    var last = -1;
-    for (var i = 0; i < SQL_ORDER.length; i++) {
-      var at = s.search(SQL_ORDER[i]);
-      if (at < 0) continue;
-      if (at < last) return false;
-      last = at;
-    }
-    return true;
-  }
-
   function missingParts(ex, input) {
     var s = String(input).toLowerCase().replace(/[`]/g, "").replace(/\s+/g, " ").trim();
-    var miss = (ex.must || []).filter(function (m) {
+    return (ex.must || []).filter(function (m) {
       return !new RegExp(m.re, "i").test(s);
     }).map(function (m) { return m.label; });
-    // Chi soi thu tu khi da du tu khoa, de khong bao mot luc qua nhieu thu.
-    if (ex.type === "query" && miss.length === 0 && !clauseOrderOk(s)) miss.push(ORDER_LABEL);
-    return miss;
+  }
+
+  // Loi cau truc khien cau khong chay duoc du da du tu khoa.
+  // Chi soi khi da du thanh phan, de khong bao mot luc qua nhieu thu.
+  function structureProblems(ex, input) {
+    if (ex.type !== "query") return [];
+    if (missingParts(ex, input).length) return [];
+    return window.NBSqlCheck.problems(input);
   }
 
   function grade(ex, input) {
     if (!norm(input)) return "empty";
     if (isMustType(ex)) {
-      return missingParts(ex, input).length === 0 ? "correct" : "wrong";
+      var ok = missingParts(ex, input).length === 0 && structureProblems(ex, input).length === 0;
+      return ok ? "correct" : "wrong";
     }
     var caseFree = CASE_FREE[ex.type] === 1;
     var u = norm(input);
@@ -154,6 +142,7 @@ window.NB = (function () {
     save: save,
     grade: grade,
     missingParts: missingParts,
+    structureProblems: structureProblems,
     isMustType: isMustType,
     findEx: findEx,
     correctCount: correctCount,

@@ -30,7 +30,7 @@ window.SUBJECTS = [
       "orders / partners của dự án. Sau đó tới PostgreSQL của b2b, cuối cùng là MySQL trên hệ ERP. " +
       "Bài tập đều là cho sẵn bảng dữ liệu rồi bạn tự viết truy vấn.",
     kind: "blocks",
-    chapters: chapterGroups(window.SQL_BASICS, window.SQL_CLAUSES, window.SQL_JOIN_UNION, window.SQL_SUBQUERY, window.SQL_AGING,
+    chapters: chapterGroups(window.SQL_BASICS, window.SQL_AGGREGATE_CHAPTERS, window.SQL_CLAUSES, window.SQL_JOIN_UNION, window.SQL_SUBQUERY, window.SQL_AGING,
       window.SQL_CHAPTERS, window.MYSQL_CHAPTERS)
   },
   {
@@ -47,7 +47,7 @@ window.SUBJECTS = [
 
 // Gop bai tap cua moi mon vao mot bang tra cuu chung theo id chuong.
 window.ALL_EXERCISES = Object.assign(
-  {}, window.EXERCISES, window.SQL_BASICS_EXERCISES,
+  {}, window.EXERCISES, window.SQL_BASICS_EXERCISES, window.SQL_AGGREGATE_EXERCISES,
   window.SQL_CLAUSES_EXERCISES, window.SQL_JOIN_UNION_EXERCISES, window.SQL_SUBQUERY_EXERCISES, window.SQL_AGING_EXERCISES, window.SQL_EXERCISES,
   window.MYSQL_EXERCISES, window.SECURITY_EXERCISES, window.API_SECURITY_EXERCISES, window.TRANSACTION_EXERCISES, window.ALGO_EXERCISES, window.JS_EXERCISES
 );

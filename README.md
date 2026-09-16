@@ -15,7 +15,7 @@ công nghệ để nhìn là biết đang nói về hệ nào:
 | Mục | Nội dung | Số bài tập |
 |---|---|---|
 | Tiếng Anh | 7 chương: giới thiệu bản thân, kinh nghiệm, dự án, công việc hằng ngày, du lịch, nhờ người nước ngoài luyện nói, đọc tên cột bảng tài chính | 41 |
-| SQL | SQL căn bản + 8 chương đào sâu (mệnh đề, NULL, JOIN, UNION, index, truy vấn con, tuổi nợ, soi lỗi câu công nợ 1C) + 3 chương PostgreSQL + 1 chương MySQL | 57 |
+| SQL | SQL căn bản, vì sao SUM phải nằm trong SELECT, + 8 chương đào sâu (mệnh đề, NULL, JOIN, UNION, index, truy vấn con, tuổi nợ, soi lỗi câu công nợ 1C) + 3 chương PostgreSQL + 1 chương MySQL | 61 |
 | Lập trình | Upload validation, Tham số hóa truy vấn, Phân quyền theo token, Transaction (Prisma), Thuật toán LCS, Object và prototype, Tối ưu duyệt mảng | 40 |
 
 Chương **SQL căn bản** đi trước, giải thích từng mệnh đề là gì và dùng làm gì, thứ tự chạy
@@ -29,6 +29,7 @@ sau đào sâu từng chỗ hay sai, dùng đúng bảng `orders` / `partners` c
 - **Truy vấn con** — subquery / derived table / CTE, mổ đúng câu công nợ 1C: vì sao phải bọc bảng tạm để đặt tên cho `sign_debt`
 - **Tuổi nợ (AR aging)** — nợ quá hạn bao lâu, vì sao một con số tổng là không đủ, chia mốc 1-30/31-60/61-90/>90 bằng gộp hai tầng
 - **Soi lỗi câu công nợ 1C** — số ngày quá hạn bị thổi phồng vì MIN chạy trên từng dòng phát sinh, luật cột gom khác cột cộng, HAVING ở tầng giữa làm đổi tổng dư nợ
+- **Vì sao SUM phải nằm trong SELECT** — SQL là tờ đơn đặt hàng chứ không phải danh sách các bước, chạy tay từng nhóm, CASE theo dòng còn SUM theo nhóm, và vì sao viết sau mà chạy trước
 - **Index và chuyện làm mất index** — vì sao `YEAR(createdAt) = 2026` quét cả bảng, sargable, index nhiều cột đi từ trái sang, `EXPLAIN ANALYZE`
 
 Các chương còn lại đi vào code thật của dự án:
@@ -56,8 +57,8 @@ Các chương còn lại đi vào code thật của dự án:
 
 - **7 chương theo chủ đề**: giới thiệu bản thân, kinh nghiệm & kỹ năng, nói về dự án, công việc hằng ngày, du lịch & sở thích, nhờ người nước ngoài luyện tiếng Anh, đọc tên cột bảng tài chính
 - Mỗi chương gồm: câu mẫu (sai → đúng → cách nói tự nhiên), bảng quy tắc, từ vựng, bài tập, ô ghi chú
-- **138 bài tập**. Phần tiếng Anh là dịch câu, sửa câu sai và điền chỗ trống.
-  Phần SQL là **57 bài viết truy vấn**: mỗi chương cho sẵn bảng dữ liệu mẫu kèm kết quả mong đợi,
+- **142 bài tập**. Phần tiếng Anh là dịch câu, sửa câu sai và điền chỗ trống.
+  Phần SQL là **61 bài viết truy vấn**: mỗi chương cho sẵn bảng dữ liệu mẫu kèm kết quả mong đợi,
   bạn tự viết câu lệnh vào ô nhiều dòng rồi bấm Kiểm tra (hoặc Ctrl+Enter).
   Phần Lập trình là **40 bài viết code**, chấm theo cùng cơ chế.
 - **Chấm điểm tự động**: gõ đáp án rồi bấm Kiểm tra (hoặc nhấn Enter)
@@ -179,6 +180,41 @@ không tạo commit rác. Thư mục tạm luôn được dọn kể cả khi sc
 
 Đợi khoảng 1-2 phút cho GitHub build xong rồi tải lại trang.
 
+## Chạy thật trên MySQL
+
+Mỗi chương SQL có bảng dữ liệu mẫu riêng. Vì nhiều chương dùng bảng cùng tên `orders`
+nhưng khác cột, nên mỗi chương được tạo thành **một database riêng**.
+
+Sinh lại file dữ liệu rồi nạp vào MySQL:
+
+```bash
+node build-sample-data.js
+```
+
+```powershell
+Get-Content sample-data.sql | mysql -u root -p
+```
+
+Trang bài tập của mỗi chương có sẵn dòng nhắc dùng database nào, ví dụ `USE nb_sqla1;`.
+Sau đó dán câu trả lời vào là chạy được thật.
+
+`sample-data.sql` sinh tự động từ chính các bảng hiển thị trong sổ nên không bao giờ lệch.
+Đừng sửa tay, sửa bảng trong file `data-*.js` rồi chạy lại lệnh trên.
+
+## Bộ soi câu lệnh chạy được
+
+Chấm theo từ khóa thôi thì chưa đủ: câu `GROUP BY Partner SUM(sign_debt)` có đủ từ khóa
+nhưng cop vào MySQL là lỗi 1064. Nên ngoài phần bắt buộc, sổ còn soi cấu trúc trong
+`notebook-sqlcheck.js` và báo riêng bằng dòng *Câu này chạy sẽ lỗi*:
+
+- Thứ tự mệnh đề sai, ví dụ `GROUP BY` viết trước `FROM`
+- Hàm gộp nằm trong `GROUP BY` (phải đưa vào `SELECT`)
+- Hàm gộp nằm trong `WHERE` (phải dùng `HAVING`)
+- Ngoặc hoặc dấu nháy không cân
+
+Bộ soi hiểu `UNION` nên mỗi vế được kiểm riêng, và bỏ qua phần nằm trong ngoặc nên hàm gộp
+trong truy vấn con không bị báo nhầm.
+
 ## Font tiếng Việt
 
 Sổ dùng font **Cambria** (dự phòng: Constantia, Palatino Linotype, Times New Roman).
@@ -195,6 +231,9 @@ english-notebook/
 ├── notebook-content.css  khối code, bảng dữ liệu, ô cảnh báo cho phần SQL
 ├── notebook-state.js     lưu trữ localStorage, chấm điểm, đếm điểm theo chương và theo mục
 ├── notebook-speech.js    đọc mẫu tiếng Anh bằng Web Speech API
+├── notebook-sqlcheck.js  soi cấu trúc câu SQL để chấm đúng nghĩa là chạy được
+├── data-sample-tables.js bổ sung bảng mẫu cho chương dùng schema ERP thật
+├── build-sample-data.js  sinh sample-data.sql, mỗi chương một database
 ├── notebook-diff.js      so từng từ với đáp án để chỉ ra sai ở đâu, sai kiểu gì
 ├── notebook-blocks.js    dựng khối nội dung SQL và ví dụ JOIN bấm được
 ├── notebook-render.js    dựng HTML cho mục lục, trang bài học, trang bài tập

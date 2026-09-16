@@ -110,7 +110,14 @@ window.NBRender = (function () {
   // Bang du lieu mau dung chung cho ca trang bai tap.
   function datasetHtml(ch) {
     if (!ch.dataset) return "";
-    var h = '<h3 class="sub">Dữ liệu dùng cho bài tập</h3><div class="dataset">';
+    // Bang nao co ten hop le thi da duoc tao san trong MySQL boi sample-data.sql
+    var runnable = ch.dataset.every(function (t) { return /^[A-Za-z_][A-Za-z0-9_]*$/.test(t.name); });
+    var h = '<h3 class="sub">Dữ liệu dùng cho bài tập</h3>';
+    if (runnable) {
+      h += '<p class="use-db">Muốn chạy thật trên MySQL: nạp <code>sample-data.sql</code> rồi gõ ' +
+        '<code>USE nb_' + ch.id + ';</code></p>';
+    }
+    h += '<div class="dataset">';
     ch.dataset.forEach(function (t) {
       h += '<div><p class="demo-cap"><b>' + esc(t.name) + "</b></p>" +
         window.NBBlocks.table(t.head, t.rows) + "</div>";

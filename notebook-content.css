@@ -78,3 +78,5 @@ textarea.sqlbox::placeholder { color: var(--code-ink); opacity: .4; }
   pre.code { background: #f2efe6; color: #241d13; border: 1px solid #ccc; }
   .demo-tabs { display: none; }
 }
+
+.use-db { font-size: 14.5px; color: var(--ink-soft); margin: 0 0 10px; }
